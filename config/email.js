@@ -1,0 +1,124 @@
+const nodemailer = require('nodemailer');
+
+// Create transporter — configure with your SMTP provider
+const createTransporter = () => nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT) || 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
+
+const FROM = '"Nikunj Platform" <noreply@nikunj.in>';
+
+// ─── Email Templates ─────────────────────────────────────────
+const templates = {
+  listingApproved: (ownerName, listingTitle) => ({
+    subject: `✅ Your listing "${listingTitle}" is now live on Nikunj!`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:auto;background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden">
+        <div style="background:#1C1A18;padding:24px 32px">
+          <h1 style="color:#fff;font-size:1.4rem;margin:0">Niku<span style="color:#E8701A">nj</span></h1>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1C1A18;margin-top:0">Great news, ${ownerName}! 🎉</h2>
+          <p style="color:#555;line-height:1.7">Your listing <strong>"${listingTitle}"</strong> has been reviewed and approved by our admin team. It is now live on Nikunj and visible to thousands of students.</p>
+          <a href="https://nikunj.in" style="display:inline-block;background:#E8701A;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:8px">View Your Listing →</a>
+          <p style="margin-top:24px;font-size:0.85rem;color:#999">Students can now contact you directly through your listing.</p>
+        </div>
+        <div style="background:#f9f6f2;padding:16px 32px;font-size:0.8rem;color:#999;text-align:center">
+          © 2026 Nikunj · Jaipur's trusted student platform
+        </div>
+      </div>`
+  }),
+
+  listingRejected: (ownerName, listingTitle, reason) => ({
+    subject: `Your listing "${listingTitle}" needs some changes`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:auto;background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden">
+        <div style="background:#1C1A18;padding:24px 32px">
+          <h1 style="color:#fff;font-size:1.4rem;margin:0">Niku<span style="color:#E8701A">nj</span></h1>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1C1A18;margin-top:0">Hi ${ownerName},</h2>
+          <p style="color:#555;line-height:1.7">Unfortunately, your listing <strong>"${listingTitle}"</strong> could not be approved at this time.</p>
+          ${reason ? `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:14px;margin:16px 0;color:#991b1b"><strong>Reason:</strong> ${reason}</div>` : ''}
+          <p style="color:#555;line-height:1.7">Please make the necessary changes and resubmit your listing. Our team will review it again within 24 hours.</p>
+          <a href="https://nikunj.in" style="display:inline-block;background:#1C1A18;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:8px">Edit & Resubmit →</a>
+        </div>
+        <div style="background:#f9f6f2;padding:16px 32px;font-size:0.8rem;color:#999;text-align:center">
+          © 2026 Nikunj · Questions? hello@nikunj.in
+        </div>
+      </div>`
+  }),
+
+  welcome: (userName, role) => ({
+    subject: 'Welcome to Nikunj! 🏠',
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:auto;background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden">
+        <div style="background:#1C1A18;padding:32px">
+          <h1 style="color:#fff;font-size:1.8rem;margin:0;font-family:serif">Niku<span style="color:#E8701A">nj</span></h1>
+          <p style="color:rgba(255,255,255,.5);margin-top:8px;margin-bottom:0">Student Living Platform, Jaipur</p>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1C1A18;margin-top:0">Welcome, ${userName}! 👋</h2>
+          <p style="color:#555;line-height:1.7">You've successfully joined Nikunj as a <strong>${role}</strong>. ${
+            role === 'student'
+              ? 'You can now browse verified hostels, PG rooms, flats, and tiffin services in Jaipur.'
+              : 'You can now list your property and reach thousands of students in Jaipur.'
+          }</p>
+          <a href="https://nikunj.in" style="display:inline-block;background:#E8701A;color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:600;margin-top:8px">Get Started →</a>
+        </div>
+        <div style="background:#f9f6f2;padding:16px 32px;font-size:0.8rem;color:#999;text-align:center">
+          © 2026 Nikunj · Made with ❤️ for students in Jaipur
+        </div>
+      </div>`
+  }),
+
+  newInquiry: (ownerName, studentName, studentPhone, listingTitle, message) => ({
+    subject: `New inquiry for "${listingTitle}"`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:auto;background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden">
+        <div style="background:#1C1A18;padding:24px 32px">
+          <h1 style="color:#fff;font-size:1.4rem;margin:0">Niku<span style="color:#E8701A">nj</span></h1>
+        </div>
+        <div style="padding:32px">
+          <h2 style="color:#1C1A18;margin-top:0">New inquiry, ${ownerName}!</h2>
+          <p style="color:#555;line-height:1.7">A student is interested in your listing <strong>"${listingTitle}"</strong>.</p>
+          <div style="background:#f9f6f2;border-radius:10px;padding:16px;margin:16px 0">
+            <p style="margin:0 0 8px;color:#1C1A18"><strong>Student:</strong> ${studentName}</p>
+            <p style="margin:0 0 8px;color:#1C1A18"><strong>Phone:</strong> ${studentPhone}</p>
+            ${message ? `<p style="margin:0;color:#555"><strong>Message:</strong> ${message}</p>` : ''}
+          </div>
+          <p style="color:#555">Contact them directly to discuss availability and terms.</p>
+        </div>
+      </div>`
+  })
+};
+
+// ─── Send Functions ──────────────────────────────────────────
+const sendMail = async (to, template) => {
+  try {
+    if (!process.env.SMTP_USER) {
+      console.log(`[Email skipped - SMTP not configured] To: ${to} | Subject: ${template.subject}`);
+      return { skipped: true };
+    }
+    const transporter = createTransporter();
+    const info = await transporter.sendMail({ from: FROM, to, ...template });
+    console.log(`Email sent: ${info.messageId}`);
+    return info;
+  } catch (err) {
+    console.error('Email error:', err.message);
+    return null;
+  }
+};
+
+module.exports = {
+  sendWelcome: (to, name, role) => sendMail(to, templates.welcome(name, role)),
+  sendApproved: (to, ownerName, title) => sendMail(to, templates.listingApproved(ownerName, title)),
+  sendRejected: (to, ownerName, title, reason) => sendMail(to, templates.listingRejected(ownerName, title, reason)),
+  sendInquiry: (to, ownerName, studentName, studentPhone, title, msg) =>
+    sendMail(to, templates.newInquiry(ownerName, studentName, studentPhone, title, msg))
+};
