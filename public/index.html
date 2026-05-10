@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nikunj — Student Living Platform, Jaipur</title>
+<title>Nikunj - Rental homes, rooms, PGs and food in Jaipur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 /* ── Reset & Variables ─────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --or:#27187E;--or2:#1F1268;--or-lt:rgba(39,24,126,0.16);
-  --ink:#F7F7FF;--mid:rgba(247,247,255,0.72);--muted:rgba(247,247,255,0.52);
-  --surf:rgba(8,6,22,0.9);--white:rgba(18,14,42,0.94);
-  --brd:rgba(247,247,255,0.12);--brd2:rgba(247,247,255,0.22);
+  --or:#18B875;--or2:#0E8F5F;--or-lt:rgba(24,184,117,0.14);
+  --ink:#16211D;--mid:#52615C;--muted:#7B8984;
+  --surf:#F4F7F5;--white:#FFFFFF;
+  --brd:rgba(18,33,29,0.1);--brd2:rgba(18,33,29,0.18);
   --r:12px;--rL:18px;--rXL:24px;
-  --sh:0 4px 24px rgba(0,0,0,0.3);
-  --sh2:0 12px 40px rgba(0,0,0,0.5);
+  --sh:0 10px 30px rgba(18,33,29,0.08);
+  --sh2:0 24px 70px rgba(18,33,29,0.14);
   --font:'DM Sans',sans-serif;
   --serif:'Playfair Display',serif;
   --trans:.2s ease;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:linear-gradient(rgba(8,6,22,.68),rgba(8,6,22,.78)),url('/dsaa.jpg') center center/cover fixed no-repeat;color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh}
+body{font-family:var(--font);background:#F7FAF8;color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 input,select,textarea,button{font-family:var(--font)}
@@ -313,6 +313,109 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
 .loader span{width:10px;height:10px;background:var(--or);border-radius:50%;animation:blink 1.2s infinite}
 .loader span:nth-child(2){animation-delay:.2s}
 .loader span:nth-child(3){animation-delay:.4s}
+
+/* Modern marketplace refresh */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 12% 8%,rgba(24,184,117,.1),transparent 28%),radial-gradient(circle at 90% 12%,rgba(27,86,166,.08),transparent 24%);pointer-events:none;z-index:-1}
+nav{background:rgba(255,255,255,.9);backdrop-filter:blur(18px);box-shadow:0 8px 30px rgba(18,33,29,.06);border-bottom:1px solid rgba(18,33,29,.08)}
+.logo{font-family:var(--font);font-weight:800;letter-spacing:-.02em}
+.nav-links a{color:var(--mid)}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.btn{border-radius:999px}
+.btn-primary{background:var(--ink);color:#fff;box-shadow:0 12px 28px rgba(18,33,29,.16)}
+.btn-primary:hover{background:#26342F;box-shadow:0 16px 34px rgba(18,33,29,.2)}
+.btn-outline{background:#fff;border-color:var(--brd2);color:var(--ink)}
+.btn-ghost:hover,.btn-outline:hover{background:var(--surf)}
+.hero{background:linear-gradient(135deg,#F8FBF9 0%,#ECF7F1 52%,#F7FAF8 100%);padding:58px 5% 42px;border-bottom:1px solid var(--brd)}
+.hero::before{background:linear-gradient(135deg,rgba(24,184,117,.08),rgba(27,86,166,.06));opacity:.8}
+.hero-grid{background-image:linear-gradient(rgba(18,33,29,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(18,33,29,.04) 1px,transparent 1px);background-size:48px 48px}
+.hero-inner{grid-template-columns:minmax(0,1.04fr) minmax(360px,.96fr);min-height:520px;gap:3rem}
+.hero-badge{background:#fff;border:1px solid var(--brd);color:var(--mid);box-shadow:var(--sh)}
+.hero h1{font-family:var(--font);font-size:clamp(2.6rem,5.5vw,5.7rem);letter-spacing:0;line-height:.96;color:var(--ink);max-width:780px}
+.hero h1 em{color:var(--or)}
+.hero p{color:var(--mid);font-size:1.06rem;max-width:620px}
+.hero-stats{border-top:1px solid var(--brd);gap:1rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.h-stat{background:rgba(255,255,255,.75);border:1px solid var(--brd);border-radius:16px;padding:14px 16px;box-shadow:0 10px 24px rgba(18,33,29,.05)}
+.h-stat strong{font-family:var(--font);color:var(--ink);font-size:1.45rem}
+.h-stat span{color:var(--muted)}
+.hero-card{background:#fff;border:1px solid var(--brd);box-shadow:var(--sh2);padding:16px;border-radius:28px}
+.hero-search{box-shadow:none;border:0;background:#fff;padding:1rem}
+.hero-search h3{font-size:.95rem;color:var(--ink);display:flex;align-items:center;justify-content:space-between}
+.search-field label{color:var(--muted)}
+.search-field input,.search-field select,.form-group input,.form-group select,.form-group textarea,.ai-input-wrap input{background:#fff;color:var(--ink);border-color:var(--brd2)}
+.search-field input:focus,.search-field select:focus,.form-group input:focus,.form-group select:focus{box-shadow:0 0 0 4px var(--or-lt)}
+.hero-market-card{position:relative;min-height:440px;border-radius:24px;overflow:hidden;background:#E8F3EE;border:1px solid var(--brd)}
+.market-map-art{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.38),rgba(24,184,117,.08)),repeating-linear-gradient(26deg,transparent 0 46px,rgba(18,33,29,.08) 47px 48px),repeating-linear-gradient(116deg,transparent 0 58px,rgba(18,33,29,.07) 59px 60px)}
+.map-route{position:absolute;background:#fff;border:1px solid var(--brd);box-shadow:var(--sh);border-radius:18px;padding:14px;min-width:210px}
+.map-route strong{display:block;font-size:.95rem}
+.map-route span{display:block;font-size:.78rem;color:var(--muted)}
+.map-route.r1{left:24px;top:30px}.map-route.r2{right:18px;top:150px}.map-route.r3{left:58px;bottom:28px}
+.pin-dot{position:absolute;width:18px;height:18px;background:var(--or);border:4px solid #fff;border-radius:50%;box-shadow:0 8px 20px rgba(24,184,117,.35)}
+.pin-dot.p1{left:62%;top:18%}.pin-dot.p2{left:42%;top:45%}.pin-dot.p3{left:74%;top:66%}.pin-dot.p4{left:24%;top:58%}
+.market-panel{position:absolute;right:22px;bottom:22px;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border:1px solid var(--brd);border-radius:20px;padding:16px;width:260px;box-shadow:var(--sh2)}
+.market-panel h4{font-size:.95rem;margin-bottom:8px}.market-panel p{font-size:.8rem;color:var(--muted);margin:0}
+.section-band{padding:3rem 5%;max-width:1400px;margin:0 auto}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.25rem}
+.section-head h2{font-size:clamp(1.5rem,2.6vw,2.3rem);letter-spacing:-.02em}
+.section-head p{color:var(--muted);max-width:560px}
+.category-grid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:12px}
+.category-card{background:#fff;border:1px solid var(--brd);border-radius:18px;padding:16px;min-height:136px;cursor:pointer;box-shadow:var(--sh);transition:transform var(--trans),border-color var(--trans),box-shadow var(--trans)}
+.category-card:hover{transform:translateY(-4px);border-color:rgba(24,184,117,.38);box-shadow:var(--sh2)}
+.category-card .cc-icon{width:42px;height:42px;border-radius:14px;background:var(--or-lt);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--or);font-weight:700}
+.category-card strong{display:block;font-size:.96rem}.category-card span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
+.trust-strip{display:grid;grid-template-columns:1.1fr repeat(3,1fr);gap:14px}
+.trust-card,.testimonial-card{background:#fff;border:1px solid var(--brd);border-radius:20px;padding:20px;box-shadow:var(--sh)}
+.trust-card.feature{background:var(--ink);color:#fff}.trust-card.feature p{color:rgba(255,255,255,.68)}
+.trust-card p,.testimonial-card p{color:var(--muted);font-size:.9rem;margin-top:6px}
+.testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cat-tabs{background:rgba(247,250,248,.88);backdrop-filter:blur(14px);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.cat-tab{background:#fff;color:var(--mid);box-shadow:0 8px 20px rgba(18,33,29,.04)}
+.cat-tab:hover{color:var(--ink)}
+.cat-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.listings-section{background:#fff;border-top:1px solid var(--brd);max-width:none;padding:2.5rem 5%}
+.ls-header{max-width:1400px;margin-left:auto;margin-right:auto}
+.listings-grid{max-width:1400px;margin:0 auto;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.listing-card{border-radius:22px;box-shadow:var(--sh);background:#fff}
+.listing-card:hover{box-shadow:var(--sh2);border-color:rgba(24,184,117,.4)}
+.lc-img{height:210px;background:#DCEFE6;font-size:3rem}
+.lc-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.22));pointer-events:none}
+.lc-img.t-hostel{background:linear-gradient(135deg,#DFF1E9,#B8DDCF)}
+.lc-img.t-room{background:linear-gradient(135deg,#EAF0FF,#C7D7F3)}
+.lc-img.t-flat{background:linear-gradient(135deg,#F5ECE0,#DFC8AC)}
+.lc-img.t-tiffin{background:linear-gradient(135deg,#FFF1D9,#FFD6A2)}
+.lc-badges,.lc-save{z-index:2}
+.badge{background:#fff;color:var(--ink);border:1px solid rgba(255,255,255,.5);box-shadow:0 8px 16px rgba(18,33,29,.08)}
+.badge-featured{background:var(--ink);color:#fff}
+.lc-body{padding:16px}
+.lc-type{color:var(--or);font-weight:700}
+.lc-name{font-size:1.05rem;color:var(--ink)}
+.lc-loc,.lc-rating{color:var(--muted)}
+.facility-tag{background:var(--surf);color:var(--mid);border:1px solid var(--brd)}
+.listing-meta-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.meta-pill{font-size:11px;border-radius:999px;background:#F8FAF9;border:1px solid var(--brd);padding:4px 9px;color:var(--mid)}
+.active-dot{width:7px;height:7px;border-radius:50%;background:var(--or);display:inline-block;margin-right:5px}
+.map-shell{display:grid;grid-template-columns:minmax(0,1.35fr) 360px;gap:16px;max-width:1400px;margin:0 auto}
+#map-container{height:620px;border-radius:24px;background:#E8F3EE;box-shadow:var(--sh);border:1px solid var(--brd);margin:0}
+.map-side-panel{background:#fff;border:1px solid var(--brd);border-radius:24px;padding:14px;box-shadow:var(--sh);max-height:620px;overflow:auto}
+.map-list-card{border:1px solid var(--brd);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer;transition:background var(--trans),border-color var(--trans)}
+.map-list-card:hover{background:var(--surf);border-color:rgba(24,184,117,.35)}
+.map-list-card strong{display:block;font-size:.92rem}.map-list-card span{display:block;font-size:.78rem;color:var(--muted)}
+.leaflet-container{font-family:var(--font);border-radius:24px}
+.nikunj-marker{background:var(--ink);color:#fff;border:2px solid #fff;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(18,33,29,.2);white-space:nowrap}
+.panel-content{background:#F7FAF8}
+.panel-sidebar{background:#fff;border-right:1px solid var(--brd)}
+.panel-sidebar-logo{color:var(--ink);border-bottom:1px solid var(--brd)}
+.sidebar-item{color:var(--mid)}.sidebar-item:hover,.sidebar-item.active{background:var(--or-lt);color:var(--ink)}
+.stat-card,.data-table,.listing-form,.modal,.ai-chat-panel{background:#fff;color:var(--ink);box-shadow:var(--sh)}
+.data-table th{background:var(--surf)}.data-table tr:hover td{background:#F8FAF9}
+footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
+.footer-brand p,.footer-col a{color:rgba(255,255,255,.62)}
+.toast{box-shadow:var(--sh2);color:var(--ink)}
+@media(max-width:1100px){
+  .hero-inner{grid-template-columns:1fr}.hero-card{display:block}.category-grid{grid-template-columns:repeat(4,1fr)}.trust-strip,.testimonial-grid{grid-template-columns:1fr 1fr}.map-shell{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  nav{height:62px}.nav-links{background:#fff}.hero{padding:38px 5% 28px}.hero h1{font-size:clamp(2.45rem,13vw,4rem)}.hero-stats{grid-template-columns:repeat(2,1fr)}.hero-card{padding:10px}.hero-market-card{min-height:360px}.market-panel{left:14px;right:14px;width:auto}.map-route.r2{display:none}.category-grid{display:flex;overflow-x:auto;padding-bottom:6px}.category-card{min-width:150px}.section-head{display:block}.trust-strip,.testimonial-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr}.map-side-panel{max-height:none}.cat-tabs{top:62px}.filter-bar{width:100%;align-items:stretch}.filter-bar select,.map-toggle{width:100%}.view-btn{flex:1}.footer-inner{grid-template-columns:1fr}.footer-bottom{display:block}.modal-body{padding:1.25rem}.panel-content{padding:1rem}
+}
 </style>
 <style>
 /* Clerk Modal Styling */
@@ -408,10 +511,10 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
   <div class="logo" onclick="showPage('home')">Niku<span>nj</span></div>
   <div class="nav-links" id="navLinks">
     <a onclick="showPage('home');filterType('all')" class="active" id="nav-home">Home</a>
-    <a onclick="showPage('home');filterType('hostel')" id="nav-hostels">Hostels</a>
-    <a onclick="showPage('home');filterType('room')" id="nav-rooms">Rooms & PG</a>
-    <a onclick="showPage('home');filterType('flat')" id="nav-flats">Flats</a>
-    <a onclick="showPage('home');filterType('tiffin')" id="nav-tiffin">Tiffin</a>
+    <a onclick="showPage('home');filterCategory('rooms')" id="nav-rooms">Rooms</a>
+    <a onclick="showPage('home');filterCategory('flats')" id="nav-flats">Flats</a>
+    <a onclick="showPage('home');filterCategory('pg')" id="nav-pg">PG</a>
+    <a onclick="showPage('home');filterCategory('food')" id="nav-tiffin">Food</a>
     <a id="nav-panel" onclick="showPage('panel')" style="display:none">Dashboard</a>
   </div>
   <div class="nav-right">
@@ -438,60 +541,99 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     <div class="hero-grid"></div>
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-badge"><span class="badge-dot"></span> Jaipur's most trusted student platform</div>
-        <h1>Your home away<br>from <em>home</em>,<br>found here.</h1>
-        <p>Verified hostels, PG rooms, flats & daily tiffin services — curated for students, approved by admins.</p>
+        <div class="hero-badge"><span class="badge-dot"></span> Verified rentals, rooms and food services across Jaipur</div>
+        <h1>Find your next <em>place</em> in Jaipur.</h1>
+        <p>Nikunj brings homes, flats, PGs, hostels, rooms, roommates and mess services into one trusted rental marketplace for students, families, professionals and owners.</p>
         <div class="hero-btns">
-          <button class="btn btn-primary" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Browse Listings</button>
-          <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="openAI()">Ask AI ✦</button>
+          <button class="btn btn-primary" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Explore rentals</button>
+          <button class="btn btn-outline" onclick="setView('map');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Open map</button>
+          <button class="btn btn-outline" onclick="openAI()">Ask Nikunj AI</button>
         </div>
         <div class="hero-stats">
-          <div class="h-stat"><strong id="stat-total">340+</strong><span>Verified listings</span></div>
-          <div class="h-stat"><strong>12K+</strong><span>Students helped</span></div>
-          <div class="h-stat"><strong>4.8★</strong><span>Average rating</span></div>
-          <div class="h-stat"><strong>24hr</strong><span>Approval time</span></div>
+          <div class="h-stat"><strong id="stat-total">340+</strong><span>Active spaces</span></div>
+          <div class="h-stat"><strong>7</strong><span>Living categories</span></div>
+          <div class="h-stat"><strong>4.8</strong><span>Average rating</span></div>
+          <div class="h-stat"><strong>24hr</strong><span>Verification goal</span></div>
         </div>
       </div>
       <div class="hero-card">
-        <div class="hero-search">
-          <h3>Quick Search</h3>
-          <div class="search-field">
-            <label>I'm looking for</label>
-            <select id="qs-type" onchange="syncFilter()">
-              <option value="all">All types</option>
-              <option value="hostel">Hostel</option>
-              <option value="room">Room / PG</option>
-              <option value="flat">Flat</option>
-              <option value="tiffin">Tiffin / Food</option>
-            </select>
-          </div>
-          <div class="search-field">
-            <label>Area / Locality</label>
-            <input type="text" id="qs-area" placeholder="e.g. Malviya Nagar, Mansarovar…" onkeydown="if(event.key==='Enter')doSearch()"/>
-          </div>
-          <div class="search-row">
+        <div class="hero-market-card">
+          <div class="market-map-art"></div>
+          <span class="pin-dot p1"></span><span class="pin-dot p2"></span><span class="pin-dot p3"></span><span class="pin-dot p4"></span>
+          <div class="map-route r1"><strong>Family-ready flats</strong><span>Mansarovar, Vaishali Nagar, C-Scheme</span></div>
+          <div class="map-route r2"><strong>PGs and rooms</strong><span>Verified owners, safe locations</span></div>
+          <div class="map-route r3"><strong>Food and mess</strong><span>Monthly plans near your stay</span></div>
+          <div class="market-panel">
+            <h4>Quick Search</h4>
             <div class="search-field">
-              <label>Min Price (₹)</label>
-              <input type="number" id="qs-min" placeholder="0"/>
+              <label>I'm looking for</label>
+              <select id="qs-type" onchange="syncFilter()">
+                <option value="all">All rentals</option>
+                <option value="room">Rooms / PG</option>
+                <option value="flat">Flats / Family homes</option>
+                <option value="hostel">Hostels</option>
+                <option value="tiffin">Food / Mess</option>
+              </select>
             </div>
             <div class="search-field">
-              <label>Max Price (₹)</label>
-              <input type="number" id="qs-max" placeholder="Any"/>
+              <label>Area / Locality</label>
+              <input type="text" id="qs-area" placeholder="Mansarovar, Jagatpura..." onkeydown="if(event.key==='Enter')doSearch()"/>
             </div>
+            <div class="search-row">
+              <div class="search-field"><label>Min (Rs)</label><input type="number" id="qs-min" placeholder="0"/></div>
+              <div class="search-field"><label>Max (Rs)</label><input type="number" id="qs-max" placeholder="Any"/></div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-top:.5rem;justify-content:center" onclick="doSearch()">Search now</button>
           </div>
-          <button class="btn btn-primary" style="width:100%;margin-top:.5rem;justify-content:center" onclick="doSearch()">Search Listings →</button>
         </div>
       </div>
     </div>
   </div>
 
+  <section class="section-band">
+    <div class="section-head">
+      <div>
+        <h2>Start with what you need</h2>
+        <p>Clear categories for every kind of renter, from a single room to a family home.</p>
+      </div>
+      <button class="btn btn-outline" onclick="showPage('panel')">List your property</button>
+    </div>
+    <div class="category-grid" id="categoryCards"></div>
+  </section>
+
+  <section class="section-band" id="featuredSection">
+    <div class="section-head">
+      <div>
+        <h2>Featured verified spaces</h2>
+        <p>Premium picks with ratings, owner signals and active listing details.</p>
+      </div>
+      <button class="btn btn-outline" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">View all</button>
+    </div>
+    <div class="listings-grid" id="featuredGrid"></div>
+  </section>
+
+  <section class="section-band">
+    <div class="trust-strip">
+      <div class="trust-card feature">
+        <h2>Built for real rental decisions</h2>
+        <p>Every flow stays connected to owner posting, admin verification, secure login, uploads, notifications and payments.</p>
+      </div>
+      <div class="trust-card"><strong>Verified owners</strong><p>Admin-reviewed listings and role-aware dashboards.</p></div>
+      <div class="trust-card"><strong>Location clarity</strong><p>Map browsing, nearby markers and locality-led discovery.</p></div>
+      <div class="trust-card"><strong>Fast response signals</strong><p>Active listings, direct calls, WhatsApp and recent activity.</p></div>
+    </div>
+  </section>
+
   <!-- Category Tabs -->
   <div class="cat-tabs" id="listings-top">
-    <div class="cat-tab active" id="tab-all" onclick="filterType('all')"><span class="ct-icon">🏠</span> All <span class="ct-count" id="cnt-all">0</span></div>
-    <div class="cat-tab" id="tab-hostel" onclick="filterType('hostel')"><span class="ct-icon">🏨</span> Hostels <span class="ct-count" id="cnt-hostel">0</span></div>
-    <div class="cat-tab" id="tab-room" onclick="filterType('room')"><span class="ct-icon">🛏</span> Rooms & PG <span class="ct-count" id="cnt-room">0</span></div>
-    <div class="cat-tab" id="tab-flat" onclick="filterType('flat')"><span class="ct-icon">🏢</span> Flats <span class="ct-count" id="cnt-flat">0</span></div>
-    <div class="cat-tab" id="tab-tiffin" onclick="filterType('tiffin')"><span class="ct-icon">🍱</span> Tiffin <span class="ct-count" id="cnt-tiffin">0</span></div>
+    <div class="cat-tab active" id="tab-all" onclick="filterType('all')"><span class="ct-icon">All</span> All <span class="ct-count" id="cnt-all">0</span></div>
+    <div class="cat-tab" id="tab-room" onclick="filterCategory('rooms')"><span class="ct-icon">Room</span> Rooms <span class="ct-count" id="cnt-room">0</span></div>
+    <div class="cat-tab" id="tab-flat" onclick="filterCategory('flats')"><span class="ct-icon">Flat</span> Flats <span class="ct-count" id="cnt-flat">0</span></div>
+    <div class="cat-tab" id="tab-pg" onclick="filterCategory('pg')"><span class="ct-icon">PG</span> PG <span class="ct-count" id="cnt-pg">0</span></div>
+    <div class="cat-tab" id="tab-hostel" onclick="filterType('hostel')"><span class="ct-icon">Hostel</span> Hostels <span class="ct-count" id="cnt-hostel">0</span></div>
+    <div class="cat-tab" id="tab-family" onclick="filterCategory('family')"><span class="ct-icon">Home</span> Family Homes <span class="ct-count" id="cnt-family">0</span></div>
+    <div class="cat-tab" id="tab-tiffin" onclick="filterCategory('food')"><span class="ct-icon">Food</span> Food/Mess <span class="ct-count" id="cnt-tiffin">0</span></div>
+    <div class="cat-tab" id="tab-roommates" onclick="filterCategory('roommates')"><span class="ct-icon">Share</span> Roommates <span class="ct-count" id="cnt-roommates">0</span></div>
   </div>
 
   <!-- Listings -->
@@ -518,30 +660,46 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     </div>
     <div class="listings-grid" id="listingsGrid"></div>
     <div id="mapContainer" style="display:none">
-      <div id="map-container">
-        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem">
-          <div style="font-size:2rem">📍</div>
-          <p>Add your Google Maps API key to enable map view</p>
-          <code style="font-size:.8rem;background:var(--surf);padding:6px 14px;border-radius:8px">GOOGLE_MAPS_API_KEY in .env</code>
+      <div class="map-shell">
+        <div id="map-container">
+          <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem">
+            <div style="font-size:2rem">Map</div>
+            <p>Verified listings with coordinates appear here.</p>
+          </div>
         </div>
+        <div class="map-side-panel" id="mapListPanel"></div>
       </div>
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
+
+  <section class="section-band">
+    <div class="section-head">
+      <div>
+        <h2>People use Nikunj for different moves</h2>
+        <p>Students, owners, families and working professionals can all discover or list spaces with confidence.</p>
+      </div>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card"><strong>For families</strong><p>"The locality-first view makes it easier to compare flats and contact verified owners quickly."</p></div>
+      <div class="testimonial-card"><strong>For students</strong><p>"Hostels, PGs and tiffin options are in one place, so moving near college feels simpler."</p></div>
+      <div class="testimonial-card"><strong>For owners</strong><p>"Posting a room or apartment stays connected to admin approval, uploads and the owner dashboard."</p></div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="logo">Niku<span>nj</span></div>
-        <p>Jaipur's most trusted platform for student accommodation and food services. Every listing verified by our admin team.</p>
+        <p>Jaipur's modern rental marketplace for rooms, flats, PGs, family homes, hostels, roommates and food services.</p>
       </div>
       <div class="footer-col">
-        <h4>Students</h4>
-        <a onclick="filterType('hostel')">Find Hostels</a>
-        <a onclick="filterType('room')">PG & Rooms</a>
-        <a onclick="filterType('flat')">Flats</a>
-        <a onclick="filterType('tiffin')">Tiffin Services</a>
+        <h4>Find</h4>
+        <a onclick="filterCategory('rooms')">Rooms</a>
+        <a onclick="filterCategory('pg')">PG</a>
+        <a onclick="filterCategory('flats')">Flats</a>
+        <a onclick="filterCategory('food')">Food/Mess</a>
       </div>
       <div class="footer-col">
         <h4>Owners</h4>
@@ -557,7 +715,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Nikunj. Made with ❤️ for students in Jaipur.</span>
+      <span>© 2026 Nikunj. Rental discovery for Jaipur.</span>
       <span>Contact: hello@nikunj.in</span>
     </div>
   </footer>
@@ -762,6 +920,7 @@ var state={
   listings:[],filtered:[],
   currentPage:1,perPage:9,
   currentType:'all',
+  currentCategory:'all',
   currentView:'grid',
   selectedRating:0,
   currentListingId:null,
@@ -781,10 +940,19 @@ var DEMO_LISTINGS=[
   {_id:'9',title:'3BHK Student Flat — Mansarovar',type:'flat',description:'Spacious 3BHK flat available for a group of 4 students. Semi-furnished, quiet area, close to coaching centers and RTU.',owner:{name:'Harish Agarwal',phone:'+91 10987 65432',whatsapp:'+91 10987 65432'},location:{address:'Sector 3, Mansarovar',area:'Mansarovar',city:'Jaipur',nearbyColleges:['RTU','IIS University'],lat:26.862,lng:75.762},pricing:{amount:11000,deposit:15000,negotiable:true},facilities:['Semi-Furnished','Parking','Water Backup','Terrace Access'],gender:'any',status:'approved',avgRating:4.2,totalReviews:8,views:64,featured:false,reviews:[]}
 ];
 
-var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan'];
-var TYPE_ICONS={hostel:'🏨',room:'🛏',flat:'🏢',tiffin:'🍱'};
-var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat',tiffin:'Tiffin Service'};
+var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan','Family Friendly','Lift','Power Backup'];
+var TYPE_ICONS={hostel:'Stay',room:'Room',flat:'Home',tiffin:'Food'};
+var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat / Home',tiffin:'Food / Mess'};
 var GENDER_LABELS={male:'Boys only',female:'Girls only',any:'All genders'};
+var CATEGORY_OPTIONS=[
+  {key:'rooms',label:'Rooms',type:'room',text:'Private and shared rooms'},
+  {key:'flats',label:'Flats',type:'flat',text:'Apartments for rent'},
+  {key:'pg',label:'PG',type:'room',text:'Managed stays and meals'},
+  {key:'hostel',label:'Hostels',type:'hostel',text:'Budget community living'},
+  {key:'family',label:'Family Homes',type:'flat',text:'Homes for families'},
+  {key:'food',label:'Food/Mess',type:'tiffin',text:'Daily meals and tiffin'},
+  {key:'roommates',label:'Roommates',type:'room',text:'Shared stays and groups'}
+];
 
 // ═══════════════════════════════════════════════════════════
 // INIT
@@ -793,6 +961,8 @@ var GENDER_LABELS={male:'Boys only',female:'Girls only',any:'All genders'};
   state.listings=[...DEMO_LISTINGS];
   state.filtered=[...DEMO_LISTINGS];
   updateCounts();
+  renderCategoryCards();
+  renderFeaturedListings();
   renderListings();
   buildFacilitiesGrid();
   loadSavedAuth();
@@ -828,6 +998,8 @@ async function loadListings(includeAll){
     state.listings=data.listings.map(normalizeListing);
     applyFilters();
     updateCounts();
+    renderCategoryCards();
+    renderFeaturedListings();
     if(document.getElementById('page-panel')?.classList.contains('active'))loadPanelData();
   }catch(err){}
 }
@@ -856,11 +1028,19 @@ function updateCounts(){
     var el=document.getElementById('cnt-'+t);
     if(el)el.textContent=all.filter(function(l){return l.type===t}).length;
   });
+  var pg=document.getElementById('cnt-pg');
+  var family=document.getElementById('cnt-family');
+  var roommates=document.getElementById('cnt-roommates');
+  if(pg)pg.textContent=all.filter(function(l){return l.type==='room'}).length;
+  if(family)family.textContent=all.filter(function(l){return l.type==='flat'}).length;
+  if(roommates)roommates.textContent=all.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
   document.getElementById('stat-total').textContent=all.length+'+';
 }
 
 function filterType(t){
   state.currentType=t;state.currentPage=1;
+  if(t==='all')state.currentCategory='all';
+  else if(state.currentCategory==='all'||!CATEGORY_OPTIONS.some(function(c){return c.key===state.currentCategory&&c.type===t}))state.currentCategory=t;
   document.querySelectorAll('.cat-tab').forEach(function(el){el.classList.remove('active')});
   var tab=document.getElementById('tab-'+t);
   if(tab)tab.classList.add('active');
@@ -868,6 +1048,76 @@ function filterType(t){
   applyFilters();
   var el=document.getElementById('listings-top');
   if(el)el.scrollIntoView({behavior:'smooth'});
+}
+
+function filterCategory(key){
+  var cat=CATEGORY_OPTIONS.find(function(c){return c.key===key});
+  if(!cat)return filterType('all');
+  state.currentCategory=key;
+  filterType(cat.type);
+  document.querySelectorAll('.cat-tab').forEach(function(el){el.classList.remove('active')});
+  var tab=document.getElementById('tab-'+key);
+  if(tab)tab.classList.add('active');
+}
+
+function renderCategoryCards(){
+  var el=document.getElementById('categoryCards');
+  if(!el)return;
+  var approved=state.listings.filter(function(l){return l.status==='approved'});
+  el.innerHTML=CATEGORY_OPTIONS.map(function(cat){
+    var count=approved.filter(function(l){return l.type===cat.type}).length;
+    if(cat.key==='roommates')count=approved.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
+    return '<div class="category-card" onclick="filterCategory(\''+cat.key+'\')">'+
+      '<div class="cc-icon">'+cat.label.split('/')[0]+'</div>'+
+      '<strong>'+cat.label+'</strong>'+
+      '<span>'+cat.text+'</span>'+
+      '<span style="margin-top:12px;color:var(--or);font-weight:700">'+count+' active</span>'+
+    '</div>';
+  }).join('');
+}
+
+function listingCardHtml(l,compact){
+  var saved=(state.user&&state.user.savedListings||[]).includes(l._id);
+  var response=l.featured?'Fast response':'Usually replies today';
+  var active=l.availability===false?'Limited availability':'Active now';
+  return '<div class="listing-card" onclick="openDetail(\''+l._id+'\')">'+
+    '<div class="lc-img t-'+l.type+'">'+
+      '<div class="lc-badges">'+
+        '<span class="badge badge-verified">Verified</span>'+
+        (l.featured?'<span class="badge badge-featured">Featured</span>':'')+
+      '</div>'+
+      TYPE_ICONS[l.type]+
+      '<div class="lc-save '+(saved?'saved':'')+'" onclick="event.stopPropagation();toggleSave(\''+l._id+'\',this)">'+
+        (saved?'Saved':'Save')+
+      '</div>'+
+    '</div>'+
+    '<div class="lc-body">'+
+      '<div class="lc-type">'+TYPE_LABELS[l.type]+'</div>'+
+      '<div class="lc-name">'+l.title+'</div>'+
+      '<div class="lc-loc">'+l.location.area+', '+l.location.city+'</div>'+
+      '<div class="listing-meta-row">'+
+        '<span class="meta-pill"><span class="active-dot"></span>'+active+'</span>'+
+        '<span class="meta-pill">'+response+'</span>'+
+        '<span class="meta-pill">'+GENDER_LABELS[l.gender]+'</span>'+
+      '</div>'+
+      (!compact?'<div class="lc-facilities">'+
+        (l.facilities||[]).slice(0,3).map(function(f){return '<span class="facility-tag">'+f+'</span>'}).join('')+
+        (l.facilities&&l.facilities.length>3?'<span class="facility-tag">+more</span>':'')+
+      '</div>':'')+
+      '<div class="lc-foot">'+
+        '<div class="lc-price">Rs '+l.pricing.amount.toLocaleString()+'<small>/'+l.pricing.period+'</small></div>'+
+        '<div class="lc-rating"><span class="star">★</span> '+l.avgRating+' ('+l.totalReviews+')</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderFeaturedListings(){
+  var el=document.getElementById('featuredGrid');
+  if(!el)return;
+  var featured=state.listings.filter(function(l){return l.status==='approved'&&(l.featured||l.avgRating>=4.6)}).slice(0,3);
+  if(!featured.length)featured=state.listings.filter(function(l){return l.status==='approved'}).slice(0,3);
+  el.innerHTML=featured.map(function(l){return listingCardHtml(l,true)}).join('');
 }
 
 function applyFilters(){
@@ -890,8 +1140,13 @@ function applyFilters(){
   else state.filtered.sort(function(a,b){return (b.featured?1:0)-(a.featured?1:0)});
   state.currentPage=1;
   var h=document.getElementById('listings-heading');
-  if(h){var t=state.currentType==='all'?'All Listings':TYPE_LABELS[state.currentType]+'s';h.textContent=t+' ('+state.filtered.length+')';}
+  if(h){
+    var cat=CATEGORY_OPTIONS.find(function(c){return c.key===state.currentCategory});
+    var t=state.currentType==='all'?'All Listings':(cat?cat.label:TYPE_LABELS[state.currentType]+'s');
+    h.textContent=t+' ('+state.filtered.length+')';
+  }
   renderListings();
+  renderFeaturedListings();
   if(state.currentView==='map')renderMapView();
 }
 
@@ -913,34 +1168,7 @@ function renderListings(){
     document.getElementById('pagination').innerHTML='';
     return;
   }
-  grid.innerHTML=page.map(function(l){
-    var saved=(state.user&&state.user.savedListings||[]).includes(l._id);
-    return '<div class="listing-card" onclick="openDetail(\''+l._id+'\')">'+
-      '<div class="lc-img t-'+l.type+'">'+
-        '<div class="lc-badges">'+
-          '<span class="badge badge-verified">✓ Verified</span>'+
-          (l.featured?'<span class="badge badge-featured">★ Featured</span>':'')+
-        '</div>'+
-        TYPE_ICONS[l.type]+
-        '<div class="lc-save '+(saved?'saved':'')+'" onclick="event.stopPropagation();toggleSave(\''+l._id+'\',this)">'+
-          (saved?'🔖':'🤍')+
-        '</div>'+
-      '</div>'+
-      '<div class="lc-body">'+
-        '<div class="lc-type">'+TYPE_LABELS[l.type]+'</div>'+
-        '<div class="lc-name">'+l.title+'</div>'+
-        '<div class="lc-loc">📍 '+l.location.area+', '+l.location.city+'</div>'+
-        '<div class="lc-facilities">'+
-          (l.facilities||[]).slice(0,3).map(function(f){return '<span class="facility-tag">'+f+'</span>'}).join('')+
-          (l.facilities&&l.facilities.length>3?'<span class="facility-tag">+more</span>':'')+
-        '</div>'+
-        '<div class="lc-foot">'+
-          '<div class="lc-price">₹'+l.pricing.amount.toLocaleString()+'<small>/month</small></div>'+
-          '<div class="lc-rating"><span class="star">★</span> '+l.avgRating+' ('+l.totalReviews+')</div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+  grid.innerHTML=page.map(function(l){return listingCardHtml(l,false)}).join('');
   renderPagination();
 }
 
@@ -985,19 +1213,31 @@ function ensureLeaflet(){
 
 async function renderMapView(){
   var el=document.getElementById('map-container');
+  var side=document.getElementById('mapListPanel');
   var points=state.filtered.filter(function(l){return l.location&&l.location.lat&&l.location.lng});
+  if(side){
+    side.innerHTML='<div style="padding:6px 6px 14px"><strong>'+state.filtered.length+' matching places</strong><p style="color:var(--muted);font-size:.82rem;margin-top:4px">Tap a card or map pin to inspect the listing.</p></div>'+state.filtered.slice(0,12).map(function(l){
+      return '<div class="map-list-card" onclick="openDetail(\''+l._id+'\')"><strong>'+l.title+'</strong><span>'+TYPE_LABELS[l.type]+' in '+l.location.area+'</span><span>Rs '+l.pricing.amount.toLocaleString()+'/'+l.pricing.period+' - '+l.avgRating+' rating</span></div>';
+    }).join('');
+  }
   if(!points.length){
-    el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem"><div style="font-size:2rem">📍</div><p>Map locations will appear when listings include coordinates</p></div>';
+    el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem"><div style="font-size:2rem">Map</div><p>Map locations will appear when listings include coordinates.</p></div>';
     return;
   }
   try{
     await ensureLeaflet();
     el.innerHTML='';
-    var map=L.map(el).setView([points[0].location.lat,points[0].location.lng],12);
+    var map=L.map(el,{zoomControl:false}).setView([points[0].location.lat,points[0].location.lng],12);
+    L.control.zoom({position:'bottomright'}).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+    var bounds=[];
     points.forEach(function(l){
-      L.marker([l.location.lat,l.location.lng]).addTo(map).bindPopup('<strong>'+l.title+'</strong><br>'+l.location.area+'<br>₹'+l.pricing.amount+'/month');
+      var html='<div class="nikunj-marker">Rs '+Math.round(l.pricing.amount/1000)+'k</div>';
+      var icon=L.divIcon({html:html,className:'',iconSize:[72,30],iconAnchor:[36,15]});
+      L.marker([l.location.lat,l.location.lng],{icon:icon}).addTo(map).bindPopup('<strong>'+l.title+'</strong><br>'+TYPE_LABELS[l.type]+' - '+l.location.area+'<br>Rs '+l.pricing.amount.toLocaleString()+'/'+l.pricing.period+'<br><button style="margin-top:8px;border:0;background:#16211D;color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer" onclick="openDetail(\''+l._id+'\')">View details</button>');
+      bounds.push([l.location.lat,l.location.lng]);
     });
+    if(bounds.length>1)map.fitBounds(bounds,{padding:[42,42]});
     setTimeout(function(){map.invalidateSize()},100);
   }catch(err){
     el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)">Map could not be loaded</div>';
