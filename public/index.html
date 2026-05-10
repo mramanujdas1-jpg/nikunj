@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Nikunj - Rental homes, rooms, PGs and food in Jaipur</title>
+<title>Nikunj - Find rooms, flats and homes anywhere</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
@@ -541,8 +541,8 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
     <div class="hero-grid"></div>
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-badge"><span class="badge-dot"></span> Verified rentals, rooms and food services across Jaipur</div>
-        <h1>Find your next <em>place</em> in Jaipur.</h1>
+        <div class="hero-badge"><span class="badge-dot"></span> Verified rentals, rooms and food services across cities</div>
+        <h1>Find your next <em>place</em> in india.</h1>
         <p>Nikunj brings homes, flats, PGs, hostels, rooms, roommates and mess services into one trusted rental marketplace for students, families, professionals and owners.</p>
         <div class="hero-btns">
           <button class="btn btn-primary" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Explore rentals</button>
@@ -692,7 +692,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="logo">Niku<span>nj</span></div>
-        <p>Jaipur's modern rental marketplace for rooms, flats, PGs, family homes, hostels, roommates and food services.</p>
+        <p>insia's modern rental marketplace for rooms, flats, PGs, family homes, hostels, roommates and food services.</p>
       </div>
       <div class="footer-col">
         <h4>Find</h4>
@@ -715,7 +715,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Nikunj. Rental discovery for Jaipur.</span>
+      <span>© 2026 Nikunj. Rental discovery for everyone..</span>
       <span>Contact: hello@nikunj.in</span>
     </div>
   </footer>
@@ -760,7 +760,9 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
             <div class="form-group"><label>Monthly Price (₹) *</label><input type="number" id="f-price" placeholder="e.g. 4500"/></div>
             <div class="form-group"><label>Security Deposit (₹)</label><input type="number" id="f-deposit" placeholder="e.g. 5000"/></div>
           </div>
-          <div class="form-group"><label>Full Address *</label><input type="text" id="f-address" placeholder="House no., Street, Area, Jaipur"/></div>
+          <div class="form-group">
+           <label>Full Address *</label>
+           <input type="text" id="f-address" placeholder="House no., street, area and city"/></div>
           <div class="form-2col">
             <div class="form-group"><label>Area / Locality *</label><input type="text" id="f-area" placeholder="e.g. Malviya Nagar"/></div>
             <div class="form-group"><label>Pincode</label><input type="text" id="f-pin" placeholder="e.g. 302017"/></div>
@@ -866,7 +868,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
   </div>
   <div class="quick-q">
     <span class="qq" onclick="sendAI('Hostel under ₹5000 near RTU')">Hostel &lt;₹5k near RTU</span>
-    <span class="qq" onclick="sendAI('Girls PG with food included in Jaipur')">Girls PG with food</span>
+    <span class="qq" onclick="sendAI('Fully serviced girls PG with meals')">Girls PG with food</span>
     <span class="qq" onclick="sendAI('Affordable tiffin service under ₹2000')">Cheap tiffin</span>
     <span class="qq" onclick="sendAI('2BHK flat for 3 students')">Flat for group</span>
   </div>
@@ -928,18 +930,7 @@ var state={
 };
 
 // Demo listings (replace with API calls when backend is running)
-var DEMO_LISTINGS=[
-  {_id:'1',title:'Sunrise Boys Hostel',type:'hostel',description:'A comfortable hostel for boys near RTU. Clean rooms, great food, strong WiFi, and 24/7 security. Perfect for engineering students.',owner:{name:'Ramesh Sharma',phone:'+91 98765 43210',whatsapp:'+91 98765 43210'},location:{address:'Plot 12, Sector 7, Malviya Nagar',area:'Malviya Nagar',city:'Jaipur',nearbyColleges:['RTU','Manipal University'],lat:26.852,lng:75.804},pricing:{amount:4500,deposit:5000,negotiable:true},facilities:['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking'],gender:'male',status:'approved',avgRating:4.7,totalReviews:38,views:284,featured:true,reviews:[{name:'Rahul K.',rating:5,comment:'Best hostel near RTU. Food is amazing!',date:'2026-03-12'},{name:'Mohit S.',rating:4,comment:'Good facilities, staff is helpful.',date:'2026-02-20'}]},
-  {_id:'2',title:'Shanti Girls PG',type:'room',description:'Safe, comfortable PG for girls near Manipal University. CCTV, biometric entry, home-cooked meals included.',owner:{name:'Sunita Meena',phone:'+91 87654 32109',whatsapp:'+91 87654 32109'},location:{address:'14-B, Bapu Nagar',area:'Bapu Nagar',city:'Jaipur',nearbyColleges:['Manipal University','JECRC'],lat:26.891,lng:75.812},pricing:{amount:5200,deposit:6000,negotiable:false},facilities:['WiFi','Meals Included','CCTV','Laundry','AC','Geyser','Biometric Entry'],gender:'female',status:'approved',avgRating:4.9,totalReviews:54,views:412,featured:true,reviews:[{name:'Priya M.',rating:5,comment:'Very safe and clean. Owner aunty is very caring!',date:'2026-04-01'},{name:'Sneha G.',rating:5,comment:'Best PG in Jaipur for girls. Highly recommended.',date:'2026-03-15'}]},
-  {_id:'3',title:'2BHK Furnished Flat — Kota Road',type:'flat',description:'Fully furnished 2BHK flat near RTU campus. Ideal for groups of 2-3 students. Gated society with 24/7 security.',owner:{name:'Anil Gupta',phone:'+91 76543 21098',whatsapp:'+91 76543 21098'},location:{address:'C-45, Krishna Vihar, Kota Road',area:'Kota Road',city:'Jaipur',nearbyColleges:['RTU'],lat:26.865,lng:75.823},pricing:{amount:8000,deposit:10000,negotiable:true},facilities:['WiFi','Furnished','Parking','Gated Society','Water Backup','Inverter'],gender:'any',status:'approved',avgRating:4.6,totalReviews:22,views:156,featured:false,reviews:[{name:'Ankit R.',rating:4,comment:'Good flat for students. Owner is cooperative.',date:'2026-03-05'}]},
-  {_id:'4',title:'Maa Ki Rasoi — Daily Tiffin',type:'tiffin',description:'Homemade daily tiffin service delivering across Jaipur. Healthy, fresh, veg meals — just like home. Monthly plans available.',owner:{name:'Savitri Devi',phone:'+91 65432 10987',whatsapp:'+91 65432 10987'},location:{address:'Near Ganesh Temple, Mansarovar',area:'Mansarovar',city:'Jaipur',nearbyColleges:['RTU','IIS University'],lat:26.858,lng:75.758},pricing:{amount:2200,deposit:0,negotiable:false},facilities:['Veg Only','Home Cooked','Lunch + Dinner','Monthly Plan','Free Delivery'],gender:'any',status:'approved',avgRating:4.8,totalReviews:91,views:632,featured:true,reviews:[{name:'Vikram Y.',rating:5,comment:'Best tiffin in Jaipur. Tastes like home!',date:'2026-04-10'},{name:'Deepak T.',rating:5,comment:'Healthy, fresh food. Never missed a delivery.',date:'2026-03-28'}]},
-  {_id:'5',title:'Royal Boys Hostel',type:'hostel',description:'Premium hostel for boys near MNIT Jaipur. Gym, study room, fast WiFi, and a great community of engineering students.',owner:{name:'Suresh Yadav',phone:'+91 54321 09876',whatsapp:'+91 54321 09876'},location:{address:'Plot 8, Tonk Road',area:'Tonk Road',city:'Jaipur',nearbyColleges:['MNIT','Poornima University'],lat:26.841,lng:75.814},pricing:{amount:6000,deposit:8000,negotiable:false},facilities:['WiFi','Gym','Study Room','Meals Included','Security','CCTV','AC'],gender:'male',status:'approved',avgRating:4.5,totalReviews:29,views:198,featured:false,reviews:[{name:'Rajan P.',rating:4,comment:'Great hostel! Gym is a bonus.',date:'2026-02-14'}]},
-  {_id:'6',title:'Green Valley Girls Hostel',type:'hostel',description:'Budget-friendly girls hostel in Vaishali Nagar. Clean rooms, good food, and a safe environment. Walking distance from LNMIIT.',owner:{name:'Kavita Sharma',phone:'+91 43210 98765',whatsapp:'+91 43210 98765'},location:{address:'B-12, Vaishali Nagar',area:'Vaishali Nagar',city:'Jaipur',nearbyColleges:['LNMIIT','Amity University'],lat:26.905,lng:75.736},pricing:{amount:3800,deposit:4000,negotiable:true},facilities:['WiFi','Meals Included','Geyser','Laundry','Security'],gender:'female',status:'approved',avgRating:4.3,totalReviews:18,views:127,featured:false,reviews:[]},
-  {_id:'7',title:'Annapurna Tiffin Service',type:'tiffin',description:'Nutritious daily tiffin delivering in C-Scheme and nearby areas. Specially designed for students with exam stress — wholesome, balanced meals.',owner:{name:'Deepak Mittal',phone:'+91 32109 87654',whatsapp:'+91 32109 87654'},location:{address:'Near GPO, C-Scheme',area:'C-Scheme',city:'Jaipur',nearbyColleges:['University of Rajasthan'],lat:26.917,lng:75.801},pricing:{amount:1800,deposit:0,negotiable:false},facilities:['Veg & Non-Veg','Lunch Only','Monthly Plan','Free Delivery'],gender:'any',status:'approved',avgRating:4.4,totalReviews:33,views:245,featured:false,reviews:[]},
-  {_id:'8',title:'Student Studio Rooms — Jagatpura',type:'room',description:'Independent studio rooms for students near Poornima University. Fully furnished with attached bathroom, kitchen, and high-speed WiFi.',owner:{name:'Manoj Choudhary',phone:'+91 21098 76543',whatsapp:'+91 21098 76543'},location:{address:'Sector 6, Jagatpura',area:'Jagatpura',city:'Jaipur',nearbyColleges:['Poornima University','Jagan Nath University'],lat:26.795,lng:75.856},pricing:{amount:6500,deposit:7000,negotiable:true},facilities:['WiFi','Attached Bath','Kitchen','Furnished','AC','24/7 Water'],gender:'any',status:'approved',avgRating:4.6,totalReviews:14,views:89,featured:false,reviews:[]},
-  {_id:'9',title:'3BHK Student Flat — Mansarovar',type:'flat',description:'Spacious 3BHK flat available for a group of 4 students. Semi-furnished, quiet area, close to coaching centers and RTU.',owner:{name:'Harish Agarwal',phone:'+91 10987 65432',whatsapp:'+91 10987 65432'},location:{address:'Sector 3, Mansarovar',area:'Mansarovar',city:'Jaipur',nearbyColleges:['RTU','IIS University'],lat:26.862,lng:75.762},pricing:{amount:11000,deposit:15000,negotiable:true},facilities:['Semi-Furnished','Parking','Water Backup','Terrace Access'],gender:'any',status:'approved',avgRating:4.2,totalReviews:8,views:64,featured:false,reviews:[]}
-];
-
+var DEMO_LISTINGS=[];
 var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan','Family Friendly','Lift','Power Backup'];
 var TYPE_ICONS={hostel:'Stay',room:'Room',flat:'Home',tiffin:'Food'};
 var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat / Home',tiffin:'Food / Mess'};
@@ -981,7 +972,7 @@ function normalizeListing(l){
   l.views=l.views||0;
   l.status=l.status||'approved';
   l.gender=l.gender||'any';
-  l.location.city=l.location.city||'Jaipur';
+  l.location.city = l.location.city || '';
   l.pricing.period=l.pricing.period||'month';
   l.owner.whatsapp=l.owner.whatsapp||l.owner.phone||'';
   return l;
@@ -1572,7 +1563,16 @@ function submitListing(){
   var newListing={
     _id:'new_'+Date.now(),title:title,type:type,description:desc,
     owner:{user:state.user.id,name:oname,phone:phone,whatsapp:document.getElementById('f-wa').value||phone},
-    location:{address:address,area:area,city:'Jaipur',pincode:document.getElementById('f-pin').value,nearbyColleges:document.getElementById('f-colleges').value.split(',').map(function(c){return c.trim()}).filter(Boolean)},
+    location:{
+  address:address,
+  area:area,
+  city: document.getElementById('f-city').value,
+  pincode:document.getElementById('f-pin').value,
+  nearbyColleges:document.getElementById('f-colleges').value
+    .split(',')
+    .map(function(c){return c.trim()})
+    .filter(Boolean)
+},
     pricing:{amount:parseInt(price),deposit:parseInt(document.getElementById('f-deposit').value)||0,negotiable:false,period:'month'},
     facilities:facilities,gender:document.getElementById('f-gender').value,
     images:[],status:'pending',avgRating:0,totalReviews:0,views:0,featured:false,reviews:[],
