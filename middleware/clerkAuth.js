@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const { normalizeConcatenatedEnv } = require('../config/env');
+normalizeConcatenatedEnv();
 
 const ROLE_FALLBACK = 'student';
 const VALID_ROLES = new Set(['student', 'owner', 'admin']);
@@ -18,6 +20,7 @@ function decodeJson(value) {
 
 function getIssuer() {
   if (process.env.CLERK_ISSUER_URL) return process.env.CLERK_ISSUER_URL.replace(/\/$/, '');
+  if (process.env.CLERK_FRONTEND_API_URL) return process.env.CLERK_FRONTEND_API_URL.replace(/\/$/, '');
 
   const key = process.env.CLERK_PUBLISHABLE_KEY || process.env.VITE_CLERK_PUBLISHABLE_KEY || '';
   const encoded = key.split('_').pop();
@@ -29,7 +32,7 @@ function getIssuer() {
 
 function getSecretKey() {
   const secretKey = process.env.CLERK_SECRET_KEY;
-  if (!secretKey || secretKey === 'sk_test_...') {
+  if (!secretKey || secretKey === 'sk_test_...' || secretKey.includes('YOUR_CLERK_SECRET_KEY')) {
     throw new Error('Missing CLERK_SECRET_KEY');
   }
   return secretKey;
@@ -37,7 +40,16 @@ function getSecretKey() {
 
 function getBearerToken(req) {
   const header = req.headers.authorization || '';
-  return header.startsWith('Bearer ') ? header.slice(7) : null;
+  const bearerMatch = header.match(/^Bearer\s+(.+)$/i);
+  if (bearerMatch) return bearerMatch[1].trim();
+
+  const cookies = String(req.headers.cookie || '').split(';').reduce((acc, part) => {
+    const index = part.indexOf('=');
+    if (index === -1) return acc;
+    acc[part.slice(0, index).trim()] = decodeURIComponent(part.slice(index + 1).trim());
+    return acc;
+  }, {});
+  return cookies.__session || null;
 }
 
 async function fetchJwks() {
@@ -78,6 +90,7 @@ async function verifySessionToken(token) {
   if (payload.exp && payload.exp <= now) throw new Error('Session token expired');
   if (payload.nbf && payload.nbf > now) throw new Error('Session token not active');
   if (payload.iss !== getIssuer()) throw new Error('Invalid token issuer');
+  if (payload.iat && payload.iat > now + 60) throw new Error('Session token issued in the future');
   if (!payload.sub) throw new Error('Missing Clerk user id');
 
   return payload;
@@ -98,7 +111,8 @@ async function getClerkUser(userId) {
 }
 
 function normalizeRole(value) {
-  return VALID_ROLES.has(value) ? value : ROLE_FALLBACK;
+  const role = String(value || '').trim().toLowerCase();
+  return VALID_ROLES.has(role) ? role : ROLE_FALLBACK;
 }
 
 function toSafeUser(clerkUser, tokenPayload) {

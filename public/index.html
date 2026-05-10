@@ -819,8 +819,9 @@ function normalizeListing(l){
 
 async function loadListings(includeAll){
   try{
-    var url=includeAll&&state.token?'/api/admin/listings?status=all&limit=500':'/api/listings?limit=500';
-    var opts=includeAll&&state.token?{headers:{'Authorization':'Bearer '+state.token}}:{};
+    var adminRequest=includeAll&&isAdminUser();
+    var url=adminRequest?'/api/admin/listings?status=all&limit=500':'/api/listings?limit=500';
+    var opts=adminRequest?{headers:await getAuthHeaders(),credentials:'include'}:{};
     var res=await fetch(url,opts);
     var data=await res.json();
     if(!res.ok||!data.success||!Array.isArray(data.listings))return;
@@ -1012,9 +1013,9 @@ async function toggleSave(id,el){
   else{saved.push(id);el.innerHTML='&#128278;';el.classList.add('saved');}
   state.user.savedListings=saved;
   localStorage.setItem('nikunj_user',JSON.stringify(state.user));
-  if(state.token&&id.indexOf('new_')!==0){
+  if(state.user&&id.indexOf('new_')!==0){
     try{
-      var res=await fetch('/api/auth/save/'+id,{method:'PUT',headers:{'Authorization':'Bearer '+state.token}});
+      var res=await authFetch('/api/auth/save/'+id,{method:'PUT'});
       if(!res.ok)throw new Error('Save failed');
     }catch(err){
       if(wasSaved){saved.push(id);el.innerHTML='&#128278;';el.classList.add('saved');}
@@ -1092,9 +1093,9 @@ async function submitReview(){
   if(!text){showToast('Please write a review');return;}
   var l=state.listings.find(function(x){return x._id===state.currentListingId});
   if(!l)return;
-  if(state.token&&l._id.indexOf('new_')!==0){
+  if(state.user&&l._id.indexOf('new_')!==0){
     try{
-      var res=await fetch('/api/listings/'+l._id+'/review',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+state.token},body:JSON.stringify({rating:state.selectedRating,comment:text})});
+      var res=await authFetch('/api/listings/'+l._id+'/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({rating:state.selectedRating,comment:text})});
       var data=await res.json();
       if(!res.ok||!data.success){showToast(data.message||'Review failed');return;}
       if(data.listing){
@@ -1207,10 +1208,10 @@ async function adminAction(id,status){
     showToast('Admin access required');
     return;
   }
-  if(state.token&&id.indexOf('new_')!==0){
+  if(state.user&&id.indexOf('new_')!==0){
     try{
       var action=status==='approved'?'approve':'reject';
-      var res=await fetch('/api/admin/listings/'+id+'/'+action,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+state.token},body:JSON.stringify({})});
+      var res=await authFetch('/api/admin/listings/'+id+'/'+action,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
       if(!res.ok){showToast('Admin action denied');return;}
     }catch(err){showToast('Admin action failed');return;}
   }
@@ -1229,9 +1230,9 @@ async function deleteListing(id){
     return;
   }
   if(!confirm('Delete this listing?'))return;
-  if(state.token&&id.indexOf('new_')!==0){
+  if(state.user&&id.indexOf('new_')!==0){
     try{
-      var res=await fetch('/api/admin/listings/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+state.token}});
+      var res=await authFetch('/api/admin/listings/'+id,{method:'DELETE'});
       if(!res.ok){showToast('Delete denied');return;}
     }catch(err){showToast('Delete failed');return;}
   }
@@ -1248,9 +1249,9 @@ async function loadUsers(){
     return;
   }
   var users=[];
-  if(state.token){
+  if(state.user){
     try{
-      var res=await fetch('/api/admin/users',{headers:{'Authorization':'Bearer '+state.token}});
+      var res=await authFetch('/api/admin/users');
       var data=await res.json();
       if(res.ok&&data.success&&Array.isArray(data.users))users=data.users.map(function(u){
         return {name:u.name,email:u.email,role:u.role,createdAt:u.createdAt?new Date(u.createdAt).toLocaleDateString():''};
@@ -1337,11 +1338,11 @@ function submitListing(){
     images:[],status:'pending',avgRating:0,totalReviews:0,views:0,featured:false,reviews:[],
     createdAt:new Date().toISOString()
   };
-  if(selectedImages.length>0&&state.token&&state.token!=='demo_token'){
+  if(selectedImages.length>0&&state.user){
     alertEl.innerHTML='<div class="alert" style="background:var(--surf);border:1px solid var(--brd)">Uploading images...</div>';
     var fd=new FormData();
     selectedImages.forEach(function(f){fd.append('images',f)});
-    fetch('/api/upload/images',{method:'POST',headers:{'Authorization':'Bearer '+state.token},body:fd})
+    authFetch('/api/upload/images',{method:'POST',body:fd})
       .then(function(r){return r.json()})
       .then(function(d){if(d.success)newListing.images=d.urls;})
       .catch(function(){})
@@ -1352,9 +1353,9 @@ function submitListing(){
 }
 
 async function finishSubmit(listing){
-  if(state.token&&state.token!=='demo_token'){
+  if(state.user){
     try{
-      var res=await fetch('/api/listings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+state.token},body:JSON.stringify(listing)});
+      var res=await authFetch('/api/listings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(listing)});
       var data=await res.json();
       if(res.ok&&data.success&&data.listing)listing=normalizeListing(data.listing);
       else{showToast(data.message||'Listing submission failed');return;}
@@ -1446,8 +1447,34 @@ function isAdminUser(){return !!(state.user&&state.user.role==='admin')}
 function isOwnerUser(){return !!(state.user&&(state.user.role==='owner'||state.user.role==='admin'))}
 
 async function getClerkToken(){
-  if(!clerk||!clerk.session||!clerk.session.getToken)return null;
-  try{return await clerk.session.getToken();}catch(err){console.warn('Unable to read Clerk token',err);return null;}
+  var activeSession=(clerk&&clerk.session)||(window.Clerk&&window.Clerk.session);
+  try{
+    if(activeSession&&activeSession.getToken){
+      var token=await activeSession.getToken({skipCache:true});
+      if(token)return token;
+      return await activeSession.getToken();
+    }
+    if(clerk&&clerk.client&&Array.isArray(clerk.client.sessions)){
+      var session=clerk.client.sessions.find(function(s){return s.status==='active';})||clerk.client.sessions[0];
+      if(session&&session.getToken)return await session.getToken({skipCache:true});
+    }
+  }catch(err){
+    console.warn('Unable to read Clerk token',err);
+  }
+  return null;
+}
+
+async function getAuthHeaders(headers){
+  var token=await getClerkToken();
+  if(token)state.token=token;
+  return Object.assign({},headers||{},token?{'Authorization':'Bearer '+token}:{});
+}
+
+async function authFetch(url,options){
+  options=options||{};
+  options.headers=await getAuthHeaders(options.headers);
+  options.credentials='include';
+  return fetch(url,options);
 }
 
 async function fetchSafeClerkUser(){
@@ -1455,7 +1482,7 @@ async function fetchSafeClerkUser(){
   state.token=token;
   if(!token)return null;
   try{
-    var res=await fetch('/api/clerk/me',{headers:{'Authorization':'Bearer '+token}});
+    var res=await authFetch('/api/clerk/me');
     var data=await res.json();
     return data.success?data.user:null;
   }catch(err){
@@ -1535,5 +1562,3 @@ function logout() {
 </script>
 </body>
 </html>
-
-
