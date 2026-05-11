@@ -1566,7 +1566,7 @@ function submitListing(){
     location:{
   address:address,
   area:area,
-  city: document.getElementById('f-city').value,
+  city: document.getElementById('f-address').value.split(',').slice(-2).join(',').trim() || 'India',
   pincode:document.getElementById('f-pin').value,
   nearbyColleges:document.getElementById('f-colleges').value
     .split(',')
