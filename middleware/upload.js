@@ -27,7 +27,7 @@ const uploadToCloudinary = async (buffer, folder = 'nikunj') => {
   const timestamp = Math.floor(Date.now() / 1000);
   const signature = crypto
     .createHash('sha1')
-    .update(`folder=${folder}&timestamp=${timestamp}${CLOUDINARY_API_SECRET}`)
+    .update(`folder=${folder}&timestamp=${timestamp}&api_key=${CLOUDINARY_API_KEY}${CLOUDINARY_API_SECRET}`)
     .digest('hex');
 
   const form = new FormData();
