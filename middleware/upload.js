@@ -41,8 +41,10 @@ const uploadToCloudinary = async (buffer, folder = 'nikunj') => {
     method: 'POST',
     body: form
   });
-  if (!response.ok) throw new Error('Cloudinary upload failed');
-
+  if (!response.ok) {
+  const errText = await response.text();
+  throw new Error('Cloudinary upload failed: ' + errText);
+}
   const result = await response.json();
   return result.secure_url;
 };
