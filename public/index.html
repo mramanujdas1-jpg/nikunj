@@ -500,7 +500,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
   defer
   crossorigin="anonymous"
   data-clerk-publishable-key="pk_test_aW5jbHVkZWQtcGlyYW5oYS01My5jbGVyay5hY2NvdW50cy5kZXYk"
-  src="https://elegant-boa-55.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+  src="https://included-piranha-53.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
   type="text/javascript">
 </script>
 </head>
@@ -1690,9 +1690,8 @@ async function getClerkToken(){
   var activeSession=(clerk&&clerk.session)||(window.Clerk&&window.Clerk.session);
   try{
     if(activeSession&&activeSession.getToken){
-      var token=await activeSession.getToken({skipCache:true});
-      if(token)return token;
-      return await activeSession.getToken();
+      var token=await activeSession.getToken();
+if(token)return token;
     }
     if(clerk&&clerk.client&&Array.isArray(clerk.client.sessions)){
       var session=clerk.client.sessions.find(function(s){return s.status==='active';})||clerk.client.sessions[0];
