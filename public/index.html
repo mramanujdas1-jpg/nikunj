@@ -1595,6 +1595,7 @@ function submitListing(){
 async function finishSubmit(listing){
   if(state.user){
     try{
+      delete listing._id;
       var res=await authFetch('/api/listings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(listing)});
       var data=await res.json();
       if(res.ok&&data.success&&data.listing)listing=normalizeListing(data.listing);
