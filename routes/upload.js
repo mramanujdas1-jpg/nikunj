@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { upload, uploadToCloudinary } = require('../middleware/upload');
-const { protect } = require('../middleware/auth');
+const { requireClerkAuth } = require('../middleware/clerkAuth');
 
 // POST /api/upload/images — upload up to 5 listing images
-router.post('/images', protect, upload.array('images', 5), async (req, res) => {
+router.post('/images', requireClerkAuth, upload.array('images', 5), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0)
       return res.status(400).json({ success: false, message: 'No files uploaded' });
@@ -20,7 +20,7 @@ router.post('/images', protect, upload.array('images', 5), async (req, res) => {
 });
 
 // POST /api/upload/avatar — upload profile avatar
-router.post('/avatar', protect, upload.single('avatar'), async (req, res) => {
+router.post('/avatar', requireClerkAuth, upload.single('avatar'), async (req, res) => {
   try {
     if (!req.file)
       return res.status(400).json({ success: false, message: 'No file uploaded' });
