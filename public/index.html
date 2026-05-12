@@ -401,6 +401,8 @@ nav{background:rgba(255,255,255,.9);backdrop-filter:blur(18px);box-shadow:0 8px 
 .map-list-card strong{display:block;font-size:.92rem}.map-list-card span{display:block;font-size:.78rem;color:var(--muted)}
 .leaflet-container{font-family:var(--font);border-radius:24px}
 .nikunj-marker{background:var(--ink);color:#fff;border:2px solid #fff;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(18,33,29,.2);white-space:nowrap}
+.static-map-fallback{position:relative;width:100%;height:100%;min-height:420px;overflow:hidden;background:linear-gradient(135deg,#E8F3EE,#F7FAF8),repeating-linear-gradient(30deg,transparent 0 48px,rgba(22,33,29,.08) 49px 50px),repeating-linear-gradient(120deg,transparent 0 54px,rgba(22,33,29,.07) 55px 56px)}
+.static-map-pin{position:absolute;transform:translate(-50%,-50%);border:1px solid rgba(24,184,117,.35);background:#fff;color:var(--ink);font-weight:800;border-radius:999px;padding:8px 11px;box-shadow:var(--sh);cursor:pointer;white-space:nowrap}
 .panel-content{background:#F7FAF8}
 .panel-sidebar{background:#fff;border-right:1px solid var(--brd)}
 .panel-sidebar-logo{color:var(--ink);border-bottom:1px solid var(--brd)}
@@ -415,6 +417,8 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
 }
 @media(max-width:768px){
   nav{height:62px}.nav-links{background:#fff}.hero{padding:38px 5% 28px}.hero h1{font-size:clamp(2.45rem,13vw,4rem)}.hero-stats{grid-template-columns:repeat(2,1fr)}.hero-card{padding:10px}.hero-market-card{min-height:360px}.market-panel{left:14px;right:14px;width:auto}.map-route.r2{display:none}.category-grid{display:flex;overflow-x:auto;padding-bottom:6px}.category-card{min-width:150px}.section-head{display:block}.trust-strip,.testimonial-grid{grid-template-columns:1fr}.listings-grid{grid-template-columns:1fr}.map-side-panel{max-height:none}.cat-tabs{top:62px}.filter-bar{width:100%;align-items:stretch}.filter-bar select,.map-toggle{width:100%}.view-btn{flex:1}.footer-inner{grid-template-columns:1fr}.footer-bottom{display:block}.modal-body{padding:1.25rem}.panel-content{padding:1rem}
+  input,select,textarea{font-size:16px!important}
+  #map-container{min-height:420px;touch-action:pan-x pan-y}
 }
 </style>
 <style>
@@ -550,9 +554,9 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
           <button class="btn btn-outline" onclick="openAI()">Ask Nikunj AI</button>
         </div>
         <div class="hero-stats">
-          <div class="h-stat"><strong id="stat-total">340+</strong><span>Active spaces</span></div>
+          <div class="h-stat"><strong id="stat-total">0</strong><span>Active spaces</span></div>
           <div class="h-stat"><strong>7</strong><span>Living categories</span></div>
-          <div class="h-stat"><strong>4.8</strong><span>Average rating</span></div>
+          <div class="h-stat"><strong id="stat-rating">0.0</strong><span>Average rating</span></div>
           <div class="h-stat"><strong>24hr</strong><span>Verification goal</span></div>
         </div>
       </div>
@@ -560,7 +564,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
         <div class="hero-market-card">
           <div class="market-map-art"></div>
           <span class="pin-dot p1"></span><span class="pin-dot p2"></span><span class="pin-dot p3"></span><span class="pin-dot p4"></span>
-          <div class="map-route r1"><strong>Family-ready flats</strong><span>Mansarovar, Vaishali Nagar, C-Scheme</span></div>
+          <div class="map-route r1"><strong>Family-ready flats</strong><span>Browse by area, budget and availability</span></div>
           <div class="map-route r2"><strong>PGs and rooms</strong><span>Verified owners, safe locations</span></div>
           <div class="map-route r3"><strong>Food and mess</strong><span>Monthly plans near your stay</span></div>
           <div class="market-panel">
@@ -620,7 +624,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
       </div>
       <div class="trust-card"><strong>Verified owners</strong><p>Admin-reviewed listings and role-aware dashboards.</p></div>
       <div class="trust-card"><strong>Location clarity</strong><p>Map browsing, nearby markers and locality-led discovery.</p></div>
-      <div class="trust-card"><strong>Fast response signals</strong><p>Active listings, direct calls, WhatsApp and recent activity.</p></div>
+      <div class="trust-card"><strong>Contact options</strong><p>Active listings can show direct call and WhatsApp details.</p></div>
     </div>
   </section>
 
@@ -681,9 +685,9 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
       </div>
     </div>
     <div class="testimonial-grid">
-      <div class="testimonial-card"><strong>For families</strong><p>"The locality-first view makes it easier to compare flats and contact verified owners quickly."</p></div>
-      <div class="testimonial-card"><strong>For students</strong><p>"Hostels, PGs and tiffin options are in one place, so moving near college feels simpler."</p></div>
-      <div class="testimonial-card"><strong>For owners</strong><p>"Posting a room or apartment stays connected to admin approval, uploads and the owner dashboard."</p></div>
+      <div class="testimonial-card"><strong>For families</strong><p>Compare flats and homes by area, budget and owner contact details.</p></div>
+      <div class="testimonial-card"><strong>For students</strong><p>Find hostels, PGs, rooms and food services from approved listings.</p></div>
+      <div class="testimonial-card"><strong>For owners</strong><p>Post rooms, flats or services through the existing approval workflow.</p></div>
     </div>
   </section>
 
@@ -754,24 +758,25 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
             <div class="form-group"><label>Listing Type *</label><select id="f-type"><option value="hostel">Hostel</option><option value="room">Room / PG</option><option value="flat">Flat</option><option value="tiffin">Tiffin / Food</option></select></div>
             <div class="form-group"><label>Gender</label><select id="f-gender"><option value="any">Any</option><option value="male">Boys only</option><option value="female">Girls only</option></select></div>
           </div>
-          <div class="form-group"><label>Property / Service Name *</label><input type="text" id="f-title" placeholder="e.g. Sunrise Boys Hostel"/></div>
+          <div class="form-group"><label>Property / Service Name *</label><input type="text" id="f-title" placeholder="Property or service name"/></div>
           <div class="form-group"><label>Description *</label><textarea id="f-desc" rows="3" placeholder="Describe your property, rules, timing, etc." style="width:100%;padding:11px 14px;border:1.5px solid var(--brd);border-radius:10px;font-size:.9rem;outline:none;resize:vertical;font-family:var(--font)"></textarea></div>
           <div class="form-2col">
-            <div class="form-group"><label>Monthly Price (₹) *</label><input type="number" id="f-price" placeholder="e.g. 4500"/></div>
-            <div class="form-group"><label>Security Deposit (₹)</label><input type="number" id="f-deposit" placeholder="e.g. 5000"/></div>
+            <div class="form-group"><label>Monthly Price (₹) *</label><input type="number" id="f-price" placeholder="Monthly amount"/></div>
+            <div class="form-group"><label>Security Deposit (₹)</label><input type="number" id="f-deposit" placeholder="Deposit amount"/></div>
           </div>
           <div class="form-group">
            <label>Full Address *</label>
            <input type="text" id="f-address" placeholder="House no., street, area and city"/></div>
           <div class="form-2col">
-            <div class="form-group"><label>Area / Locality *</label><input type="text" id="f-area" placeholder="e.g. Malviya Nagar"/></div>
-            <div class="form-group"><label>Pincode</label><input type="text" id="f-pin" placeholder="e.g. 302017"/></div>
+            <div class="form-group"><label>Area / Locality *</label><input type="text" id="f-area" placeholder="Area or locality"/></div>
+            <div class="form-group"><label>City *</label><input type="text" id="f-city" placeholder="City name"/></div>
           </div>
-          <div class="form-group"><label>Nearby Colleges</label><input type="text" id="f-colleges" placeholder="RTU, MNIT, Manipal (comma separated)"/></div>
+          <div class="form-group"><label>Pincode</label><input type="text" id="f-pin" placeholder="Pincode"/></div>
+          <div class="form-group"><label>Nearby Colleges</label><input type="text" id="f-colleges" placeholder="College names, comma separated"/></div>
           <div class="form-group"><label>Owner Name *</label><input type="text" id="f-oname" placeholder="Your full name"/></div>
           <div class="form-2col">
-            <div class="form-group"><label>Contact Phone *</label><input type="tel" id="f-phone" placeholder="+91 98765 43210"/></div>
-            <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="f-wa" placeholder="+91 98765 43210"/></div>
+            <div class="form-group"><label>Contact Phone *</label><input type="tel" id="f-phone" placeholder="Phone number"/></div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="tel" id="f-wa" placeholder="WhatsApp number"/></div>
           </div>
           <div class="form-group">
             <label>Facilities / Amenities</label>
@@ -786,7 +791,7 @@ footer{background:#101A17;color:rgba(255,255,255,.68);margin-top:0}
             <input type="file" id="imageInput" accept="image/*" multiple style="display:none" onchange="previewImages(this.files)"/>
             <div id="imagePreviews" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div>
           </div>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem;padding:13px" onclick="submitListing()">Submit for Admin Review →</button>
+          <button class="btn btn-primary" id="submitListingBtn" style="width:100%;justify-content:center;margin-top:.5rem;padding:13px" onclick="submitListing()">Submit for Admin Review →</button>
           <p style="text-align:center;margin-top:.75rem;font-size:.8rem;color:var(--muted)">Your listing will go live within 24 hours after admin verification.</p>
         </div>
       </div>
@@ -926,11 +931,10 @@ var state={
   currentView:'grid',
   selectedRating:0,
   currentListingId:null,
-  aiHistory:[]
+  aiHistory:[],
+  mapInstance:null
 };
 
-// Demo listings (replace with API calls when backend is running)
-var DEMO_LISTINGS=[];
 var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan','Family Friendly','Lift','Power Backup'];
 var TYPE_ICONS={hostel:'Stay',room:'Room',flat:'Home',tiffin:'Food'};
 var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat / Home',tiffin:'Food / Mess'};
@@ -949,8 +953,6 @@ var CATEGORY_OPTIONS=[
 // INIT
 // ═══════════════════════════════════════════════════════════
 (async function init(){
-  state.listings=[...DEMO_LISTINGS];
-  state.filtered=[...DEMO_LISTINGS];
   updateCounts();
   renderCategoryCards();
   renderFeaturedListings();
@@ -964,6 +966,12 @@ function normalizeListing(l){
   l._id=String(l._id);
   l.reviews=l.reviews||[];
   l.facilities=l.facilities||[];
+  if(typeof l.images==='string')l.images=[l.images];
+  l.images=Array.isArray(l.images)?l.images.map(function(img){
+    if(typeof img==='string')return img;
+    if(img&&typeof img==='object')return img.secure_url||img.url||img.src||'';
+    return '';
+  }).filter(function(url){return /^https?:\/\//i.test(url)||/^data:image\//i.test(url);}):[];
   l.location=l.location||{};
   l.pricing=l.pricing||{};
   l.owner=l.owner||{};
@@ -972,10 +980,17 @@ function normalizeListing(l){
   l.views=l.views||0;
   l.status=l.status||'approved';
   l.gender=l.gender||'any';
-  l.location.city = l.location.city || '';
+  l.location.area=l.location.area||'';
+  l.location.city=l.location.city||'';
+  l.location.address=l.location.address||'';
+  l.pricing.amount=Number(l.pricing.amount)||0;
   l.pricing.period=l.pricing.period||'month';
   l.owner.whatsapp=l.owner.whatsapp||l.owner.phone||'';
   return l;
+}
+
+function cssImageUrl(url){
+  return 'url("'+String(url||'').replace(/"/g,'%22')+'")';
 }
 
 async function loadListings(includeAll){
@@ -1014,7 +1029,8 @@ function toggleNav(){document.getElementById('navLinks').classList.toggle('open'
 // ═══════════════════════════════════════════════════════════
 function updateCounts(){
   var all=state.listings.filter(function(l){return l.status==='approved'});
-  document.getElementById('cnt-all').textContent=all.length;
+  var totalEl=document.getElementById('cnt-all');
+  if(totalEl)totalEl.textContent=all.length;
   ['hostel','room','flat','tiffin'].forEach(function(t){
     var el=document.getElementById('cnt-'+t);
     if(el)el.textContent=all.filter(function(l){return l.type===t}).length;
@@ -1025,7 +1041,14 @@ function updateCounts(){
   if(pg)pg.textContent=all.filter(function(l){return l.type==='room'}).length;
   if(family)family.textContent=all.filter(function(l){return l.type==='flat'}).length;
   if(roommates)roommates.textContent=all.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
-  document.getElementById('stat-total').textContent=all.length+'+';
+  var statTotal=document.getElementById('stat-total');
+  if(statTotal)statTotal.textContent=all.length+'+';
+  var statRating=document.getElementById('stat-rating');
+  if(statRating){
+    var rated=all.filter(function(l){return Number(l.avgRating)>0});
+    var avg=rated.length?rated.reduce(function(sum,l){return sum+Number(l.avgRating||0)},0)/rated.length:0;
+    statRating.textContent=avg.toFixed(1);
+  }
 }
 
 function filterType(t){
@@ -1069,15 +1092,19 @@ function renderCategoryCards(){
 
 function listingCardHtml(l,compact){
   var saved=(state.user&&state.user.savedListings||[]).includes(l._id);
-  var response=l.featured?'Fast response':'Usually replies today';
+  var response=l.featured?'Featured':'Approved listing';
   var active=l.availability===false?'Limited availability':'Active now';
+  var hasImg=l.images&&l.images.length>0;
+  var imgStyle=hasImg?'background-image:'+cssImageUrl(l.images[0])+';background-size:cover;background-position:center':'';
+  var cityDisplay=l.location.city||l.location.area;
+  var amount=Number(l.pricing.amount)||0;
   return '<div class="listing-card" onclick="openDetail(\''+l._id+'\')">'+
-    '<div class="lc-img t-'+l.type+'">'+
+    '<div class="lc-img t-'+l.type+'"'+(hasImg?' style="'+imgStyle+'"':'')+'>'+
       '<div class="lc-badges">'+
         '<span class="badge badge-verified">Verified</span>'+
         (l.featured?'<span class="badge badge-featured">Featured</span>':'')+
       '</div>'+
-      TYPE_ICONS[l.type]+
+      (hasImg?'':TYPE_ICONS[l.type])+
       '<div class="lc-save '+(saved?'saved':'')+'" onclick="event.stopPropagation();toggleSave(\''+l._id+'\',this)">'+
         (saved?'Saved':'Save')+
       '</div>'+
@@ -1085,7 +1112,7 @@ function listingCardHtml(l,compact){
     '<div class="lc-body">'+
       '<div class="lc-type">'+TYPE_LABELS[l.type]+'</div>'+
       '<div class="lc-name">'+l.title+'</div>'+
-      '<div class="lc-loc">'+l.location.area+', '+l.location.city+'</div>'+
+      '<div class="lc-loc">'+l.location.area+(cityDisplay&&cityDisplay!==l.location.area?', '+cityDisplay:'')+'</div>'+
       '<div class="listing-meta-row">'+
         '<span class="meta-pill"><span class="active-dot"></span>'+active+'</span>'+
         '<span class="meta-pill">'+response+'</span>'+
@@ -1096,7 +1123,7 @@ function listingCardHtml(l,compact){
         (l.facilities&&l.facilities.length>3?'<span class="facility-tag">+more</span>':'')+
       '</div>':'')+
       '<div class="lc-foot">'+
-        '<div class="lc-price">Rs '+l.pricing.amount.toLocaleString()+'<small>/'+l.pricing.period+'</small></div>'+
+        '<div class="lc-price">Rs '+amount.toLocaleString()+'<small>/'+l.pricing.period+'</small></div>'+
         '<div class="lc-rating"><span class="star">★</span> '+l.avgRating+' ('+l.totalReviews+')</div>'+
       '</div>'+
     '</div>'+
@@ -1122,7 +1149,8 @@ function applyFilters(){
     if(state.currentType!=='all'&&l.type!==state.currentType)return false;
     if(gender&&l.gender!==gender&&l.gender!=='any')return false;
     if(l.pricing.amount<minP||l.pricing.amount>maxP)return false;
-    if(area&&!l.location.area.toLowerCase().includes(area)&&!l.title.toLowerCase().includes(area))return false;
+    var searchText=((l.location.area||'')+' '+(l.location.city||'')+' '+(l.title||'')).toLowerCase();
+    if(area&&!searchText.includes(area))return false;
     return true;
   });
   if(sort==='price-asc')state.filtered.sort(function(a,b){return a.pricing.amount-b.pricing.amount});
@@ -1194,7 +1222,14 @@ function ensureLeaflet(){
       document.head.appendChild(link);
     }
     var existing=document.getElementById('leafletJs');
-    if(existing){existing.addEventListener('load',resolve);existing.addEventListener('error',reject);return;}
+    if(existing){
+      if(window.L)return resolve();
+      var onDone=function(){existing.removeEventListener('load',onDone);existing.removeEventListener('error',onErr);resolve();};
+      var onErr=function(){existing.removeEventListener('load',onDone);existing.removeEventListener('error',onErr);reject(new Error('Leaflet failed'));};
+      existing.addEventListener('load',onDone);
+      existing.addEventListener('error',onErr);
+      return;
+    }
     var script=document.createElement('script');
     script.id='leafletJs';script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     script.onload=resolve;script.onerror=reject;
@@ -1202,36 +1237,59 @@ function ensureLeaflet(){
   });
 }
 
+function renderStaticMapFallback(el,points){
+  var lats=points.map(function(l){return Number(l.location.lat)});
+  var lngs=points.map(function(l){return Number(l.location.lng)});
+  var minLat=Math.min.apply(null,lats),maxLat=Math.max.apply(null,lats);
+  var minLng=Math.min.apply(null,lngs),maxLng=Math.max.apply(null,lngs);
+  var latSpan=maxLat-minLat||0.02;
+  var lngSpan=maxLng-minLng||0.02;
+  el.innerHTML='<div class="static-map-fallback">'+points.map(function(l){
+    var amount=Number(l.pricing.amount)||0;
+    var left=8+((Number(l.location.lng)-minLng)/lngSpan)*84;
+    var top=92-((Number(l.location.lat)-minLat)/latSpan)*84;
+    return '<button class="static-map-pin" style="left:'+left+'%;top:'+top+'%" onclick="openDetail(\''+l._id+'\')">Rs '+Math.round(amount/1000)+'k</button>';
+  }).join('')+'</div>';
+}
+
 async function renderMapView(){
   var el=document.getElementById('map-container');
   var side=document.getElementById('mapListPanel');
-  var points=state.filtered.filter(function(l){return l.location&&l.location.lat&&l.location.lng});
+  var points=state.filtered.filter(function(l){
+    return l.location&&Number.isFinite(Number(l.location.lat))&&Number.isFinite(Number(l.location.lng));
+  });
   if(side){
     side.innerHTML='<div style="padding:6px 6px 14px"><strong>'+state.filtered.length+' matching places</strong><p style="color:var(--muted);font-size:.82rem;margin-top:4px">Tap a card or map pin to inspect the listing.</p></div>'+state.filtered.slice(0,12).map(function(l){
-      return '<div class="map-list-card" onclick="openDetail(\''+l._id+'\')"><strong>'+l.title+'</strong><span>'+TYPE_LABELS[l.type]+' in '+l.location.area+'</span><span>Rs '+l.pricing.amount.toLocaleString()+'/'+l.pricing.period+' - '+l.avgRating+' rating</span></div>';
+      var amount=Number(l.pricing.amount)||0;
+      return '<div class="map-list-card" onclick="openDetail(\''+l._id+'\')"><strong>'+l.title+'</strong><span>'+TYPE_LABELS[l.type]+' in '+(l.location.area||l.location.city||'Location pending')+'</span><span>Rs '+amount.toLocaleString()+'/'+l.pricing.period+' - '+l.avgRating+' rating</span></div>';
     }).join('');
   }
   if(!points.length){
+    if(state.mapInstance){state.mapInstance.remove();state.mapInstance=null;}
     el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem"><div style="font-size:2rem">Map</div><p>Map locations will appear when listings include coordinates.</p></div>';
     return;
   }
   try{
     await ensureLeaflet();
+    if(state.mapInstance){state.mapInstance.remove();state.mapInstance=null;}
     el.innerHTML='';
     var map=L.map(el,{zoomControl:false}).setView([points[0].location.lat,points[0].location.lng],12);
+    state.mapInstance=map;
     L.control.zoom({position:'bottomright'}).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
     var bounds=[];
     points.forEach(function(l){
-      var html='<div class="nikunj-marker">Rs '+Math.round(l.pricing.amount/1000)+'k</div>';
+      var amount=Number(l.pricing.amount)||0;
+      var html='<div class="nikunj-marker">Rs '+Math.round(amount/1000)+'k</div>';
       var icon=L.divIcon({html:html,className:'',iconSize:[72,30],iconAnchor:[36,15]});
-      L.marker([l.location.lat,l.location.lng],{icon:icon}).addTo(map).bindPopup('<strong>'+l.title+'</strong><br>'+TYPE_LABELS[l.type]+' - '+l.location.area+'<br>Rs '+l.pricing.amount.toLocaleString()+'/'+l.pricing.period+'<br><button style="margin-top:8px;border:0;background:#16211D;color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer" onclick="openDetail(\''+l._id+'\')">View details</button>');
+      L.marker([l.location.lat,l.location.lng],{icon:icon}).addTo(map).bindPopup('<strong>'+l.title+'</strong><br>'+TYPE_LABELS[l.type]+' - '+(l.location.area||l.location.city||'Location pending')+'<br>Rs '+amount.toLocaleString()+'/'+l.pricing.period+'<br><button style="margin-top:8px;border:0;background:#16211D;color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer" onclick="openDetail(\''+l._id+'\')">View details</button>');
       bounds.push([l.location.lat,l.location.lng]);
     });
     if(bounds.length>1)map.fitBounds(bounds,{padding:[42,42]});
     setTimeout(function(){map.invalidateSize()},100);
   }catch(err){
-    el.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)">Map could not be loaded</div>';
+    console.warn('Leaflet map failed, using static marker fallback',err);
+    renderStaticMapFallback(el,points);
   }
 }
 
@@ -1268,12 +1326,22 @@ function openDetail(id){
   state.selectedRating=0;
   var img=document.getElementById('dm-img');
   img.className='modal-imgs t-'+l.type;
-  img.innerHTML='<button class="modal-close" onclick="closeModal(\'detailModal\')">✕</button>'+TYPE_ICONS[l.type];
+  var hasImg=l.images&&l.images.length>0;
+  if(hasImg){
+    img.style.backgroundImage=cssImageUrl(l.images[0]);
+    img.style.backgroundSize='cover';
+    img.style.backgroundPosition='center';
+    img.innerHTML='<button class="modal-close" onclick="closeModal(\'detailModal\')">✕</button>';
+  }else{
+    img.style.backgroundImage='';
+    img.innerHTML='<button class="modal-close" onclick="closeModal(\'detailModal\')">✕</button>'+TYPE_ICONS[l.type];
+  }
   document.getElementById('dm-type').textContent=TYPE_LABELS[l.type];
   document.getElementById('dm-title').textContent=l.title;
-  document.getElementById('dm-price').textContent='₹'+l.pricing.amount.toLocaleString();
+  var amount=Number(l.pricing.amount)||0;
+  document.getElementById('dm-price').textContent='₹'+amount.toLocaleString();
   document.getElementById('dm-period').textContent='/'+l.pricing.period;
-  document.getElementById('dm-loc').textContent=l.location.area+', '+l.location.city;
+  document.getElementById('dm-loc').textContent=[l.location.area,l.location.city].filter(Boolean).join(', ')||'Location pending';
   document.getElementById('dm-gender').textContent=GENDER_LABELS[l.gender];
   document.getElementById('dm-rating').textContent=l.avgRating+' ('+l.totalReviews+' reviews)';
   document.getElementById('dm-views').textContent=l.views;
@@ -1281,8 +1349,11 @@ function openDetail(id){
   document.getElementById('dm-address').textContent=l.location.address;
   var fac=document.getElementById('dm-facilities');
   fac.innerHTML=(l.facilities||[]).map(function(f){return '<span class="facility-tag">'+f+'</span>'}).join('');
-  document.getElementById('dm-call').onclick=function(){window.open('tel:'+l.owner.phone)};
-  document.getElementById('dm-wa').onclick=function(){window.open('https://wa.me/'+l.owner.whatsapp.replace(/[^0-9]/g,''))};
+  document.getElementById('dm-call').onclick=function(){if(l.owner.phone)window.open('tel:'+l.owner.phone)};
+  document.getElementById('dm-wa').onclick=function(){
+    var number=String(l.owner.whatsapp||l.owner.phone||'').replace(/[^0-9]/g,'');
+    if(number)window.open('https://wa.me/'+number);
+  };
   document.getElementById('dm-review-count').textContent=l.reviews.length;
   var revEl=document.getElementById('dm-reviews');
   if(l.reviews&&l.reviews.length>0){
@@ -1304,9 +1375,9 @@ function renderDetailMap(l){
   var address=[l.location.address,l.location.area,l.location.city].filter(Boolean).join(', ');
   if(l.location.lat&&l.location.lng){
     var lat=Number(l.location.lat),lng=Number(l.location.lng);
-    map.innerHTML='<iframe title="Listing location" src="https://www.openstreetmap.org/export/embed.html?bbox='+(lng-.02)+'%2C'+(lat-.02)+'%2C'+(lng+.02)+'%2C'+(lat+.02)+'&layer=mapnik&marker='+lat+'%2C'+lng+'" style="border:0;width:100%;height:100%"></iframe><span id="dm-address" style="display:none">'+address+'</span>';
+    map.innerHTML='<iframe title="Listing location" src="https://www.openstreetmap.org/export/embed.html?bbox='+(lng-.02)+'%2C'+(lat-.02)+'%2C'+(lng+.02)+'%2C'+(lat+.02)+'&layer=mapnik&marker='+lat+'%2C'+lng+'" style="border:0;width:100%;height:100%"></iframe>';
   }else{
-    map.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)"><span>📍 <span id="dm-address">'+address+'</span></span></div>';
+    map.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)"><span>📍 '+address+'</span></div>';
   }
 }
 
@@ -1371,6 +1442,9 @@ function loadPanelData(){
   var approved=state.listings.filter(function(l){return l.status==='approved'}).length;
   var pending=state.listings.filter(function(l){return l.status==='pending'}).length;
   var mine=state.listings.filter(function(l){return l.owner&&l.owner.name===state.user.name}).length;
+  var totalViews=state.listings.reduce(function(sum,l){return sum+(Number(l.views)||0)},0);
+  var rated=state.listings.filter(function(l){return Number(l.avgRating)>0});
+  var avgRating=rated.length?rated.reduce(function(sum,l){return sum+Number(l.avgRating||0)},0)/rated.length:0;
   var statsEl=document.getElementById('panelStats');
   document.getElementById('sb-admin').style.display='none';
   document.getElementById('sb-users').style.display='none';
@@ -1378,8 +1452,8 @@ function loadPanelData(){
     statsEl.innerHTML=
       '<div class="stat-card"><div class="s-num">'+approved+'</div><div class="s-lbl">Live listings</div><span class="s-sub ok">All verified</span></div>'+
       '<div class="stat-card"><div class="s-num">'+pending+'</div><div class="s-lbl">Pending review</div><span class="s-sub warn">Need action</span></div>'+
-      '<div class="stat-card"><div class="s-num">12.4K</div><div class="s-lbl">Students served</div><span class="s-sub ok">+18% this month</span></div>'+
-      '<div class="stat-card"><div class="s-num">4.8★</div><div class="s-lbl">Avg. rating</div><span class="s-sub ok">Excellent</span></div>';
+      '<div class="stat-card"><div class="s-num">'+totalViews+'</div><div class="s-lbl">Listing views</div><span class="s-sub info">All time</span></div>'+
+      '<div class="stat-card"><div class="s-num">'+avgRating.toFixed(1)+'</div><div class="s-lbl">Avg. rating</div><span class="s-sub info">From reviews</span></div>';
     document.getElementById('sb-admin').style.display='flex';
     document.getElementById('sb-users').style.display='flex';
   }else{
@@ -1398,11 +1472,21 @@ function loadRecentTable(){
   document.getElementById('panelRecentTable').innerHTML='<table><thead><tr><th>Title</th><th>Type</th><th>Area</th><th>Price</th><th>Status</th><th>Action</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
-function loadOwnerListings(){
-  var rows=state.listings.map(function(l){
+async function loadOwnerListings(){
+  var listings=[];
+  try{
+    var res=await authFetch('/api/listings/owner/mine');
+    var data=await res.json();
+    if(res.ok&&data.success&&Array.isArray(data.listings))listings=data.listings.map(normalizeListing);
+  }catch(err){}
+  if(!listings.length){
+    // Fallback: filter from cached state by owner name
+    listings=state.listings.filter(function(l){return state.user&&l.owner&&(l.owner.name===state.user.name||(l.owner.user&&l.owner.user.toString()===state.user.id));});
+  }
+  var rows=listings.map(function(l){
     return '<tr><td>'+l.title+'</td><td>'+TYPE_LABELS[l.type]+'</td><td>₹'+l.pricing.amount.toLocaleString()+'</td><td><span class="status-badge status-'+l.status+'">'+l.status+'</span></td><td>'+l.avgRating+'★</td><td class="action-btns"><button class="action-btn view" onclick="openDetail(\''+l._id+'\');showPage(\'home\')">View</button></td></tr>';
   }).join('');
-  document.getElementById('ownerListingsTable').innerHTML='<table><thead><tr><th>Title</th><th>Type</th><th>Price</th><th>Status</th><th>Rating</th><th>Action</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  document.getElementById('ownerListingsTable').innerHTML=rows?'<table><thead><tr><th>Title</th><th>Type</th><th>Price</th><th>Status</th><th>Rating</th><th>Action</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p style="padding:1.5rem;color:var(--muted)">You have not listed any properties yet.</p>';
 }
 
 function loadAdminData(){
@@ -1505,9 +1589,6 @@ function buildFacilitiesGrid(){
     return '<label class="facility-check"><input type="checkbox" value="'+f+'">'+f+'</label>';
   }).join('');
   el.querySelectorAll('.facility-check').forEach(function(label){
-    label.addEventListener('click',function(){
-      label.classList.toggle('checked',label.querySelector('input').checked);
-    });
     label.querySelector('input').addEventListener('change',function(){
       label.classList.toggle('checked',this.checked);
     });
@@ -1516,18 +1597,24 @@ function buildFacilitiesGrid(){
 
 // Image helpers
 var selectedImages=[];
+var listingSubmitting=false;
 function previewImages(files){
-  var previews=document.getElementById('imagePreviews');
   Array.from(files).forEach(function(file){
     if(selectedImages.length>=5){showToast('Max 5 images allowed');return;}
     selectedImages.push(file);
+  });
+  rebuildImagePreviews();
+}
+function rebuildImagePreviews(){
+  var previews=document.getElementById('imagePreviews');
+  previews.innerHTML='';
+  selectedImages.forEach(function(file,idx){
     var reader=new FileReader();
-    var idx=selectedImages.length-1;
     reader.onload=function(e){
       var div=document.createElement('div');
       div.style.cssText='position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid var(--brd)';
       div.innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover"/>'+
-        '<button onclick="removeImage('+idx+',this.parentNode)" style="position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center">x</button>';
+        '<button onclick="removeImage('+idx+')" style="position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center">x</button>';
       previews.appendChild(div);
     };
     reader.readAsDataURL(file);
@@ -1538,12 +1625,35 @@ function handleDrop(e){
   document.getElementById('imageDropzone').style.borderColor='var(--brd)';
   previewImages(e.dataTransfer.files);
 }
-function removeImage(idx,el){
+function removeImage(idx){
   selectedImages.splice(idx,1);
-  if(el)el.remove();
+  rebuildImagePreviews();
 }
 
-function submitListing(){
+async function geocodeFormLocation(location){
+  if(Number.isFinite(Number(location.lat))&&Number.isFinite(Number(location.lng)))return location;
+  var q=[location.address,location.area,location.city,location.pincode,'India'].filter(Boolean).join(', ');
+  if(!q)return location;
+  var controller=new AbortController();
+  var timer=setTimeout(function(){controller.abort()},3500);
+  try{
+    var res=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q),{signal:controller.signal});
+    if(!res.ok)return location;
+    var data=await res.json();
+    if(data&&data[0]&&data[0].lat&&data[0].lon){
+      location.lat=Number(data[0].lat);
+      location.lng=Number(data[0].lon);
+    }
+  }catch(err){
+    console.warn('Client geocoding failed',err);
+  }finally{
+    clearTimeout(timer);
+  }
+  return location;
+}
+
+async function submitListing(){
+  if(listingSubmitting)return;
   if(!state.user){openSignIn();return;}
   var title=document.getElementById('f-title').value.trim();
   var type=document.getElementById('f-type').value;
@@ -1551,56 +1661,84 @@ function submitListing(){
   var price=document.getElementById('f-price').value;
   var address=document.getElementById('f-address').value.trim();
   var area=document.getElementById('f-area').value.trim();
+  var city=(document.getElementById('f-city')?document.getElementById('f-city').value.trim():'');
   var oname=document.getElementById('f-oname').value.trim();
   var phone=document.getElementById('f-phone').value.trim();
   var alertEl=document.getElementById('addFormAlert');
-  if(!title||!desc||!price||!address||!area||!oname||!phone){
+  if(!title||!desc||!price||!address||!area||!city||!oname||!phone){
     alertEl.innerHTML='<div class="alert alert-error">Please fill all required fields (marked with *).</div>';
     return;
   }
+  listingSubmitting=true;
+  var submitBtn=document.getElementById('submitListingBtn');
+  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Submitting...';}
   var facilities=[];
   document.querySelectorAll('#facilitiesGrid input:checked').forEach(function(cb){facilities.push(cb.value)});
   var newListing={
-    _id:'new_'+Date.now(),title:title,type:type,description:desc,
-    owner:{user:state.user.id,name:oname,phone:phone,whatsapp:document.getElementById('f-wa').value||phone},
+    title:title,type:type,description:desc,
+    owner:{name:oname,phone:phone,whatsapp:document.getElementById('f-wa').value||phone},
     location:{
-  address:address,
-  area:area,
-  city: document.getElementById('f-address').value.split(',').slice(-2).join(',').trim() || 'India',
-  pincode:document.getElementById('f-pin').value,
-  nearbyColleges:document.getElementById('f-colleges').value
-    .split(',')
-    .map(function(c){return c.trim()})
-    .filter(Boolean)
-},
+      address:address,
+      area:area,
+      city:city,
+      pincode:document.getElementById('f-pin').value,
+      nearbyColleges:document.getElementById('f-colleges').value
+        .split(',')
+        .map(function(c){return c.trim()})
+        .filter(Boolean)
+    },
     pricing:{amount:parseInt(price),deposit:parseInt(document.getElementById('f-deposit').value)||0,negotiable:false,period:'month'},
     facilities:facilities,gender:document.getElementById('f-gender').value,
-    images:[],status:'pending',avgRating:0,totalReviews:0,views:0,featured:false,reviews:[],
-    createdAt:new Date().toISOString()
+    images:[],reviews:[]
   };
+  newListing.location=await geocodeFormLocation(newListing.location);
   if(selectedImages.length>0&&state.user){
     alertEl.innerHTML='<div class="alert" style="background:var(--surf);border:1px solid var(--brd)">Uploading images...</div>';
     var fd=new FormData();
     selectedImages.forEach(function(f){fd.append('images',f)});
-    authFetch('/api/upload/images',{method:'POST',body:fd})
-      .then(function(r){return r.json()})
-      .then(function(d){if(d.success)newListing.images=d.urls;})
-      .catch(function(){})
-      .finally(function(){finishSubmit(newListing);});
+    try{
+      var uploadRes=await authFetch('/api/upload/images',{method:'POST',body:fd});
+      var uploadData=await uploadRes.json();
+      console.debug('Nikunj upload response',uploadData);
+      var urls=Array.isArray(uploadData.urls)?uploadData.urls:(Array.isArray(uploadData.images)?uploadData.images:[]);
+      urls=urls.filter(function(url){return typeof url==='string'&&/^https?:\/\//i.test(url);});
+      if(uploadData.success&&urls.length){
+        newListing.images=urls;
+      }else{
+        console.warn('Image upload returned no URLs:',uploadData);
+        alertEl.innerHTML='<div class="alert alert-error">Image upload failed: '+(uploadData.message||'No image URLs returned')+'. Listing will be submitted without images.</div>';
+        showToast('Images could not be uploaded — submitting listing without images');
+      }
+    }catch(uploadErr){
+      console.warn('Image upload error:',uploadErr);
+      alertEl.innerHTML='<div class="alert alert-error">Image upload failed: '+(uploadErr.message||'Unknown error')+'. Listing will be submitted without images.</div>';
+      showToast('Images could not be uploaded — submitting listing without images');
+    }
+    await finishSubmit(newListing);
   }else{
-    finishSubmit(newListing);
+    await finishSubmit(newListing);
   }
 }
 
 async function finishSubmit(listing){
+  var submitBtn=document.getElementById('submitListingBtn');
   if(state.user){
     try{
       delete listing._id;
       var res=await authFetch('/api/listings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(listing)});
       var data=await res.json();
       if(res.ok&&data.success&&data.listing)listing=normalizeListing(data.listing);
-      else{showToast(data.message||'Listing submission failed');return;}
-    }catch(err){showToast('Listing submission failed');return;}
+      else{
+        document.getElementById('addFormAlert').innerHTML='<div class="alert alert-error">'+(data.message||'Listing submission failed')+'</div>';
+        return;
+      }
+    }catch(err){
+      document.getElementById('addFormAlert').innerHTML='<div class="alert alert-error">Listing submission failed: '+(err.message||'Network error')+'</div>';
+      return;
+    }finally{
+      listingSubmitting=false;
+      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Submit for Admin Review →';}
+    }
   }
   state.listings.unshift(listing);
   updateCounts();

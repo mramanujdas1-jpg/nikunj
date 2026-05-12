@@ -4,7 +4,10 @@ const ENV_KEYS = [
   'VITE_CLERK_PUBLISHABLE_KEY',
   'CLERK_FRONTEND_API_URL',
   'CLERK_ISSUER_URL',
-  'CORS_ORIGIN'
+  'CORS_ORIGIN',
+  'CLOUDINARY_CLOUD_NAME',
+  'CLOUDINARY_API_KEY',
+  'CLOUDINARY_API_SECRET'
 ];
 
 const ASSIGNMENT_RE = /([A-Z][A-Z0-9_]+)=/g;
@@ -85,7 +88,10 @@ function envSummary() {
     clerkPublishableKey: Boolean(process.env.CLERK_PUBLISHABLE_KEY),
     viteClerkPublishableKey: Boolean(process.env.VITE_CLERK_PUBLISHABLE_KEY),
     clerkSecretKey: Boolean(process.env.CLERK_SECRET_KEY),
-    clerkFrontendApiUrl: Boolean(process.env.CLERK_FRONTEND_API_URL || process.env.CLERK_ISSUER_URL)
+    clerkFrontendApiUrl: Boolean(process.env.CLERK_FRONTEND_API_URL || process.env.CLERK_ISSUER_URL),
+    cloudinaryCloudName: Boolean(process.env.CLOUDINARY_CLOUD_NAME && !process.env.CLOUDINARY_CLOUD_NAME.includes('YOUR_')),
+    cloudinaryApiKey: Boolean(process.env.CLOUDINARY_API_KEY && !process.env.CLOUDINARY_API_KEY.includes('YOUR_')),
+    cloudinaryApiSecret: Boolean(process.env.CLOUDINARY_API_SECRET && !process.env.CLOUDINARY_API_SECRET.includes('YOUR_'))
   };
 }
 
