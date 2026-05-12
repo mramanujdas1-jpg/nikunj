@@ -18,20 +18,26 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 });
 
-const uploadToCloudinary = async (buffer, folder = 'nikunj') => {
+function isPlaceholder(val) {
+  if (!val) return true;
+  const v = val.trim();
+  return !v || /^YOUR_/i.test(v) || v === 'undefined' || v === 'null';
+}
+
+const uploadToCloudinary = async (buffer, folder = 'nikunj', mimeType = 'image/jpeg') => {
   const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
-  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
-    return 'https://placehold.co/800x500/27187E/F7F7FF?text=Nikunj+Listing';
+  if (isPlaceholder(CLOUDINARY_CLOUD_NAME) || isPlaceholder(CLOUDINARY_API_KEY) || isPlaceholder(CLOUDINARY_API_SECRET)) {
+    throw new Error('Cloudinary credentials are not configured');
   }
 
   const timestamp = Math.floor(Date.now() / 1000);
   const signature = crypto
     .createHash('sha1')
-    .update(`folder=${folder}&timestamp=${timestamp}&api_key=${CLOUDINARY_API_KEY}${CLOUDINARY_API_SECRET}`)
+    .update(`folder=${folder}&timestamp=${timestamp}${CLOUDINARY_API_SECRET}`)
     .digest('hex');
 
   const form = new FormData();
-  form.append('file', new Blob([buffer]));
+  form.append('file', `data:${mimeType};base64,${buffer.toString('base64')}`);
   form.append('folder', folder);
   form.append('timestamp', String(timestamp));
   form.append('api_key', CLOUDINARY_API_KEY);
@@ -42,9 +48,9 @@ const uploadToCloudinary = async (buffer, folder = 'nikunj') => {
     body: form
   });
   if (!response.ok) {
-  const errText = await response.text();
-  throw new Error('Cloudinary upload failed: ' + errText);
-}
+    const errText = await response.text();
+    throw new Error('Cloudinary upload failed: ' + errText);
+  }
   const result = await response.json();
   return result.secure_url;
 };

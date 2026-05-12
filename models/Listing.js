@@ -21,7 +21,7 @@ const listingSchema = new mongoose.Schema({
   location: {
     address:   { type: String, required: true },
     area:      { type: String, required: true },
-    city:      { type: String, default: 'Jaipur' },
+    city:      { type: String, default: '' },
     pincode:   { type: String },
     lat:       { type: Number },
     lng:       { type: Number },
