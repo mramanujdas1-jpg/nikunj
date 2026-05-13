@@ -10,10 +10,10 @@
 /* ── Reset & Variables ─────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --or:#27187E;--or2:#1F1268;--or-lt:rgba(39,24,126,0.16);
-  --ink:#F7F7FF;--mid:rgba(247,247,255,0.72);--muted:rgba(247,247,255,0.52);
-  --surf:rgba(8,6,22,0.9);--white:rgba(18,14,42,0.94);
-  --brd:rgba(247,247,255,0.12);--brd2:rgba(247,247,255,0.22);
+  --or:#18B875;--or2:#0F8E5A;--or-lt:rgba(24,184,117,0.16);
+  --ink:#17211D;--mid:#56615D;--muted:#74807B;
+  --surf:#F4F8F6;--white:#FFFFFF;
+  --brd:rgba(23,33,29,0.10);--brd2:rgba(23,33,29,0.18);
   --r:12px;--rL:18px;--rXL:24px;
   --sh:0 4px 24px rgba(0,0,0,0.3);
   --sh2:0 12px 40px rgba(0,0,0,0.5);
@@ -22,7 +22,7 @@
   --trans:.2s ease;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:linear-gradient(rgba(8,6,22,.68),rgba(8,6,22,.78)),url('/dsaa.jpg') center center/cover fixed no-repeat;color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh}
+body{font-family:var(--font);background:#F7FAF8;color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 input,select,textarea,button{font-family:var(--font)}
@@ -63,27 +63,27 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 }
 
 /* ── Hero ─────────────────────────────────────────── */
-.hero{background:rgba(8,6,22,.72);padding:80px 5% 0;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 80% 50%,rgba(39,24,126,.18),transparent)}
-.hero-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(247,247,255,.08) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.hero{background:linear-gradient(135deg,#F7FAF8 0%,#E8F3EE 100%);padding:80px 5% 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 75% at 82% 28%,rgba(24,184,117,.18),transparent)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(23,33,29,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(23,33,29,.06) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
 .hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;min-height:480px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(39,24,126,.26);border:1px solid rgba(247,247,255,.22);color:var(--ink);padding:6px 16px;border-radius:99px;font-size:0.75rem;font-weight:500;letter-spacing:.5px;margin-bottom:1.5rem}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.76);border:1px solid var(--brd);color:var(--ink);padding:6px 16px;border-radius:99px;font-size:0.75rem;font-weight:500;letter-spacing:.5px;margin-bottom:1.5rem;box-shadow:var(--sh)}
 .badge-dot{width:7px;height:7px;background:var(--or);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.8rem);color:#FFFFFF;line-height:1.08;margin-bottom:1.25rem;font-weight:900}
+.hero h1{font-family:var(--serif);font-size:clamp(2.35rem,4.6vw,4.35rem);color:var(--ink);line-height:1.02;margin-bottom:1.25rem;font-weight:900}
 .hero h1 em{color:var(--or);font-style:normal}
-.hero p{font-size:1rem;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:2.5rem;max-width:480px}
+.hero p{font-size:1.02rem;color:var(--mid);line-height:1.75;margin-bottom:2.5rem;max-width:560px}
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1)}
-.h-stat strong{display:block;font-family:var(--serif);font-size:1.75rem;color:#fff}
-.h-stat span{font-size:0.75rem;color:rgba(255,255,255,.4);letter-spacing:.3px}
-.hero-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--rL);padding:2rem;backdrop-filter:blur(8px)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--brd)}
+.h-stat strong{display:block;font-family:var(--serif);font-size:1.75rem;color:var(--ink)}
+.h-stat span{font-size:0.75rem;color:var(--muted);letter-spacing:.3px}
+.hero-card{background:rgba(255,255,255,.72);border:1px solid var(--brd);border-radius:var(--rL);padding:2rem;backdrop-filter:blur(8px);box-shadow:var(--sh)}
 .hero-search{background:var(--white);border-radius:var(--rL);padding:1.5rem;box-shadow:var(--sh2);border:1px solid var(--brd)}
 .hero-search h3{font-size:1rem;font-weight:600;margin-bottom:1.25rem;color:var(--ink)}
 .search-field{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
 .search-field label{font-size:0.75rem;font-weight:500;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
-.search-field input,.search-field select{padding:10px 14px;border:1.5px solid var(--brd2);border-radius:10px;font-size:0.9rem;outline:none;color:var(--ink);transition:border-color var(--trans);background:rgba(39,24,126,.24)}
-.search-field input:focus,.search-field select:focus{border-color:var(--or);box-shadow:0 0 8px rgba(39,24,126,.32)}
+.search-field input,.search-field select{padding:10px 14px;border:1.5px solid var(--brd2);border-radius:10px;font-size:0.9rem;outline:none;color:var(--ink);transition:border-color var(--trans);background:#fff}
+.search-field input:focus,.search-field select:focus{border-color:var(--or);box-shadow:0 0 8px rgba(24,184,117,.24)}
 .search-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:900px){
   .hero-inner{grid-template-columns:1fr}
@@ -92,7 +92,21 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 }
 
 /* ── Category Tabs ────────────────────────────────── */
-.cat-tabs{background:rgba(18,14,42,.86);padding:1.25rem 5%;border-bottom:1px solid var(--brd);display:flex;gap:8px;overflow-x:auto;position:sticky;top:64px;z-index:90}
+.section-band{padding:2.5rem 5%;background:#fff;border-top:1px solid var(--brd)}
+.section-head{max-width:1400px;margin:0 auto 1.2rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem}
+.section-head h2{font-family:var(--serif);font-size:1.8rem;line-height:1.1;color:var(--ink)}
+.section-head p{color:var(--muted);max-width:620px;margin-top:.4rem}
+.category-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:12px}
+.category-card{background:#fff;border:1px solid var(--brd);border-radius:16px;padding:16px;box-shadow:var(--sh);cursor:pointer;transition:all var(--trans);min-height:138px}
+.category-card:hover{transform:translateY(-3px);border-color:rgba(24,184,117,.42);box-shadow:var(--sh2)}
+.category-card strong{display:block;margin-top:10px;color:var(--ink)}
+.category-card span{display:block;color:var(--muted);font-size:.82rem;margin-top:4px}
+.cc-icon{width:40px;height:40px;border-radius:12px;background:var(--or-lt);color:var(--or2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem}
+.trust-strip,.testimonial-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.trust-card,.testimonial-card{background:#fff;border:1px solid var(--brd);border-radius:16px;padding:18px;box-shadow:var(--sh)}
+.trust-card strong,.testimonial-card strong{display:block;color:var(--ink);margin-bottom:6px}
+.trust-card p,.testimonial-card p{color:var(--muted);font-size:.9rem}
+.cat-tabs{background:rgba(255,255,255,.92);padding:1.25rem 5%;border-bottom:1px solid var(--brd);display:flex;gap:8px;overflow-x:auto;position:sticky;top:64px;z-index:90;backdrop-filter:blur(12px)}
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tab{flex-shrink:0;display:flex;align-items:center;gap:7px;padding:8px 18px;border-radius:99px;border:1.5px solid var(--brd);background:var(--white);font-size:0.85rem;font-weight:500;cursor:pointer;color:var(--muted);transition:all var(--trans);white-space:nowrap}
 .cat-tab:hover{border-color:var(--or);color:var(--or)}
@@ -298,7 +312,11 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
   .panel-layout{grid-template-columns:1fr}
   .panel-sidebar{display:none}
   .modal-contact{grid-template-columns:1fr}
-  .hero-stats{flex-wrap:wrap;gap:1rem}
+  .hero-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+  .category-grid{display:flex;overflow-x:auto;padding-bottom:6px}
+  .category-card{min-width:150px}
+  .trust-strip,.testimonial-grid{grid-template-columns:1fr}
+  input,select,textarea{font-size:16px!important}
   .ai-chat-panel{width:calc(100vw - 2rem);right:1rem}
 }
 
@@ -412,9 +430,9 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
   <div class="nav-links" id="navLinks">
     <a onclick="showPage('home');filterType('all')" class="active" id="nav-home">Home</a>
     <a onclick="showPage('home');filterType('hostel')" id="nav-hostels">Hostels</a>
-    <a onclick="showPage('home');filterType('room')" id="nav-rooms">Rooms & PG</a>
+    <a onclick="showPage('home');filterType('room')" id="nav-rooms">Rooms</a>
     <a onclick="showPage('home');filterType('flat')" id="nav-flats">Flats</a>
-    <a onclick="showPage('home');filterType('tiffin')" id="nav-tiffin">Tiffin</a>
+    <a onclick="showPage('home');filterType('tiffin')" id="nav-tiffin">Food</a>
     <a id="nav-panel" onclick="showPage('panel')" style="display:none">Dashboard</a>
   </div>
   <div class="nav-right">
@@ -441,17 +459,18 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     <div class="hero-grid"></div>
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-badge"><span class="badge-dot"></span> Jaipur's most trusted student platform</div>
-        <h1>Your home away<br>from <em>home</em>,<br>found here.</h1>
-        <p>Verified hostels, PG rooms, flats & daily tiffin services — curated for students, approved by admins.</p>
+        <div class="hero-badge"><span class="badge-dot"></span> Verified rentals, rooms and food services</div>
+        <h1>Find your next <em>place</em> with confidence.</h1>
+        <p>Nikunj connects students, families, working professionals and owners with verified rooms, flats, PGs, hostels, roommates and food services.</p>
         <div class="hero-btns">
-          <button class="btn btn-primary" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Browse Listings</button>
-          <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3)" onclick="openAI()">Ask AI ✦</button>
+          <button class="btn btn-primary" onclick="filterType('all');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Explore Rentals</button>
+          <button class="btn btn-outline" onclick="setView('map');document.getElementById('listings-top').scrollIntoView({behavior:'smooth'})">Open Map</button>
+          <button class="btn btn-outline" onclick="openAI()">Ask Nikunj AI</button>
         </div>
         <div class="hero-stats">
-          <div class="h-stat"><strong id="stat-total">340+</strong><span>Verified listings</span></div>
-          <div class="h-stat"><strong>12K+</strong><span>Students helped</span></div>
-          <div class="h-stat"><strong>4.8★</strong><span>Average rating</span></div>
+          <div class="h-stat"><strong id="stat-total">0</strong><span>Active listings</span></div>
+          <div class="h-stat"><strong>7</strong><span>Rental categories</span></div>
+          <div class="h-stat"><strong id="stat-rating">0.0</strong><span>Average rating</span></div>
           <div class="h-stat"><strong>24hr</strong><span>Approval time</span></div>
         </div>
       </div>
@@ -461,11 +480,11 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
           <div class="search-field">
             <label>I'm looking for</label>
             <select id="qs-type" onchange="syncFilter()">
-              <option value="all">All types</option>
-              <option value="hostel">Hostel</option>
-              <option value="room">Room / PG</option>
-              <option value="flat">Flat</option>
-              <option value="tiffin">Tiffin / Food</option>
+              <option value="all">All rentals</option>
+              <option value="hostel">Hostels</option>
+              <option value="room">Rooms / PG</option>
+              <option value="flat">Flats / Family homes</option>
+              <option value="tiffin">Food / Mess</option>
             </select>
           </div>
           <div class="search-field">
@@ -488,13 +507,35 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     </div>
   </div>
 
+  <section class="section-band">
+    <div class="section-head">
+      <div>
+        <h2>Start with what you need</h2>
+        <p>Clear paths for rooms, flats, PGs, hostels, family homes, food services and shared living.</p>
+      </div>
+      <button class="btn btn-outline" onclick="showPage('panel')">List your property</button>
+    </div>
+    <div class="category-grid" id="categoryCards"></div>
+  </section>
+
+  <section class="section-band">
+    <div class="trust-strip">
+      <div class="trust-card"><strong>Verified listings</strong><p>Admin review, owner details and role-aware dashboards stay connected to existing workflows.</p></div>
+      <div class="trust-card"><strong>Map-first discovery</strong><p>Browse by locality, compare nearby options and open location details from each listing.</p></div>
+      <div class="trust-card"><strong>Ready for owners</strong><p>Rooms, flats, homes and food services can be posted through the same secure flow.</p></div>
+    </div>
+  </section>
+
   <!-- Category Tabs -->
   <div class="cat-tabs" id="listings-top">
-    <div class="cat-tab active" id="tab-all" onclick="filterType('all')"><span class="ct-icon">🏠</span> All <span class="ct-count" id="cnt-all">0</span></div>
-    <div class="cat-tab" id="tab-hostel" onclick="filterType('hostel')"><span class="ct-icon">🏨</span> Hostels <span class="ct-count" id="cnt-hostel">0</span></div>
-    <div class="cat-tab" id="tab-room" onclick="filterType('room')"><span class="ct-icon">🛏</span> Rooms & PG <span class="ct-count" id="cnt-room">0</span></div>
-    <div class="cat-tab" id="tab-flat" onclick="filterType('flat')"><span class="ct-icon">🏢</span> Flats <span class="ct-count" id="cnt-flat">0</span></div>
-    <div class="cat-tab" id="tab-tiffin" onclick="filterType('tiffin')"><span class="ct-icon">🍱</span> Tiffin <span class="ct-count" id="cnt-tiffin">0</span></div>
+    <div class="cat-tab active" id="tab-all" onclick="filterType('all')"><span class="ct-icon">All</span> All <span class="ct-count" id="cnt-all">0</span></div>
+    <div class="cat-tab" id="tab-rooms" onclick="filterCategory('rooms')"><span class="ct-icon">Room</span> Rooms <span class="ct-count" id="cnt-room">0</span></div>
+    <div class="cat-tab" id="tab-flats" onclick="filterCategory('flats')"><span class="ct-icon">Flat</span> Flats <span class="ct-count" id="cnt-flat">0</span></div>
+    <div class="cat-tab" id="tab-pg" onclick="filterCategory('pg')"><span class="ct-icon">PG</span> PG <span class="ct-count" id="cnt-pg">0</span></div>
+    <div class="cat-tab" id="tab-hostel" onclick="filterType('hostel')"><span class="ct-icon">Hostel</span> Hostels <span class="ct-count" id="cnt-hostel">0</span></div>
+    <div class="cat-tab" id="tab-family" onclick="filterCategory('family')"><span class="ct-icon">Home</span> Family Homes <span class="ct-count" id="cnt-family">0</span></div>
+    <div class="cat-tab" id="tab-tiffin" onclick="filterCategory('food')"><span class="ct-icon">Food</span> Food/Mess <span class="ct-count" id="cnt-tiffin">0</span></div>
+    <div class="cat-tab" id="tab-roommates" onclick="filterCategory('roommates')"><span class="ct-icon">Share</span> Roommates <span class="ct-count" id="cnt-roommates">0</span></div>
   </div>
 
   <!-- Listings -->
@@ -524,27 +565,40 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       <div id="map-container">
         <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:1rem">
           <div style="font-size:2rem">📍</div>
-          <p>Add your Google Maps API key to enable map view</p>
-          <code style="font-size:.8rem;background:var(--surf);padding:6px 14px;border-radius:8px">GOOGLE_MAPS_API_KEY in .env</code>
+          <p>Listings with coordinates appear here</p>
         </div>
       </div>
     </div>
     <div class="pagination" id="pagination"></div>
   </div>
 
+  <section class="section-band">
+    <div class="section-head">
+      <div>
+        <h2>Built for every move</h2>
+        <p>Use Nikunj to compare homes, rooms, food services and owner-posted spaces with the same trusted flow.</p>
+      </div>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card"><strong>For renters</strong><p>Search by budget, area and category, then contact owners from verified listings.</p></div>
+      <div class="testimonial-card"><strong>For families</strong><p>Compare flats and homes with location details, facilities and contact options.</p></div>
+      <div class="testimonial-card"><strong>For owners</strong><p>Post rooms, flats and services through the existing approval and dashboard workflow.</p></div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="logo">Niku<span>nj</span></div>
-        <p>Jaipur's most trusted platform for student accommodation and food services. Every listing verified by our admin team.</p>
+        <p>A modern rental marketplace for rooms, flats, PGs, hostels, family homes, roommates and food services.</p>
       </div>
       <div class="footer-col">
-        <h4>Students</h4>
-        <a onclick="filterType('hostel')">Find Hostels</a>
-        <a onclick="filterType('room')">PG & Rooms</a>
+        <h4>Find</h4>
+        <a onclick="filterType('hostel')">Hostels</a>
+        <a onclick="filterType('room')">Rooms / PG</a>
         <a onclick="filterType('flat')">Flats</a>
-        <a onclick="filterType('tiffin')">Tiffin Services</a>
+        <a onclick="filterType('tiffin')">Food / Mess</a>
       </div>
       <div class="footer-col">
         <h4>Owners</h4>
@@ -785,10 +839,19 @@ var DEMO_LISTINGS=[
   {_id:'9',title:'3BHK Student Flat — Mansarovar',type:'flat',description:'Spacious 3BHK flat available for a group of 4 students. Semi-furnished, quiet area, close to coaching centers and RTU.',owner:{name:'Harish Agarwal',phone:'+91 10987 65432',whatsapp:'+91 10987 65432'},location:{address:'Sector 3, Mansarovar',area:'Mansarovar',city:'Jaipur',nearbyColleges:['RTU','IIS University'],lat:26.862,lng:75.762},pricing:{amount:11000,deposit:15000,negotiable:true},facilities:['Semi-Furnished','Parking','Water Backup','Terrace Access'],gender:'any',status:'approved',avgRating:4.2,totalReviews:8,views:64,featured:false,reviews:[]}
 ];
 
-var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan'];
-var TYPE_ICONS={hostel:'🏨',room:'🛏',flat:'🏢',tiffin:'🍱'};
-var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat',tiffin:'Tiffin Service'};
+var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot Water','Parking','CCTV','Gym','Study Room','Geyser','Inverter','Furnished','Attached Bath','Kitchen','Veg Only','Free Delivery','Monthly Plan','Family Friendly','Lift','Power Backup'];
+var TYPE_ICONS={hostel:'Stay',room:'Room',flat:'Home',tiffin:'Food'};
+var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat / Home',tiffin:'Food / Mess'};
 var GENDER_LABELS={male:'Boys only',female:'Girls only',any:'All genders'};
+var CATEGORY_OPTIONS=[
+  {key:'rooms',label:'Rooms',type:'room',text:'Private and shared rooms'},
+  {key:'flats',label:'Flats',type:'flat',text:'Apartments for rent'},
+  {key:'pg',label:'PG',type:'room',text:'Managed stays and meals'},
+  {key:'hostel',label:'Hostels',type:'hostel',text:'Budget community living'},
+  {key:'family',label:'Family Homes',type:'flat',text:'Homes for families'},
+  {key:'food',label:'Food/Mess',type:'tiffin',text:'Daily meals and tiffin'},
+  {key:'roommates',label:'Roommates',type:'room',text:'Shared stays and groups'}
+];
 
 function normalizeImageList(images){
   if(typeof images==='string')images=[images];
@@ -811,6 +874,7 @@ function cssImageUrl(url){
   state.listings=[...DEMO_LISTINGS];
   state.filtered=[...DEMO_LISTINGS];
   updateCounts();
+  renderCategoryCards();
   renderListings();
   buildFacilitiesGrid();
   loadSavedAuth();
@@ -847,6 +911,7 @@ async function loadListings(includeAll){
     state.listings=data.listings.map(normalizeListing);
     applyFilters();
     updateCounts();
+    renderCategoryCards();
     if(document.getElementById('page-panel')?.classList.contains('active'))loadPanelData();
   }catch(err){}
 }
@@ -875,7 +940,19 @@ function updateCounts(){
     var el=document.getElementById('cnt-'+t);
     if(el)el.textContent=all.filter(function(l){return l.type===t}).length;
   });
-  document.getElementById('stat-total').textContent=all.length+'+';
+  var pg=document.getElementById('cnt-pg');
+  var family=document.getElementById('cnt-family');
+  var roommates=document.getElementById('cnt-roommates');
+  if(pg)pg.textContent=all.filter(function(l){return l.type==='room'}).length;
+  if(family)family.textContent=all.filter(function(l){return l.type==='flat'}).length;
+  if(roommates)roommates.textContent=all.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
+  document.getElementById('stat-total').textContent=all.length;
+  var statRating=document.getElementById('stat-rating');
+  if(statRating){
+    var rated=all.filter(function(l){return Number(l.avgRating)>0});
+    var avg=rated.length?rated.reduce(function(sum,l){return sum+Number(l.avgRating||0)},0)/rated.length:0;
+    statRating.textContent=avg.toFixed(1);
+  }
 }
 
 function filterType(t){
@@ -887,6 +964,31 @@ function filterType(t){
   applyFilters();
   var el=document.getElementById('listings-top');
   if(el)el.scrollIntoView({behavior:'smooth'});
+}
+
+function filterCategory(key){
+  var cat=CATEGORY_OPTIONS.find(function(c){return c.key===key});
+  if(!cat)return filterType('all');
+  filterType(cat.type);
+  document.querySelectorAll('.cat-tab').forEach(function(el){el.classList.remove('active')});
+  var tab=document.getElementById('tab-'+key)||document.getElementById('tab-'+cat.type);
+  if(tab)tab.classList.add('active');
+}
+
+function renderCategoryCards(){
+  var el=document.getElementById('categoryCards');
+  if(!el)return;
+  var approved=state.listings.filter(function(l){return l.status==='approved'});
+  el.innerHTML=CATEGORY_OPTIONS.map(function(cat){
+    var count=approved.filter(function(l){return l.type===cat.type}).length;
+    if(cat.key==='roommates')count=approved.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
+    return '<div class="category-card" onclick="filterCategory(\''+cat.key+'\')">'+
+      '<div class="cc-icon">'+cat.label.split('/')[0]+'</div>'+
+      '<strong>'+cat.label+'</strong>'+
+      '<span>'+cat.text+'</span>'+
+      '<span style="margin-top:12px;color:var(--or);font-weight:700">'+count+' active</span>'+
+    '</div>';
+  }).join('');
 }
 
 function applyFilters(){
