@@ -38,6 +38,7 @@ async function geocodeListingLocation(location = {}) {
 // GET /api/listings — search + filter
 function normalizeImageUrls(images) {
   if (typeof images === 'string') images = [images];
+  if (images && typeof images === 'object' && !Array.isArray(images)) images = [images];
   if (!Array.isArray(images)) return [];
   return images
     .map(image => {
@@ -45,7 +46,7 @@ function normalizeImageUrls(images) {
       if (image && typeof image === 'object') return image.secure_url || image.url || image.src || '';
       return '';
     })
-    .filter(url => /^https?:\/\//i.test(url));
+    .filter(url => url && typeof url === 'string' && /^https?:\/\//i.test(url));
 }
 
 async function fillMissingCoordinates(listings) {
