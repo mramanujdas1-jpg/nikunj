@@ -1551,6 +1551,15 @@ async function fetchSafeClerkUser(){
   }
 }
 
+function loadSavedAuth(){
+  try{
+    var saved=localStorage.getItem('nikunj_user');
+    if(saved)state.user=JSON.parse(saved);
+  }catch(err){
+    localStorage.removeItem('nikunj_user');
+  }
+}
+
 async function updateAuthUI() {
   const user = clerk?.user;
   const navAuth = document.getElementById('navAuth');
