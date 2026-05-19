@@ -1226,7 +1226,18 @@ function openDetail(id){
 function renderDetailMap(l){
   var map=document.getElementById('dm-map');
   if(!map)return;
-  var address=[l.location.address,l.location.area,l.location.city].filter(Boolean).join(', ');
+  var baseAddress = l.location.address || '';
+  var parts = [baseAddress];
+
+  if (l.location.area && !baseAddress.includes(l.location.area)) {
+    parts.push(l.location.area);
+  }
+
+  if (l.location.city && !baseAddress.includes(l.location.city)) {
+    parts.push(l.location.city);
+  }
+
+  var address = parts.filter(Boolean).join(', ');
   if(l.location.lat&&l.location.lng){
     var lat=Number(l.location.lat),lng=Number(l.location.lng);
     map.innerHTML='<iframe title="Listing location" src="https://www.openstreetmap.org/export/embed.html?bbox='+(lng-.02)+'%2C'+(lat-.02)+'%2C'+(lng+.02)+'%2C'+(lat+.02)+'&layer=mapnik&marker='+lat+'%2C'+lng+'" style="border:0;width:100%;height:100%"></iframe>';
@@ -1473,7 +1484,7 @@ function submitListing(){
   var title=document.getElementById('f-title').value.trim();
   var type=document.getElementById('f-type').value;
   var desc=document.getElementById('f-desc').value.trim();
-  var price=document.getElementById('f-price').value;
+  var price=document.getElementById('f-price').value.trim();
   var address=document.getElementById('f-address').value.trim();
   var area=document.getElementById('f-area').value.trim();
   var oname=document.getElementById('f-oname').value.trim();
@@ -1483,6 +1494,13 @@ function submitListing(){
     alertEl.innerHTML='<div class="alert alert-error">Please fill all required fields (marked with *).</div>';
     return;
   }
+  if(title.length < 10) { alertEl.innerHTML='<div class="alert alert-error">Title must be at least 10 characters.</div>'; return; }
+  if(desc.length < 20) { alertEl.innerHTML='<div class="alert alert-error">Description must be at least 20 characters.</div>'; return; }
+  var numPrice = parseInt(price);
+  if(isNaN(numPrice) || numPrice <= 0) { alertEl.innerHTML='<div class="alert alert-error">Please enter a valid numeric price greater than 0.</div>'; return; }
+  if(!['hostel','room','flat','tiffin'].includes(type)) { alertEl.innerHTML='<div class="alert alert-error">Please select a valid category.</div>'; return; }
+  if(address.length < 5) { alertEl.innerHTML='<div class="alert alert-error">Please enter a valid detailed address.</div>'; return; }
+  if(selectedImages.length === 0) { alertEl.innerHTML='<div class="alert alert-error">Please upload at least 1 image.</div>'; return; }
   var facilities=[];
   document.querySelectorAll('#facilitiesGrid input:checked').forEach(function(cb){facilities.push(cb.value)});
   var newListing={

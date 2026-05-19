@@ -17,7 +17,9 @@ router.get('/me', requireClerkAuth, async (req, res) => {
   } else {
     user.clerkId = user.clerkId || req.auth.id;
     user.name = req.auth.name || user.name;
-    user.role = req.auth.role || user.role;
+    if (user.role === 'student' && req.auth.role !== 'student') {
+      user.role = req.auth.role;
+    }
     user.lastLoginAt = new Date();
     await user.save();
   }

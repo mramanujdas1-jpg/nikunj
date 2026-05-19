@@ -25,7 +25,8 @@ async function geocodeListingLocation(location = {}) {
     const results = await response.json();
     const first = Array.isArray(results) ? results[0] : null;
     if (first && first.lat && first.lon) {
-      return { ...location, lat: Number(first.lat), lng: Number(first.lon) };
+      const locObj = location.toObject ? location.toObject() : location;
+      return { ...locObj, lat: Number(first.lat), lng: Number(first.lon) };
     }
   } catch (err) {
     return location;
@@ -102,9 +103,25 @@ router.get('/owner/mine', protect, async (req, res) => {
   }
 });
 
+function validateListingInput(data) {
+  if (!data.title || typeof data.title !== 'string' || data.title.trim().length < 10) return 'Title must be at least 10 characters';
+  if (!data.description || typeof data.description !== 'string' || data.description.trim().length < 20) return 'Description must be at least 20 characters';
+  const amount = data.pricing && data.pricing.amount;
+  if (!amount || isNaN(amount) || Number(amount) <= 0) return 'Valid numeric price (> 0) is required';
+  if (!['hostel', 'room', 'flat', 'tiffin'].includes(data.type)) return 'Valid category is required';
+  const address = data.location && data.location.address;
+  if (!address || typeof address !== 'string' || address.trim().length < 5) return 'Detailed address (min 5 chars) is required';
+  const imgs = normalizeImageUrls(data.images);
+  if (imgs.length === 0) return 'At least one image is required';
+  return null;
+}
+
 // POST /api/listings — owner submits new listing
 router.post('/', protect, async (req, res) => {
   try {
+    const error = validateListingInput(req.body);
+    if (error) return res.status(400).json({ success: false, message: error });
+
     const ownerData = req.body.owner || {};
     const location = await geocodeListingLocation(req.body.location || {});
     const data = {
@@ -135,6 +152,16 @@ router.put('/:id', protect, async (req, res) => {
     if (!listing) return res.status(404).json({ success: false, message: 'Not found' });
     if (listing.owner.user.toString() !== req.user._id.toString() && req.user.role !== 'admin')
       return res.status(403).json({ success: false, message: 'Not authorized' });
+
+    const merged = { 
+      ...listing.toObject(), 
+      ...req.body, 
+      location: { ...listing.location, ...req.body.location },
+      pricing: { ...listing.pricing, ...req.body.pricing }
+    };
+    const error = validateListingInput(merged);
+    if (error) return res.status(400).json({ success: false, message: error });
+
     const updates = { ...req.body };
     if (updates.location) updates.location = await geocodeListingLocation(updates.location);
     if ('images' in updates) updates.images = normalizeImageUrls(updates.images);
