@@ -130,6 +130,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .lc-img.t-flat{background:linear-gradient(135deg,#152515,#254a18)}
 .lc-img.t-tiffin{background:linear-gradient(135deg,#2a1515,#4a2020)}
 .lc-img.has-photo,.modal-imgs.has-photo{background-size:cover;background-position:center}
+.lc-card-img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
 .lc-badges{position:absolute;top:10px;left:10px;display:flex;gap:6px}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:500}
 .badge-verified{background:var(--surf);border:1px solid rgba(247,247,255,.28);color:#F7F7FF}
@@ -991,11 +992,10 @@ function cssImageUrl(url){
 // INIT
 // ═══════════════════════════════════════════════════════════
 (async function init(){
-  state.listings=[...DEMO_LISTINGS];
-  state.filtered=[...DEMO_LISTINGS];
+  state.listings=[];
+  state.filtered=[];
   updateCounts();
   renderCategoryCards();
-  renderListings();
   buildFacilitiesGrid();
   loadSavedAuth();
   await loadListings();
@@ -1028,13 +1028,18 @@ async function loadListings(includeAll){
     var opts=adminRequest?{headers:await getAuthHeaders(),credentials:'include'}:{};
     var res=await fetch(url,opts);
     var data=await res.json();
-    if(!res.ok||!data.success||!Array.isArray(data.listings))return;
+    if(!res.ok||!data.success||!Array.isArray(data.listings)) {
+      throw new Error('API returned unsuccessful response or invalid format');
+    }
     state.listings=data.listings.map(normalizeListing);
-    applyFilters();
-    updateCounts();
-    renderCategoryCards();
-    if(document.getElementById('page-panel')?.classList.contains('active'))loadPanelData();
-  }catch(err){}
+  }catch(err){
+    console.warn('API fetch failed, falling back to DEMO_LISTINGS:', err);
+    state.listings=DEMO_LISTINGS.map(normalizeListing);
+  }
+  applyFilters();
+  updateCounts();
+  renderCategoryCards();
+  if(document.getElementById('page-panel')?.classList.contains('active'))loadPanelData();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1170,14 +1175,20 @@ function renderListings(){
   grid.innerHTML=page.map(function(l){
     var saved=(state.user&&state.user.savedListings||[]).includes(l._id);
     var imageUrl=(l.images&&l.images[0])||'';
-    var imageStyle=imageUrl?' style="background-image:'+cssImageUrl(imageUrl)+'"':'';
     return '<div class="listing-card" onclick="openDetail(\''+l._id+'\')">'+
-      '<div class="lc-img t-'+l.type+(imageUrl?' has-photo':'')+'"'+imageStyle+'>'+
+      '<div class="lc-img t-'+l.type+(imageUrl?' has-photo':'')+'">'+
+        (imageUrl ?
+          '<img src="'+imageUrl+'" alt="'+l.title+'" class="lc-card-img" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';" />' :
+          ''
+        )+
+        '<div class="lc-fallback" style="display:'+(imageUrl?'none':'flex')+'; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:rgba(255,255,255,0.5); font-family:var(--font); position:absolute; top:0; left:0;">'+
+          '<span style="font-size:3rem; margin-bottom:4px;">'+(l.type==='hostel'?'🏨':(l.type==='room'?'🛏':(l.type==='flat'?'🏢':'🍱')))+'</span>'+
+          '<span style="font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;">'+TYPE_LABELS[l.type]+'</span>'+
+        '</div>'+
         '<div class="lc-badges">'+
           '<span class="badge badge-verified">✓ Verified</span>'+
           (l.featured?'<span class="badge badge-featured">★ Featured</span>':'')+
         '</div>'+
-        (imageUrl?'':TYPE_ICONS[l.type])+
         '<div class="lc-save '+(saved?'saved':'')+'" onclick="event.stopPropagation();toggleSave(\''+l._id+'\',this)">'+
           (saved?'🔖':'🤍')+
         '</div>'+
