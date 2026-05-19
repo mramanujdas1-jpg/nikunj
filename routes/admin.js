@@ -46,16 +46,16 @@ router.get('/listings', isAdmin, async (req, res) => {
 // PUT /api/admin/listings/:id/approve
 router.put('/listings/:id/approve', isAdmin, async (req, res) => {
   try {
-    const listing = await Listing.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: 'approved',
-        adminNote: req.body.note || '',
-        $push: { adminActions: { action: 'approved', adminId: req.auth.id, note: req.body.note || '' } }
-      },
-      { new: true }
-    );
+    const listing = await Listing.findById(req.params.id);
     if (!listing) return res.status(404).json({ success: false, message: 'Not found' });
+    // Idempotency guard — already approved, return current state without duplicate action
+    if (listing.status === 'approved') {
+      return res.json({ success: true, listing, message: 'Listing already approved' });
+    }
+    listing.status = 'approved';
+    listing.adminNote = req.body.note || '';
+    listing.adminActions.push({ action: 'approved', adminId: req.auth.id, note: req.body.note || '' });
+    await listing.save();
     await Notification.create({
       audience: 'owner',
       user: listing.owner.user,
@@ -77,16 +77,16 @@ router.put('/listings/:id/approve', isAdmin, async (req, res) => {
 // PUT /api/admin/listings/:id/reject
 router.put('/listings/:id/reject', isAdmin, async (req, res) => {
   try {
-    const listing = await Listing.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: 'rejected',
-        adminNote: req.body.note || '',
-        $push: { adminActions: { action: 'rejected', adminId: req.auth.id, note: req.body.note || '' } }
-      },
-      { new: true }
-    );
+    const listing = await Listing.findById(req.params.id);
     if (!listing) return res.status(404).json({ success: false, message: 'Not found' });
+    // Idempotency guard — already rejected, return current state without duplicate action
+    if (listing.status === 'rejected') {
+      return res.json({ success: true, listing, message: 'Listing already rejected' });
+    }
+    listing.status = 'rejected';
+    listing.adminNote = req.body.note || '';
+    listing.adminActions.push({ action: 'rejected', adminId: req.auth.id, note: req.body.note || '' });
+    await listing.save();
     await Notification.create({
       audience: 'owner',
       user: listing.owner.user,

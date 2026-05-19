@@ -161,6 +161,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .map-toggle{display:flex;gap:8px;margin-bottom:1rem}
 .view-btn{padding:8px 16px;border-radius:10px;border:1.5px solid var(--brd);background:var(--white);font-size:0.85rem;cursor:pointer;font-weight:500;color:var(--muted);transition:all var(--trans)}
 .view-btn.active{background:var(--or);color:#111;border-color:var(--or)}
+.view-btn.near-me-active{background:#e8f5e9;color:#1b5e20;border-color:#4caf50;font-weight:600}
+.view-btn.near-me-active:hover{background:#c8e6c9}
+.lc-dist{font-size:10px;font-weight:600;color:#fff;background:#1b5e20;border-radius:99px;padding:2px 7px;margin-left:5px;vertical-align:middle;white-space:nowrap}
+.near-me-banner{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:8px 14px;font-size:.82rem;color:#1b5e20;display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.near-me-banner button{padding:4px 12px;border-radius:99px;border:1px solid #4caf50;background:#fff;color:#1b5e20;font-size:.78rem;cursor:pointer;font-weight:500}
 
 /* ── Map Picker (Listing Form) ───────────────────── */
 .location-picker-wrap{margin-top:8px;border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;background:var(--surf)}
@@ -560,6 +565,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
         <div class="map-toggle">
           <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')">⊞ Grid</button>
           <button class="view-btn" id="mapViewBtn" onclick="setView('map')">📍 Map</button>
+          <button class="view-btn" id="nearMeBtn" onclick="toggleNearMe()">📡 Near Me</button>
         </div>
         <select id="filter-gender" onchange="applyFilters()">
           <option value="">Any gender</option>
@@ -573,6 +579,10 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
           <option value="rating">Best rated</option>
         </select>
       </div>
+    </div>
+    <div class="near-me-banner" id="nearMeBanner" style="display:none">
+      <span>📡 <strong>Near Me</strong> — showing listings sorted by distance from your location</span>
+      <button onclick="cancelNearMe()">✕ Cancel</button>
     </div>
     <div class="listings-grid" id="listingsGrid"></div>
     <div id="mapContainer" style="display:none">
@@ -857,7 +867,8 @@ var state={
   selectedRating:0,
   currentListingId:null,
   aiHistory:[],
-  mapInstance:null
+  mapInstance:null,
+  nearMeLat:null,nearMeLng:null,nearMeActive:false
 };
 
 // Demo listings (replace with API calls when backend is running)
@@ -1044,9 +1055,21 @@ function applyFilters(){
   else if(sort==='price-desc')state.filtered.sort(function(a,b){return b.pricing.amount-a.pricing.amount});
   else if(sort==='rating')state.filtered.sort(function(a,b){return b.avgRating-a.avgRating});
   else state.filtered.sort(function(a,b){return (b.featured?1:0)-(a.featured?1:0)});
+  // Near Me override: sort by distance, only listings with coords
+  if(state.nearMeActive&&state.nearMeLat!==null&&state.nearMeLng!==null){
+    state.filtered=state.filtered.filter(function(l){return l.location&&l.location.lat&&l.location.lng;});
+    state.filtered.sort(function(a,b){
+      return nearMeDistance(state.nearMeLat,state.nearMeLng,a.location.lat,a.location.lng)-
+             nearMeDistance(state.nearMeLat,state.nearMeLng,b.location.lat,b.location.lng);
+    });
+  }
   state.currentPage=1;
   var h=document.getElementById('listings-heading');
-  if(h){var t=state.currentType==='all'?'All Listings':TYPE_LABELS[state.currentType]+'s';h.textContent=t+' ('+state.filtered.length+')';}
+  if(h){
+    var t=state.currentType==='all'?'All Listings':TYPE_LABELS[state.currentType]+'s';
+    var suffix=state.nearMeActive?' nearby':'';
+    h.textContent=t+suffix+' ('+state.filtered.length+')';
+  }
   renderListings();
   if(state.currentView==='map')renderMapView();
 }
@@ -1087,7 +1110,9 @@ function renderListings(){
       '<div class="lc-body">'+
         '<div class="lc-type">'+TYPE_LABELS[l.type]+'</div>'+
         '<div class="lc-name">'+l.title+'</div>'+
-        '<div class="lc-loc">📍 '+l.location.area+', '+l.location.city+'</div>'+
+        '<div class="lc-loc">📍 '+l.location.area+', '+l.location.city+
+          (state.nearMeActive&&state.nearMeLat&&l.location.lat&&l.location.lng?
+            '<span class="lc-dist">'+formatNearMeDist(nearMeDistance(state.nearMeLat,state.nearMeLng,l.location.lat,l.location.lng))+'</span>':'')+'</div>'+
         '<div class="lc-facilities">'+
           (l.facilities||[]).slice(0,3).map(function(f){return '<span class="facility-tag">'+f+'</span>'}).join('')+
           (l.facilities&&l.facilities.length>3?'<span class="facility-tag">+more</span>':'')+
@@ -1411,25 +1436,54 @@ function loadAdminData(){
   document.getElementById('allAdminTable').innerHTML='<table><thead><tr><th>Title</th><th>Type</th><th>Status</th><th>Rating</th><th>Actions</th></tr></thead><tbody>'+allRows+'</tbody></table>';
 }
 
-async function adminAction(id,status){
-  if(!isAdminUser()){
-    showToast('Admin access required');
+var adminActionInFlight = new Set();
+
+async function adminAction(id, status) {
+  if (!isAdminUser()) { showToast('Admin access required'); return; }
+
+  // Guard 1: block if a request for this listing is already running
+  if (adminActionInFlight.has(id)) return;
+
+  // Guard 2: status pre-check — skip if already in target state
+  var l = state.listings.find(function(x) { return x._id === id; });
+  if (l && l.status === status) {
+    showToast('Listing is already ' + status);
     return;
   }
-  if(state.user&&id.indexOf('new_')!==0){
-    try{
-      var action=status==='approved'?'approve':'reject';
-      var res=await authFetch('/api/admin/listings/'+id+'/'+action,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});
-      if(!res.ok){showToast('Admin action denied');return;}
-    }catch(err){showToast('Admin action failed');return;}
+
+  // Disable both action buttons in this row while request runs
+  var row = document.getElementById('prow-' + id);
+  var approveBtns = row ? row.querySelectorAll('.action-btn.approve') : [];
+  var rejectBtns  = row ? row.querySelectorAll('.action-btn.reject')  : [];
+  var allBtns = Array.from(approveBtns).concat(Array.from(rejectBtns));
+  var originalLabels = allBtns.map(function(b) { return b.textContent; });
+  allBtns.forEach(function(b) { b.disabled = true; });
+  var activeBtn = status === 'approved' ? approveBtns[0] : rejectBtns[0];
+  if (activeBtn) activeBtn.textContent = '⏳';
+
+  adminActionInFlight.add(id);
+  try {
+    if (state.user && id.indexOf('new_') !== 0) {
+      var action = status === 'approved' ? 'approve' : 'reject';
+      var res = await authFetch('/api/admin/listings/' + id + '/' + action, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      if (!res.ok) { showToast('Admin action denied'); return; }
+    }
+    if (l) { l.status = status; }
+    if (row) { row.style.opacity = '0.3'; }
+    updateCounts(); applyFilters();
+    showToast(status === 'approved' ? 'Listing approved & live!' : 'Listing rejected');
+    setTimeout(function() { loadAdminData(); }, 500);
+  } catch(err) {
+    showToast('Admin action failed');
+    // Restore buttons on error so admin can retry
+    allBtns.forEach(function(b, i) { b.disabled = false; b.textContent = originalLabels[i]; });
+  } finally {
+    adminActionInFlight.delete(id);
   }
-  var l=state.listings.find(function(x){return x._id===id});
-  if(l){l.status=status;}
-  var row=document.getElementById('prow-'+id);
-  if(row)row.style.opacity='0.3';
-  updateCounts();applyFilters();
-  showToast(status==='approved'?'Listing approved & live!':'Listing rejected');
-  setTimeout(function(){loadAdminData()},500);
 }
 
 async function deleteListing(id){
@@ -1591,6 +1645,145 @@ async function finishSubmit(listing){
   selectedImages=[];
   resetFormMap();
   showToast('Listing submitted for admin review!');
+}
+
+// ═══════════════════════════════════════════════════════════
+// NEAR ME
+// ═══════════════════════════════════════════════════════════
+
+// Haversine formula — returns distance in km between two lat/lng points
+function nearMeDistance(lat1, lng1, lat2, lng2) {
+  var R = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLng/2) * Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+// Format km distance for display: "0.4 km" or "12 km"
+function formatNearMeDist(km) {
+  if (km < 1) return (km * 1000).toFixed(0) + ' m';
+  if (km < 10) return km.toFixed(1) + ' km';
+  return Math.round(km) + ' km';
+}
+
+// Entry point — request geolocation, then activate
+function toggleNearMe() {
+  if (state.nearMeActive) { cancelNearMe(); return; }
+  var btn = document.getElementById('nearMeBtn');
+  if (!navigator.geolocation) {
+    showToast('Geolocation is not supported by your browser');
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '⏳ Locating…';
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      btn.disabled = false;
+      activateNearMe(pos.coords.latitude, pos.coords.longitude);
+    },
+    function(err) {
+      btn.disabled = false;
+      btn.textContent = '📡 Near Me';
+      var msg = 'Could not get your location';
+      if (err.code === err.PERMISSION_DENIED)  msg = 'Location permission denied — please allow access and try again';
+      if (err.code === err.POSITION_UNAVAILABLE) msg = 'Location unavailable — check your device settings';
+      if (err.code === err.TIMEOUT) msg = 'Location request timed out — please try again';
+      showToast(msg);
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+function activateNearMe(lat, lng) {
+  state.nearMeActive = true;
+  state.nearMeLat   = lat;
+  state.nearMeLng   = lng;
+  var btn = document.getElementById('nearMeBtn');
+  if (btn) { btn.textContent = '📡 Near Me ✓'; btn.classList.add('near-me-active'); }
+  var banner = document.getElementById('nearMeBanner');
+  if (banner) banner.style.display = 'flex';
+  // Check if any listings have coords — warn if not
+  var withCoords = state.listings.filter(function(l) {
+    return l.status === 'approved' && l.location && l.location.lat && l.location.lng;
+  });
+  if (withCoords.length === 0) {
+    showToast('No listings with map coordinates found yet');
+  } else {
+    showToast('Showing ' + withCoords.length + ' listings nearest to you');
+  }
+  // Switch to grid so distance badges are visible, then re-filter
+  setView('grid');
+  applyFilters();
+  // Auto-open map view with user marker
+  setTimeout(function() { setView('map'); renderNearMeMapView(lat, lng); }, 300);
+}
+
+function cancelNearMe() {
+  state.nearMeActive = false;
+  state.nearMeLat   = null;
+  state.nearMeLng   = null;
+  var btn = document.getElementById('nearMeBtn');
+  if (btn) { btn.textContent = '📡 Near Me'; btn.classList.remove('near-me-active'); }
+  var banner = document.getElementById('nearMeBanner');
+  if (banner) banner.style.display = 'none';
+  setView('grid');
+  applyFilters();
+}
+
+// Render the map with user position marker + listing markers sorted by distance
+async function renderNearMeMapView(userLat, userLng) {
+  setView('map');
+  var el = document.getElementById('map-container');
+  var points = state.filtered.filter(function(l) {
+    return l.location && l.location.lat && l.location.lng;
+  });
+  try {
+    await ensureLeaflet();
+    clearMapInstance();
+    el.innerHTML = '';
+    var map = L.map(el).setView([userLat, userLng], 13);
+    state.mapInstance = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    // User location marker (blue)
+    var userIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px;height:16px;background:#1565c0;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+    L.marker([userLat, userLng], { icon: userIcon })
+      .addTo(map)
+      .bindPopup('<strong>Your location</strong>')
+      .openPopup();
+    // Listing markers with distance
+    points.forEach(function(l) {
+      var km = nearMeDistance(userLat, userLng, l.location.lat, l.location.lng);
+      L.marker([l.location.lat, l.location.lng])
+        .addTo(map)
+        .bindPopup(
+          '<strong>' + l.title + '</strong><br>' +
+          l.location.area + '<br>' +
+          '₹' + l.pricing.amount + '/month<br>' +
+          '<span style="color:#1b5e20;font-weight:600">' + formatNearMeDist(km) + ' away</span>'
+        );
+    });
+    // Fit map to show all markers
+    if (points.length > 0) {
+      var allPoints = [[userLat, userLng]].concat(
+        points.map(function(l) { return [l.location.lat, l.location.lng]; })
+      );
+      map.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
+    }
+    setTimeout(function() { map.invalidateSize(); }, 100);
+  } catch(err) {
+    // Fallback: static pin map
+    if (points.length) renderStaticMapFallback(el, points);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
