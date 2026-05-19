@@ -162,6 +162,20 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .view-btn{padding:8px 16px;border-radius:10px;border:1.5px solid var(--brd);background:var(--white);font-size:0.85rem;cursor:pointer;font-weight:500;color:var(--muted);transition:all var(--trans)}
 .view-btn.active{background:var(--or);color:#111;border-color:var(--or)}
 
+/* ── Map Picker (Listing Form) ───────────────────── */
+.location-picker-wrap{margin-top:8px;border:1.5px solid var(--brd);border-radius:var(--r);overflow:hidden;background:var(--surf)}
+.location-picker-toolbar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--white);border-bottom:1px solid var(--brd);flex-wrap:wrap}
+.location-picker-toolbar .btn{font-size:.8rem;padding:7px 14px}
+.location-picker-toolbar .loc-status{font-size:.78rem;color:var(--muted);margin-left:auto}
+.location-picker-map{height:280px;width:100%;cursor:crosshair}
+.location-picker-coords{display:flex;gap:10px;padding:8px 14px;background:var(--white);border-top:1px solid var(--brd);font-size:.78rem;color:var(--muted)}
+.location-picker-coords span{font-family:monospace;color:var(--ink)}
+@media(max-width:768px){.location-picker-map{height:220px}}
+
+/* ── Detail Map (Leaflet in modal) ───────────────── */
+.modal-map .leaflet-container{border-radius:var(--r)}
+.dm-leaflet-map{height:100%;width:100%;border-radius:var(--r)}
+
 /* ── Listing Detail Modal ─────────────────────────── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:flex-start;justify-content:center;overflow-y:auto;padding:2rem 1rem;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex;animation:fadeIn .2s}
@@ -664,6 +678,26 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
             <div class="form-group"><label>Area / Locality *</label><input type="text" id="f-area" placeholder="e.g. Malviya Nagar"/></div>
             <div class="form-group"><label>Pincode</label><input type="text" id="f-pin" placeholder="e.g. 302017"/></div>
           </div>
+          <div class="form-2col">
+            <div class="form-group"><label>City</label><input type="text" id="f-city" placeholder="Auto-detected" readonly style="background:var(--surf);cursor:default"/></div>
+            <div class="form-group"><label>State</label><input type="text" id="f-state" placeholder="Auto-detected" readonly style="background:var(--surf);cursor:default"/></div>
+          </div>
+          <input type="hidden" id="f-lat" value=""/>
+          <input type="hidden" id="f-lng" value=""/>
+          <div class="form-group">
+            <label>📍 Pin Location on Map</label>
+            <div class="location-picker-wrap">
+              <div class="location-picker-toolbar">
+                <button type="button" class="btn btn-primary btn-sm" onclick="useCurrentLocation()" id="geolocateBtn">📍 Use Current Location</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="searchAddressOnMap()">🔍 Search Address</button>
+                <span class="loc-status" id="locStatus">Click map or use GPS</span>
+              </div>
+              <div id="formMapPicker" class="location-picker-map"></div>
+              <div class="location-picker-coords" id="coordsDisplay" style="display:none">
+                Lat: <span id="coordLat">—</span> &nbsp; Lng: <span id="coordLng">—</span>
+              </div>
+            </div>
+          </div>
           <div class="form-group"><label>Nearby Colleges</label><input type="text" id="f-colleges" placeholder="RTU, MNIT, Manipal (comma separated)"/></div>
           <div class="form-group"><label>Owner Name *</label><input type="text" id="f-oname" placeholder="Your full name"/></div>
           <div class="form-2col">
@@ -895,6 +929,7 @@ function normalizeListing(l){
   l.status=l.status||'approved';
   l.gender=l.gender||'any';
   l.location.city=l.location.city||'Jaipur';
+  l.location.state=l.location.state||'';
   l.pricing.period=l.pricing.period||'month';
   l.owner.whatsapp=l.owner.whatsapp||l.owner.phone||'';
   return l;
@@ -1223,26 +1258,32 @@ function openDetail(id){
   openModal('detailModal');
 }
 
-function renderDetailMap(l){
-  var map=document.getElementById('dm-map');
-  if(!map)return;
+async function renderDetailMap(l){
+  var mapEl=document.getElementById('dm-map');
+  if(!mapEl)return;
   var baseAddress = l.location.address || '';
   var parts = [baseAddress];
-
-  if (l.location.area && !baseAddress.includes(l.location.area)) {
-    parts.push(l.location.area);
-  }
-
-  if (l.location.city && !baseAddress.includes(l.location.city)) {
-    parts.push(l.location.city);
-  }
-
+  if (l.location.area && !baseAddress.includes(l.location.area)) parts.push(l.location.area);
+  if (l.location.city && !baseAddress.includes(l.location.city)) parts.push(l.location.city);
   var address = parts.filter(Boolean).join(', ');
+
   if(l.location.lat&&l.location.lng){
     var lat=Number(l.location.lat),lng=Number(l.location.lng);
-    map.innerHTML='<iframe title="Listing location" src="https://www.openstreetmap.org/export/embed.html?bbox='+(lng-.02)+'%2C'+(lat-.02)+'%2C'+(lng+.02)+'%2C'+(lat+.02)+'&layer=mapnik&marker='+lat+'%2C'+lng+'" style="border:0;width:100%;height:100%"></iframe>';
+    try{
+      await ensureLeaflet();
+      // Clear any previous map instance on this element
+      if(mapEl._leafletMap){mapEl._leafletMap.remove();mapEl._leafletMap=null;}
+      mapEl.innerHTML='<div class="dm-leaflet-map" id="dm-leaflet-map"></div>';
+      var map=L.map('dm-leaflet-map',{scrollWheelZoom:false,dragging:true,zoomControl:true}).setView([lat,lng],15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);
+      L.marker([lat,lng]).addTo(map).bindPopup('<strong>'+l.title+'</strong><br>'+address).openPopup();
+      mapEl._leafletMap=map;
+      setTimeout(function(){map.invalidateSize()},200);
+    }catch(err){
+      mapEl.innerHTML='<iframe title="Listing location" src="https://www.openstreetmap.org/export/embed.html?bbox='+(lng-.02)+'%2C'+(lat-.02)+'%2C'+(lng+.02)+'%2C'+(lat+.02)+'&layer=mapnik&marker='+lat+'%2C'+lng+'" style="border:0;width:100%;height:100%"></iframe>';
+    }
   }else{
-    map.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)"><span>📍 <span id="dm-address">'+address+'</span></span></div>';
+    mapEl.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted)"><span>\ud83d\udccd <span id="dm-address">'+address+'</span></span></div>';
   }
 }
 
@@ -1506,7 +1547,7 @@ function submitListing(){
   var newListing={
     title:title,type:type,description:desc,
     owner:{user:state.user.id,name:oname,phone:phone,whatsapp:document.getElementById('f-wa').value||phone},
-    location:{address:address,area:area,city:'Jaipur',pincode:document.getElementById('f-pin').value,nearbyColleges:document.getElementById('f-colleges').value.split(',').map(function(c){return c.trim()}).filter(Boolean)},
+    location:{address:address,area:area,city:document.getElementById('f-city').value||'Jaipur',state:document.getElementById('f-state').value||'',pincode:document.getElementById('f-pin').value,lat:parseFloat(document.getElementById('f-lat').value)||undefined,lng:parseFloat(document.getElementById('f-lng').value)||undefined,nearbyColleges:document.getElementById('f-colleges').value.split(',').map(function(c){return c.trim()}).filter(Boolean)},
     pricing:{amount:parseInt(price),deposit:parseInt(document.getElementById('f-deposit').value)||0,negotiable:false,period:'month'},
     facilities:facilities,gender:document.getElementById('f-gender').value,
     images:[],reviews:[]
@@ -1548,8 +1589,244 @@ async function finishSubmit(listing){
   document.querySelectorAll('#facilitiesGrid .facility-check').forEach(function(l){l.classList.remove('checked');l.querySelector('input').checked=false;});
   document.getElementById('imagePreviews').innerHTML='';
   selectedImages=[];
+  resetFormMap();
   showToast('Listing submitted for admin review!');
 }
+
+// ═══════════════════════════════════════════════════════════
+// INTERACTIVE MAP PICKER (Leaflet + Geolocation)
+// ═══════════════════════════════════════════════════════════
+var formMapPickerInstance = null;
+var formMapMarker = null;
+var formMapInitialized = false;
+
+// Default center: Jaipur, India
+var DEFAULT_LAT = 26.9124;
+var DEFAULT_LNG = 75.7873;
+var DEFAULT_ZOOM = 12;
+
+async function initFormMapPicker() {
+  if (formMapInitialized && formMapPickerInstance) {
+    formMapPickerInstance.invalidateSize();
+    return;
+  }
+  try {
+    await ensureLeaflet();
+    var container = document.getElementById('formMapPicker');
+    if (!container) return;
+    // Clean up any existing instance
+    if (formMapPickerInstance) {
+      formMapPickerInstance.remove();
+      formMapPickerInstance = null;
+      formMapMarker = null;
+    }
+    container.innerHTML = '';
+    var map = L.map(container, {
+      center: [DEFAULT_LAT, DEFAULT_LNG],
+      zoom: DEFAULT_ZOOM,
+      scrollWheelZoom: true,
+      tap: true
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Click to place marker
+    map.on('click', function(e) {
+      placeFormMarker(e.latlng.lat, e.latlng.lng);
+      reverseGeocodeAndFill(e.latlng.lat, e.latlng.lng);
+    });
+
+    formMapPickerInstance = map;
+    formMapInitialized = true;
+
+    // Fix map rendering after tab switch
+    setTimeout(function() { map.invalidateSize(); }, 300);
+  } catch (err) {
+    console.warn('Map picker init failed:', err);
+    var container = document.getElementById('formMapPicker');
+    if (container) {
+      container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);flex-direction:column;gap:8px;padding:1rem"><div style="font-size:1.5rem">🗺️</div><p style="font-size:.85rem">Map could not load. You can still enter your address manually above, and we will auto-detect coordinates.</p></div>';
+    }
+  }
+}
+
+function placeFormMarker(lat, lng) {
+  if (!formMapPickerInstance) return;
+  if (formMapMarker) {
+    formMapMarker.setLatLng([lat, lng]);
+  } else {
+    formMapMarker = L.marker([lat, lng], { draggable: true }).addTo(formMapPickerInstance);
+    formMapMarker.on('dragend', function(e) {
+      var pos = e.target.getLatLng();
+      reverseGeocodeAndFill(pos.lat, pos.lng);
+    });
+  }
+  formMapPickerInstance.setView([lat, lng], Math.max(formMapPickerInstance.getZoom(), 15));
+  updateFormCoords(lat, lng);
+}
+
+function updateFormCoords(lat, lng) {
+  document.getElementById('f-lat').value = lat.toFixed(6);
+  document.getElementById('f-lng').value = lng.toFixed(6);
+  document.getElementById('coordLat').textContent = lat.toFixed(6);
+  document.getElementById('coordLng').textContent = lng.toFixed(6);
+  document.getElementById('coordsDisplay').style.display = 'flex';
+}
+
+async function reverseGeocodeAndFill(lat, lng) {
+  var statusEl = document.getElementById('locStatus');
+  statusEl.textContent = 'Detecting address...';
+  try {
+    var res = await fetch('/api/geocode/reverse?lat=' + lat + '&lng=' + lng);
+    var data = await res.json();
+    if (data.success) {
+      // Auto-fill fields (only if currently empty or user is using map)
+      var addrEl = document.getElementById('f-address');
+      var areaEl = document.getElementById('f-area');
+      var cityEl = document.getElementById('f-city');
+      var stateEl = document.getElementById('f-state');
+      var pinEl = document.getElementById('f-pin');
+
+      if (!addrEl.value.trim() && data.address) {
+        // Use a shorter version: first 2-3 components of the display_name
+        var shortAddr = data.address.split(',').slice(0, 3).map(function(s){return s.trim()}).join(', ');
+        addrEl.value = shortAddr;
+      }
+      if (!areaEl.value.trim() && data.area) areaEl.value = data.area;
+      if (data.city) cityEl.value = data.city;
+      if (data.state) stateEl.value = data.state;
+      if (!pinEl.value.trim() && data.pincode) pinEl.value = data.pincode;
+
+      statusEl.textContent = '✅ Location pinned — ' + (data.area || data.city || 'detected');
+      statusEl.style.color = 'var(--or)';
+    } else {
+      statusEl.textContent = '📍 Pinned (reverse geocode unavailable)';
+    }
+  } catch (err) {
+    statusEl.textContent = '📍 Coordinates saved';
+    console.warn('Reverse geocode failed:', err);
+  }
+}
+
+function useCurrentLocation() {
+  var statusEl = document.getElementById('locStatus');
+  var btn = document.getElementById('geolocateBtn');
+
+  if (!navigator.geolocation) {
+    statusEl.textContent = '❌ Geolocation not supported by your browser';
+    statusEl.style.color = '#f87171';
+    showToast('Geolocation not supported. Please select location on map.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Detecting...';
+  statusEl.textContent = 'Requesting location permission...';
+  statusEl.style.color = 'var(--muted)';
+
+  navigator.geolocation.getCurrentPosition(
+    // Success
+    async function(position) {
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+      btn.disabled = false;
+      btn.textContent = '📍 Use Current Location';
+
+      // Initialize map if needed
+      await initFormMapPicker();
+      placeFormMarker(lat, lng);
+      reverseGeocodeAndFill(lat, lng);
+      showToast('Location detected successfully!');
+    },
+    // Error
+    function(error) {
+      btn.disabled = false;
+      btn.textContent = '📍 Use Current Location';
+      var msg = 'Location detection failed';
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          msg = 'Location permission denied. Please allow access or select on map.';
+          break;
+        case error.POSITION_UNAVAILABLE:
+          msg = 'Location unavailable. Please select on map.';
+          break;
+        case error.TIMEOUT:
+          msg = 'Location request timed out. Please try again or select on map.';
+          break;
+      }
+      statusEl.textContent = '❌ ' + msg;
+      statusEl.style.color = '#f87171';
+      showToast(msg);
+    },
+    // Options
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+async function searchAddressOnMap() {
+  var address = document.getElementById('f-address').value.trim();
+  var area = document.getElementById('f-area').value.trim();
+  var pin = document.getElementById('f-pin').value.trim();
+  var query = [address, area, pin, 'India'].filter(Boolean).join(', ');
+  if (!query || query === 'India') {
+    showToast('Please enter an address or area first');
+    return;
+  }
+
+  var statusEl = document.getElementById('locStatus');
+  statusEl.textContent = 'Searching address...';
+  statusEl.style.color = 'var(--muted)';
+
+  try {
+    var res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query), {
+      headers: { 'User-Agent': 'Nikunj/1.0' }
+    });
+    var results = await res.json();
+    if (results && results.length > 0) {
+      var lat = Number(results[0].lat);
+      var lng = Number(results[0].lon);
+      await initFormMapPicker();
+      placeFormMarker(lat, lng);
+      reverseGeocodeAndFill(lat, lng);
+      showToast('Address found and pinned on map!');
+    } else {
+      statusEl.textContent = '❌ Address not found. Try being more specific.';
+      statusEl.style.color = '#f87171';
+      showToast('Could not find this address. Try adding more details.');
+    }
+  } catch (err) {
+    statusEl.textContent = '❌ Search failed. Check your connection.';
+    statusEl.style.color = '#f87171';
+  }
+}
+
+function resetFormMap() {
+  document.getElementById('f-lat').value = '';
+  document.getElementById('f-lng').value = '';
+  document.getElementById('f-city').value = '';
+  document.getElementById('f-state').value = '';
+  document.getElementById('coordsDisplay').style.display = 'none';
+  document.getElementById('locStatus').textContent = 'Click map or use GPS';
+  document.getElementById('locStatus').style.color = 'var(--muted)';
+  if (formMapMarker && formMapPickerInstance) {
+    formMapPickerInstance.removeLayer(formMapMarker);
+    formMapMarker = null;
+  }
+  if (formMapPickerInstance) {
+    formMapPickerInstance.setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
+  }
+}
+
+// Initialize map picker when the "Add Listing" tab is shown
+var _origShowPanelTab = showPanelTab;
+showPanelTab = function(t) {
+  _origShowPanelTab(t);
+  if (t === 'add') {
+    setTimeout(function() { initFormMapPicker(); }, 200);
+  }
+};
 
 // ═══════════════════════════════════════════════════════════
 // AI CHAT

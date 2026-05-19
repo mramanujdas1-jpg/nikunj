@@ -87,6 +87,37 @@ app.use('/api/inquiries',  require('./routes/inquiries'));
 app.use('/api/payments',   require('./routes/payments'));
 app.use('/api/notifications', require('./routes/notifications'));
 
+// ─── Geocode Proxy (avoids CORS issues with Nominatim) ────────────────────────
+app.get('/api/geocode/reverse', async (req, res) => {
+  const { lat, lng } = req.query;
+  if (!lat || !lng) return res.status(400).json({ success: false, message: 'lat and lng required' });
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&addressdetails=1&zoom=18`;
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Nikunj/1.0 contact@nikunj.local' }
+    });
+    clearTimeout(timeout);
+    if (!response.ok) return res.status(502).json({ success: false, message: 'Geocode service error' });
+    const data = await response.json();
+    const a = data.address || {};
+    res.json({
+      success: true,
+      address: data.display_name || '',
+      area: a.suburb || a.neighbourhood || a.hamlet || a.village || '',
+      city: a.city || a.town || a.village || a.county || '',
+      state: a.state || '',
+      pincode: a.postcode || '',
+      lat: Number(data.lat),
+      lng: Number(data.lon)
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Geocode failed' });
+  }
+});
+
 app.get('/api/health/auth', (req, res) => {
   res.json({ success: true, auth: envSummary() });
 });

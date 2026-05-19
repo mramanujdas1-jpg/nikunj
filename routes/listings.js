@@ -5,35 +5,89 @@ const { protect, authorize } = require('../middleware/auth');
 const Notification = require('../models/Notification');
 
 async function geocodeListingLocation(location = {}) {
-  if (Number.isFinite(Number(location.lat)) && Number.isFinite(Number(location.lng))) return location;
+  const locObj = location.toObject ? location.toObject() : { ...location };
+  const hasCoords = Number.isFinite(Number(locObj.lat)) && Number.isFinite(Number(locObj.lng));
 
-  const query = [location.address, location.area, location.city, location.pincode, 'India']
+  // If we have coords, try reverse-geocoding to fill missing address fields
+  if (hasCoords) {
+    const needsReverse = !locObj.city || !locObj.state || !locObj.pincode;
+    if (needsReverse) {
+      try {
+        const rev = await reverseGeocode(Number(locObj.lat), Number(locObj.lng));
+        if (rev) {
+          if (!locObj.address && rev.address) locObj.address = rev.address;
+          if (!locObj.city && rev.city) locObj.city = rev.city;
+          if (!locObj.state && rev.state) locObj.state = rev.state;
+          if (!locObj.pincode && rev.pincode) locObj.pincode = rev.pincode;
+          if (!locObj.area && rev.area) locObj.area = rev.area;
+        }
+      } catch (_) { /* reverse-geocode failure is non-fatal */ }
+    }
+    return locObj;
+  }
+
+  // Forward-geocode: address text → coordinates
+  const query = [locObj.address, locObj.area, locObj.city, locObj.pincode, 'India']
     .filter(Boolean)
     .join(', ');
-  if (!query.trim()) return location;
+  if (!query.trim()) return locObj;
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
   try {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q=${encodeURIComponent(query)}`;
     const response = await fetch(url, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Nikunj/1.0 contact@nikunj.local' }
     });
-    if (!response.ok) return location;
+    if (!response.ok) return locObj;
 
     const results = await response.json();
     const first = Array.isArray(results) ? results[0] : null;
     if (first && first.lat && first.lon) {
-      const locObj = location.toObject ? location.toObject() : location;
-      return { ...locObj, lat: Number(first.lat), lng: Number(first.lon) };
+      locObj.lat = Number(first.lat);
+      locObj.lng = Number(first.lon);
+      // Extract structured address from forward geocode result
+      if (first.address) {
+        if (!locObj.city) locObj.city = first.address.city || first.address.town || first.address.village || '';
+        if (!locObj.state) locObj.state = first.address.state || '';
+        if (!locObj.pincode) locObj.pincode = first.address.postcode || '';
+      }
     }
   } catch (err) {
-    return location;
+    return locObj;
   } finally {
     clearTimeout(timeout);
   }
-  return location;
+  return locObj;
+}
+
+// Reverse geocode: lat/lng → structured address
+async function reverseGeocode(lat, lng) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3500);
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&zoom=18`;
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Nikunj/1.0 contact@nikunj.local' }
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (!data || !data.address) return null;
+    const a = data.address;
+    return {
+      address: data.display_name || '',
+      area: a.suburb || a.neighbourhood || a.hamlet || a.village || '',
+      city: a.city || a.town || a.village || a.county || '',
+      state: a.state || '',
+      pincode: a.postcode || ''
+    };
+  } catch (_) {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 // GET /api/listings — search + filter
