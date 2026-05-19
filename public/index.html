@@ -205,10 +205,15 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .modal-map{height:220px;border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;background:var(--surf);border:1px solid var(--brd)}
 .modal-contact{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .contact-btn{padding:13px;border-radius:var(--r);font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;transition:all var(--trans);border:none}
-.btn-call{background:#333;color:#fff}
-.btn-call:hover{background:#444}
-.btn-wa{background:#25D366;color:#fff}
-.btn-wa:hover{background:#1aad53}
+.btn-interested{background:var(--or);color:#111}
+.btn-interested:hover{filter:brightness(1.08)}
+.btn-nikunj{background:linear-gradient(135deg,#27187e,#3d28b0);color:#fff}
+.btn-nikunj:hover{filter:brightness(1.12)}
+.modal-contact{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-lead-form{display:none;grid-column:1/-1;background:var(--surf);border:1.5px solid var(--brd);border-radius:var(--r);padding:1rem;margin-top:4px}
+.modal-lead-form h4{font-size:.9rem;font-weight:600;margin-bottom:.75rem;color:var(--ink)}
+.modal-lead-form input,.modal-lead-form textarea,.modal-lead-form select{width:100%;padding:9px 12px;border:1.5px solid var(--brd);border-radius:8px;font-size:.85rem;outline:none;font-family:var(--font);margin-bottom:.6rem;background:var(--white);color:var(--ink)}
+.modal-lead-form .lead-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
 .reviews-section{border-top:1px solid var(--brd);padding-top:1.5rem;margin-top:1.5rem}
 .reviews-section h3{font-size:1rem;font-weight:600;margin-bottom:1rem}
 .review-item{padding:12px 0;border-bottom:1px solid var(--brd)}
@@ -655,6 +660,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       <div class="sidebar-item" id="sb-listings" onclick="showPanelTab('listings')"><span class="si-icon">📋</span> My Listings</div>
       <div class="sidebar-item" id="sb-add" onclick="showPanelTab('add')"><span class="si-icon">➕</span> Add Listing</div>
       <div class="sidebar-item" id="sb-admin" onclick="showPanelTab('admin')" style="display:none"><span class="si-icon">🔐</span> Admin Review</div>
+      <div class="sidebar-item" id="sb-leads" onclick="showPanelTab('leads')" style="display:none"><span class="si-icon">📩</span> Leads <span id="leadsBadge" style="background:#e53e3e;color:#fff;padding:2px 8px;border-radius:99px;font-size:11px;margin-left:4px"></span></div>
       <div class="sidebar-item" id="sb-users" onclick="showPanelTab('users')" style="display:none"><span class="si-icon">👥</span> Users</div>
       <div class="sidebar-item" style="margin-top:auto" onclick="showPage('home')"><span class="si-icon">🏠</span> Back to site</div>
       <div class="sidebar-item" onclick="logout()"><span class="si-icon">🚪</span> Logout</div>
@@ -743,6 +749,19 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
           <div class="data-table" id="allAdminTable"><div class="loader"><span></span><span></span><span></span></div></div>
         </div>
       </div>
+      <div id="pt-leads" style="display:none">
+        <div class="panel-header"><h1>Leads &amp; Enquiries</h1></div>
+        <div class="panel-section">
+          <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="loadLeadsAdmin('all')">All</button>
+            <button class="btn btn-outline btn-sm" onclick="loadLeadsAdmin('pending')">Pending</button>
+            <button class="btn btn-outline btn-sm" onclick="loadLeadsAdmin('contacted')">Contacted</button>
+            <button class="btn btn-outline btn-sm" onclick="loadLeadsAdmin('visit_scheduled')">Visit Scheduled</button>
+            <button class="btn btn-outline btn-sm" onclick="loadLeadsAdmin('closed')">Closed</button>
+          </div>
+          <div class="data-table" id="leadsTable"><p style="padding:1.5rem;color:var(--muted)">Loading leads…</p></div>
+        </div>
+      </div>
       <div id="pt-users" style="display:none">
         <div class="panel-header"><h1>Registered Users</h1></div>
         <div class="data-table" id="usersTable"><div class="loader"><span></span><span></span><span></span></div></div>
@@ -773,9 +792,22 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
           <span>📍 <span id="dm-address"></span></span>
         </div>
       </div>
-      <div class="modal-contact">
-        <button class="contact-btn btn-call" id="dm-call">📞 Call Owner</button>
-        <button class="contact-btn btn-wa" id="dm-wa">💬 WhatsApp</button>
+      <div class="modal-contact" id="dm-contact-btns">
+        <button class="contact-btn btn-interested" onclick="showLeadModal('interested')">🏠 I'm Interested</button>
+        <button class="contact-btn btn-nikunj" onclick="showLeadModal('callback')">📞 Request Callback</button>
+        <button class="contact-btn btn-nikunj" onclick="showLeadModal('visit')" style="background:linear-gradient(135deg,#1b5e20,#2e7d32)">📅 Schedule Visit</button>
+        <button class="contact-btn btn-nikunj" onclick="showLeadModal('interested')" style="background:linear-gradient(135deg,#444,#666)">💬 Talk to Nikunj</button>
+      </div>
+      <div class="modal-lead-form" id="leadForm">
+        <h4 id="leadFormTitle">Express Interest</h4>
+        <input type="text" id="lead-name" placeholder="Your name *"/>
+        <input type="email" id="lead-email" placeholder="Your email *"/>
+        <textarea id="lead-msg" rows="2" placeholder="Any specific requirements? (optional)"></textarea>
+        <div class="lead-actions">
+          <button class="btn btn-outline btn-sm" onclick="closeLeadForm()">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="submitLead()">Send to Nikunj →</button>
+        </div>
+        <p id="lead-feedback" style="font-size:.8rem;color:var(--muted);margin-top:.5rem"></p>
       </div>
       <div class="reviews-section">
         <h3>Reviews (<span id="dm-review-count">0</span>)</h3>
@@ -1266,8 +1298,9 @@ function openDetail(id){
   document.getElementById('dm-address').textContent=l.location.address;
   var fac=document.getElementById('dm-facilities');
   fac.innerHTML=(l.facilities||[]).map(function(f){return '<span class="facility-tag">'+f+'</span>'}).join('');
-  document.getElementById('dm-call').onclick=function(){window.open('tel:'+l.owner.phone)};
-  document.getElementById('dm-wa').onclick=function(){window.open('https://wa.me/'+l.owner.whatsapp.replace(/[^0-9]/g,''))};
+  // Store current listing ID for lead submission — owner contact never exposed
+  state.currentListingId = l._id;
+  closeLeadForm();
   document.getElementById('dm-review-count').textContent=l.reviews.length;
   var revEl=document.getElementById('dm-reviews');
   if(l.reviews&&l.reviews.length>0){
@@ -1351,11 +1384,11 @@ async function submitReview(){
 // PANEL
 // ═══════════════════════════════════════════════════════════
 function showPanelTab(t){
-  if((t==='admin'||t==='users')&&!isAdminUser()){
+  if((t==='admin'||t==='users'||t==='leads')&&!isAdminUser()){
     showToast('Admin access required');
     return;
   }
-  ['dashboard','listings','add','admin','users'].forEach(function(tab){
+  ['dashboard','listings','add','admin','leads','users'].forEach(function(tab){
     var pt=document.getElementById('pt-'+tab);
     var sb=document.getElementById('sb-'+tab);
     if(pt)pt.style.display=t===tab?'block':'none';
@@ -1364,6 +1397,7 @@ function showPanelTab(t){
   if(t==='admin')loadAdminData();
   if(t==='listings')loadOwnerListings();
   if(t==='users')loadUsers();
+  if(t==='leads')loadLeadsAdmin('all');
 }
 
 function loadPanelData(){
@@ -1375,6 +1409,7 @@ function loadPanelData(){
   var mine=state.listings.filter(function(l){return l.owner&&l.owner.name===state.user.name}).length;
   var statsEl=document.getElementById('panelStats');
   document.getElementById('sb-admin').style.display='none';
+  document.getElementById('sb-leads').style.display='none';
   document.getElementById('sb-users').style.display='none';
   if(isAdminUser()){
     statsEl.innerHTML=
@@ -1383,6 +1418,7 @@ function loadPanelData(){
       '<div class="stat-card"><div class="s-num">12.4K</div><div class="s-lbl">Students served</div><span class="s-sub ok">+18% this month</span></div>'+
       '<div class="stat-card"><div class="s-num">4.8★</div><div class="s-lbl">Avg. rating</div><span class="s-sub ok">Excellent</span></div>';
     document.getElementById('sb-admin').style.display='flex';
+    document.getElementById('sb-leads').style.display='flex';
     document.getElementById('sb-users').style.display='flex';
   }else{
     statsEl.innerHTML=
@@ -2020,6 +2056,145 @@ showPanelTab = function(t) {
     setTimeout(function() { initFormMapPicker(); }, 200);
   }
 };
+
+// ═══════════════════════════════════════════════════════════
+// LEADS — Managed Contact System
+// ═══════════════════════════════════════════════════════════
+var _leadType = 'interested';
+var _leadInFlight = false;
+
+var LEAD_TYPE_LABELS = {
+  interested: 'Express Interest',
+  callback:   'Request a Callback',
+  visit:      'Schedule a Visit'
+};
+
+function showLeadModal(type) {
+  _leadType = type || 'interested';
+  document.getElementById('leadFormTitle').textContent = LEAD_TYPE_LABELS[_leadType] || 'Express Interest';
+  // Pre-fill from logged-in user
+  if (state.user) {
+    document.getElementById('lead-name').value  = state.user.name  || '';
+    document.getElementById('lead-email').value = state.user.email || '';
+  }
+  document.getElementById('lead-feedback').textContent = '';
+  document.getElementById('leadForm').style.display = 'block';
+  document.getElementById('lead-name').focus();
+}
+
+function closeLeadForm() {
+  document.getElementById('leadForm').style.display = 'none';
+  document.getElementById('lead-feedback').textContent = '';
+}
+
+async function submitLead() {
+  if (_leadInFlight) return;
+  var name    = (document.getElementById('lead-name').value  || '').trim();
+  var email   = (document.getElementById('lead-email').value || '').trim();
+  var message = (document.getElementById('lead-msg').value   || '').trim();
+  var fb = document.getElementById('lead-feedback');
+
+  if (!name)  { fb.textContent = 'Please enter your name.'; fb.style.color = '#e53e3e'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    fb.textContent = 'Please enter a valid email.'; fb.style.color = '#e53e3e'; return;
+  }
+  if (!state.currentListingId) { fb.textContent = 'No listing selected.'; return; }
+
+  _leadInFlight = true;
+  fb.textContent = 'Sending…'; fb.style.color = 'var(--muted)';
+
+  try {
+    var body = {
+      listingId: state.currentListingId,
+      userId:    state.user ? state.user.id : null,
+      userName:  name,
+      userEmail: email,
+      message:   message,
+      type:      _leadType
+    };
+    var res = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    var data = await res.json();
+    if (data.success) {
+      fb.style.color = '#1b5e20';
+      fb.textContent = '✅ ' + data.message;
+      document.getElementById('lead-name').value  = '';
+      document.getElementById('lead-email').value = '';
+      document.getElementById('lead-msg').value   = '';
+      showToast('Request sent! Nikunj will contact you shortly.');
+      setTimeout(closeLeadForm, 3000);
+    } else {
+      fb.style.color = '#e53e3e';
+      fb.textContent = data.message || 'Something went wrong. Please try again.';
+    }
+  } catch(err) {
+    fb.style.color = '#e53e3e';
+    fb.textContent = 'Network error — please try again.';
+  } finally {
+    _leadInFlight = false;
+  }
+}
+
+// Admin: load leads table
+async function loadLeadsAdmin(statusFilter) {
+  if (!isAdminUser()) return;
+  var tableEl = document.getElementById('leadsTable');
+  if (!tableEl) return;
+  tableEl.innerHTML = '<div class="loader"><span></span><span></span><span></span></div>';
+  try {
+    var url = '/api/leads/admin' + (statusFilter && statusFilter !== 'all' ? '?status=' + statusFilter : '');
+    var res = await authFetch(url);
+    var data = await res.json();
+    if (!data.success) { tableEl.innerHTML = '<p style="padding:1rem;color:var(--muted)">Failed to load leads.</p>'; return; }
+    var leads = data.leads || [];
+    // Update badge
+    var badge = document.getElementById('leadsBadge');
+    if (badge) badge.textContent = leads.filter(function(l){return l.status==='pending';}).length || '';
+    if (leads.length === 0) {
+      tableEl.innerHTML = '<p style="padding:1.5rem;color:var(--muted)">No leads found 🎉</p>';
+      return;
+    }
+    var STATUS_COLORS = { pending:'#e53e3e', contacted:'#d97706', visit_scheduled:'#2563eb', closed:'#16a34a' };
+    var rows = leads.map(function(lead) {
+      var ts = new Date(lead.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      var statusOpts = ['pending','contacted','visit_scheduled','closed'].map(function(s) {
+        return '<option value="'+s+'"'+(lead.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>';
+      }).join('');
+      return '<tr>'+
+        '<td style="font-weight:500">'+escapeHtml(lead.userName)+'<br><small style="color:var(--muted)">'+escapeHtml(lead.userEmail)+'</small></td>'+
+        '<td>'+escapeHtml(lead.listingTitle)+'</td>'+
+        '<td>'+lead.type+'</td>'+
+        '<td style="font-size:.78rem;color:var(--muted)">'+ts+'</td>'+
+        '<td><span style="color:'+( STATUS_COLORS[lead.status]||'#333')+';font-weight:600">'+lead.status.replace('_',' ')+'</span></td>'+
+        '<td><select class="action-btn" style="padding:5px 8px;border-radius:6px;border:1px solid var(--brd);background:var(--white);color:var(--ink);font-size:.78rem" onchange="updateLeadStatus(\''+lead._id+'\',this.value)">'+statusOpts+'</select></td>'+
+        (lead.message ? '<td style="font-size:.78rem;color:var(--muted);max-width:160px;word-break:break-word">'+escapeHtml(lead.message)+'</td>' : '<td style="color:var(--muted);font-size:.78rem">—</td>')+
+        '</tr>';
+    }).join('');
+    tableEl.innerHTML = '<table><thead><tr><th>User</th><th>Listing</th><th>Type</th><th>Date</th><th>Status</th><th>Update</th><th>Message</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  } catch(err) {
+    tableEl.innerHTML = '<p style="padding:1rem;color:var(--muted)">Error loading leads.</p>';
+  }
+}
+
+async function updateLeadStatus(id, status) {
+  try {
+    await authFetch('/api/leads/admin/' + id, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: status })
+    });
+    showToast('Lead updated to: ' + status.replace('_', ' '));
+  } catch(err) {
+    showToast('Failed to update lead');
+  }
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 // ═══════════════════════════════════════════════════════════
 // AI CHAT

@@ -86,6 +86,7 @@ app.use('/api/upload',     require('./routes/upload'));
 app.use('/api/inquiries',  require('./routes/inquiries'));
 app.use('/api/payments',   require('./routes/payments'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/leads',         require('./routes/leads'));
 
 // ─── Geocode Proxy (avoids CORS issues with Nominatim) ────────────────────────
 app.get('/api/geocode/reverse', async (req, res) => {
