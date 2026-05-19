@@ -1535,7 +1535,7 @@ function submitListing(){
     alertEl.innerHTML='<div class="alert alert-error">Please fill all required fields (marked with *).</div>';
     return;
   }
-  if(title.length < 10) { alertEl.innerHTML='<div class="alert alert-error">Title must be at least 10 characters.</div>'; return; }
+  if(title.length < 3) { alertEl.innerHTML='<div class="alert alert-error">Title must be at least 3 characters.</div>'; return; }
   if(desc.length < 20) { alertEl.innerHTML='<div class="alert alert-error">Description must be at least 20 characters.</div>'; return; }
   var numPrice = parseInt(price);
   if(isNaN(numPrice) || numPrice <= 0) { alertEl.innerHTML='<div class="alert alert-error">Please enter a valid numeric price greater than 0.</div>'; return; }
@@ -1547,7 +1547,7 @@ function submitListing(){
   var newListing={
     title:title,type:type,description:desc,
     owner:{user:state.user.id,name:oname,phone:phone,whatsapp:document.getElementById('f-wa').value||phone},
-    location:{address:address,area:area,city:document.getElementById('f-city').value||'Jaipur',state:document.getElementById('f-state').value||'',pincode:document.getElementById('f-pin').value,lat:parseFloat(document.getElementById('f-lat').value)||undefined,lng:parseFloat(document.getElementById('f-lng').value)||undefined,nearbyColleges:document.getElementById('f-colleges').value.split(',').map(function(c){return c.trim()}).filter(Boolean)},
+    location:{address:address,area:area,city:document.getElementById('f-city').value||'Jaipur',state:document.getElementById('f-state').value||'',pincode:document.getElementById('f-pin').value,lat:parseFloat(document.getElementById('f-lat').value)||undefined,lng:parseFloat(document.getElementById('f-lng').value)||undefined,nearbyPlaces:document.getElementById('f-colleges').value.split(',').map(function(c){return c.trim()}).filter(Boolean)},
     pricing:{amount:parseInt(price),deposit:parseInt(document.getElementById('f-deposit').value)||0,negotiable:false,period:'month'},
     facilities:facilities,gender:document.getElementById('f-gender').value,
     images:[],reviews:[]
