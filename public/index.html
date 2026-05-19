@@ -1612,13 +1612,13 @@ async function getClerkToken(){
   var activeSession=(clerk&&clerk.session)||(window.Clerk&&window.Clerk.session);
   try{
     if(activeSession&&activeSession.getToken){
-      var token=await activeSession.getToken({skipCache:true});
+      var token=await activeSession.getToken();
       if(token)return token;
       return await activeSession.getToken();
     }
     if(clerk&&clerk.client&&Array.isArray(clerk.client.sessions)){
       var session=clerk.client.sessions.find(function(s){return s.status==='active';})||clerk.client.sessions[0];
-      if(session&&session.getToken)return await session.getToken({skipCache:true});
+      if(session&&session.getToken)return await session.getToken();
     }
   }catch(err){
     console.warn('Unable to read Clerk token',err);
