@@ -16,7 +16,7 @@ router.post('/chat', async (req, res) => {
       `${l.title} (${l.type}) | Area: ${l.location.area} | ₹${l.pricing.amount}/mo | Rating: ${l.avgRating} | Facilities: ${(l.facilities || []).join(', ')} | Gender: ${l.gender}`
     ).join('\n');
 
-    const systemPrompt = `You are NikunjM AI, a helpful assistant for a modern smart rental, housing, and living marketplace in Jaipur, India. 
+    const systemPrompt = `You are Nikunjam AI, a helpful assistant for a modern smart rental, housing, and living marketplace in Jaipur, India. 
 You help students, families, working professionals, roommates, and owners find stays (hostels, PG rooms, flats, apartments, villas), roommate matches, and services (food/mess, laundry, tiffin).
 
 Current verified listings in our database:

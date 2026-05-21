@@ -102,81 +102,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .category-card strong{display:block;margin-top:10px;color:var(--ink)}
 .category-card span{display:block;color:var(--muted);font-size:.82rem;margin-top:4px}
 .cc-icon{width:40px;height:40px;border-radius:12px;background:var(--or-lt);color:var(--or2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem}
-
-/* ── Audience Grid Section ── */
-.audience-grid {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-.audience-card {
-  background: var(--white);
-  border: 1px solid var(--brd);
-  border-radius: var(--rXL);
-  padding: 1.5rem;
-  box-shadow: var(--sh);
-  transition: all var(--trans);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-}
-.audience-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--or);
-  box-shadow: var(--sh2);
-}
-.audience-badge {
-  align-self: flex-start;
-  padding: 4px 10px;
-  background: var(--or-lt);
-  color: var(--or2);
-  font-size: 0.72rem;
-  font-weight: 700;
-  border-radius: 99px;
-  margin-bottom: 0.8rem;
-  text-transform: uppercase;
-}
-.audience-card h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  font-family: var(--serif);
-  color: var(--ink);
-}
-.audience-card p {
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.5;
-  margin-bottom: 1.2rem;
-  flex-grow: 1;
-}
-.audience-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: auto;
-}
-.aud-pill {
-  background: var(--surf);
-  border: 1px solid var(--brd);
-  border-radius: 99px;
-  padding: 5px 12px;
-  font-size: 0.76rem;
-  font-weight: 500;
-  color: var(--mid);
-  cursor: pointer;
-  transition: all var(--trans);
-}
-.aud-pill:hover {
-  background: var(--or);
-  color: #111;
-  border-color: var(--or);
-  transform: translateY(-1px);
-}
-
 .trust-strip,.testimonial-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .trust-card,.testimonial-card{background:#fff;border:1px solid var(--brd);border-radius:16px;padding:18px;box-shadow:var(--sh)}
 .trust-card strong,.testimonial-card strong{display:block;color:var(--ink);margin-bottom:6px}
@@ -330,158 +255,33 @@ nav{position:sticky;top:0;z-index:100;background:rgba(18,14,42,0.92);backdrop-fi
 .star-btn.active{color:var(--or)}
 
 /* ── AI Chat ──────────────────────────────────────── */
-.ai-fab{position:fixed;bottom:2rem;right:2rem;width:58px;height:58px;background:linear-gradient(135deg, var(--or), #20e3b2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 24px rgba(24,184,117,.4);z-index:150;border:none;font-size:1.4rem;color:#fff;transition:all var(--trans);animation:pulseFab 2.5s infinite}
-@keyframes pulseFab {
-  0% { transform: scale(1); box-shadow: 0 8px 24px rgba(24,184,117,.4); }
-  50% { transform: scale(1.06); box-shadow: 0 12px 32px rgba(24,184,117,.6); }
-  100% { transform: scale(1); box-shadow: 0 8px 24px rgba(24,184,117,.4); }
-}
-.ai-fab:hover{transform:scale(1.08) rotate(15deg);box-shadow:0 12px 32px rgba(24,184,117,.6)}
-.ai-chat-panel{position:fixed;bottom:5.5rem;right:2rem;width:360px;background:var(--white);border-radius:var(--rXL);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:150;display:none;flex-direction:column;overflow:hidden;max-height:540px;border:1px solid var(--brd);animation:slideUp .25s ease}
+.ai-fab{position:fixed;bottom:2rem;right:2rem;width:58px;height:58px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(39,24,126,.38);z-index:150;border:none;font-size:1.3rem;transition:all var(--trans)}
+.ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(39,24,126,.5)}
+.ai-chat-panel{position:fixed;bottom:5.5rem;right:2rem;width:360px;background:var(--white);border-radius:var(--rXL);box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:150;display:none;flex-direction:column;overflow:hidden;max-height:520px;border:1px solid var(--brd);animation:slideUp .25s ease}
 .ai-chat-panel.open{display:flex}
-.ai-chat-header{background:rgba(18,14,42,0.95);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--brd)}
-.ai-avatar{position:relative;width:40px;height:40px;background:linear-gradient(135deg, var(--or), #20e3b2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff;box-shadow:0 0 15px rgba(24,184,117,0.6);animation:floatOrb 3s ease-in-out infinite alternate}
-@keyframes floatOrb {
-  0% { transform: translateY(0) scale(1); box-shadow: 0 0 10px rgba(24,184,117,0.4); }
-  100% { transform: translateY(-3px) scale(1.05); box-shadow: 0 0 20px rgba(24,184,117,0.8); }
-}
-.ai-avatar.speaking {
-  animation: speakPulse 0.5s infinite alternate !important;
-}
-@keyframes speakPulse {
-  0% { transform: scale(1.05); box-shadow: 0 0 15px var(--or); }
-  100% { transform: scale(1.22); box-shadow: 0 0 30px #20e3b2; }
-}
+.ai-chat-header{background:rgba(8,6,22,.74);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px}
+.ai-avatar{width:40px;height:40px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .ai-chat-header-text strong{color:#fff;font-size:0.95rem;display:block}
 .ai-chat-header-text span{color:rgba(255,255,255,.5);font-size:0.75rem}
-.ai-close-btn{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:1.1rem;padding:4px;transition:color var(--trans)}
-.ai-close-btn:hover{color:#fff}
-.ai-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px;background:#FAFDFB}
+.ai-close-btn{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:1.1rem;padding:4px}
+.ai-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:10px}
 .ai-messages::-webkit-scrollbar{width:3px}
-.chat-msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:0.875rem;line-height:1.55;white-space:pre-wrap;box-shadow:0 2px 8px rgba(0,0,0,0.03)}
-.chat-msg.bot{background:var(--white);color:var(--ink);align-self:flex-start;border-radius:4px 14px 14px 14px;border:1px solid var(--brd)}
+.chat-msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:0.875rem;line-height:1.55;white-space:pre-wrap}
+.chat-msg.bot{background:var(--surf);color:var(--ink);align-self:flex-start;border-radius:4px 14px 14px 14px}
 .chat-msg.user{background:var(--or);color:#fff;align-self:flex-end;border-radius:14px 4px 14px 14px}
-.chat-msg.typing{display:flex;gap:5px;align-items:center;background:var(--white);align-self:flex-start;border-radius:4px 14px 14px 14px;padding:14px;border:1px solid var(--brd)}
-.typing-dot{width:7px;height:7px;background:var(--or);border-radius:50%;animation:blink 1.2s infinite}
+.chat-msg.typing{display:flex;gap:5px;align-items:center;background:var(--surf);align-self:flex-start;border-radius:4px 14px 14px 14px;padding:14px}
+.typing-dot{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:blink 1.2s infinite}
 .typing-dot:nth-child(2){animation-delay:.2s}
 .typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
-.quick-q{display:flex;flex-wrap:wrap;gap:6px;padding:0 1rem .75rem;background:#FAFDFB}
-.qq{padding:5px 12px;border-radius:99px;border:1.5px solid var(--brd);background:#fff;font-size:0.78rem;cursor:pointer;color:var(--mid);transition:all var(--trans)}
-.qq:hover{border-color:var(--or);color:var(--or);transform:translateY(-1px)}
-.ai-input-wrap{border-top:1px solid var(--brd);padding:.75rem 1rem;display:flex;gap:8px;background:var(--white);align-items:center}
-.ai-input-wrap input{flex:1;border:1.5px solid var(--brd2);border-radius:99px;padding:9px 16px;font-size:0.875rem;outline:none;transition:border-color var(--trans);background:var(--surf);color:var(--ink)}
-.ai-input-wrap input:focus{border-color:var(--or);box-shadow:0 0 8px rgba(24,184,117,.16)}
-.ai-mic-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:0 8px;transition:all var(--trans);display:flex;align-items:center;justify-content:center;color:var(--muted)}
-.ai-mic-btn:hover{color:var(--or);transform:scale(1.1)}
-.ai-mic-btn.listening{color:#e53e3e;animation:pulseMic 1s infinite alternate}
-@keyframes pulseMic {
-  from { transform: scale(1); }
-  to { transform: scale(1.2); }
-}
+.quick-q{display:flex;flex-wrap:wrap;gap:6px;padding:0 1rem .75rem}
+.qq{padding:5px 12px;border-radius:99px;border:1px solid var(--brd);background:#333;font-size:0.78rem;cursor:pointer;color:var(--mid);transition:all var(--trans)}
+.qq:hover{border-color:var(--or);color:var(--or)}
+.ai-input-wrap{border-top:1px solid var(--brd);padding:.75rem 1rem;display:flex;gap:8px}
+.ai-input-wrap input{flex:1;border:1.5px solid var(--brd2);border-radius:99px;padding:9px 16px;font-size:0.875rem;outline:none;transition:border-color var(--trans);background:#333;color:var(--ink)}
+.ai-input-wrap input:focus{border-color:var(--or);box-shadow:0 0 8px rgba(39,24,126,.32)}
 .ai-send{width:38px;height:38px;background:var(--or);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;flex-shrink:0;transition:background var(--trans)}
 .ai-send:hover{background:var(--or2)}
-
-/* ── Voice Wave ── */
-.voice-wave-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px;
-  background: var(--or-lt);
-  border-top: 1px solid var(--brd);
-  font-size: 0.8rem;
-  color: var(--or2);
-}
-.wave-bar {
-  width: 3px;
-  height: 15px;
-  background: var(--or);
-  border-radius: 99px;
-  animation: wave 1s ease-in-out infinite;
-}
-.wave-bar:nth-child(2) { animation-delay: 0.15s; }
-.wave-bar:nth-child(3) { animation-delay: 0.3s; }
-.wave-bar:nth-child(4) { animation-delay: 0.45s; }
-.wave-bar:nth-child(5) { animation-delay: 0.6s; }
-@keyframes wave {
-  0%, 100% { transform: scaleY(0.3); }
-  50% { transform: scaleY(1.5); }
-}
-
-/* ── Chat Recommended Property Cards ── */
-.chat-property-card {
-  margin: 6px 1rem 6px;
-  background: var(--white);
-  border: 1.5px solid var(--brd);
-  border-radius: var(--r);
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: all var(--trans);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-}
-.chat-property-card:hover {
-  border-color: var(--or);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(24,184,117,0.12);
-}
-.chat-prop-img {
-  width: 54px;
-  height: 54px;
-  border-radius: 8px;
-  background-size: cover;
-  background-position: center;
-  flex-shrink: 0;
-  border: 1px solid var(--brd);
-}
-.chat-prop-info {
-  flex: 1;
-  min-width: 0;
-}
-.chat-prop-title {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--ink);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.chat-prop-meta {
-  font-size: 0.74rem;
-  color: var(--muted);
-  margin-top: 2px;
-}
-.chat-prop-badge {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--or2);
-  background: var(--or-lt);
-  padding: 1px 6px;
-  border-radius: 4px;
-  display: inline-block;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-.chat-prop-badge.tag-perfect {
-  background: #e6fffa !important;
-  color: #00875a !important;
-  border: 1px solid rgba(0, 135, 90, 0.2);
-}
-.chat-prop-badge.tag-best {
-  background: #ebf5ff !important;
-  color: #0052cc !important;
-  border: 1px solid rgba(0, 82, 204, 0.2);
-}
-.chat-prop-badge.tag-budget {
-  background: #fff0ea !important;
-  color: #de350b !important;
-  border: 1px solid rgba(222, 53, 11, 0.2);
-}
 
 /* ── Auth Modal ───────────────────────────────────── */
 .auth-modal{max-width:440px}
@@ -585,29 +385,6 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
 .loader span{width:10px;height:10px;background:var(--or);border-radius:50%;animation:blink 1.2s infinite}
 .loader span:nth-child(2){animation-delay:.2s}
 .loader span:nth-child(3){animation-delay:.4s}
-
-/* ── Subcategories Tab Bar ── */
-.sub-tabs-bar {display:flex;gap:8px;padding:0.75rem 5%;background:var(--surf);border-bottom:1px solid var(--brd);overflow-x:auto;align-items:center}
-.sub-tabs-bar::-webkit-scrollbar {display:none}
-.sub-tab {flex-shrink:0;padding:6px 14px;border-radius:99px;border:1px solid var(--brd);background:var(--white);font-size:0.78rem;font-weight:500;cursor:pointer;color:var(--muted);transition:all var(--trans);white-space:nowrap}
-.sub-tab:hover {border-color:var(--or);color:var(--or)}
-.sub-tab.active {background:var(--or-lt);color:var(--or2);border-color:var(--or);font-weight:600}
-
-/* ── Shimmer Skeleton Loader ── */
-.skeleton-card {background:var(--white);border:1px solid var(--brd);border-radius:var(--rL);overflow:hidden;height:360px;display:flex;flex-direction:column;position:relative}
-.skeleton-img {height:180px;background:linear-gradient(90deg,var(--surf) 25%,var(--brd) 50%,var(--surf) 75%);background-size:200% 100%;animation:loading-shimmer 1.5s infinite}
-.skeleton-text {height:14px;margin:12px 16px 6px;border-radius:4px;background:linear-gradient(90deg,var(--surf) 25%,var(--brd) 50%,var(--surf) 75%);background-size:200% 100%;animation:loading-shimmer 1.5s infinite}
-.skeleton-text.title {width:70%;height:18px}
-.skeleton-text.loc {width:40%}
-.skeleton-tags {display:flex;gap:8px;margin:12px 16px}
-.skeleton-tag {width:50px;height:20px;border-radius:99px;background:linear-gradient(90deg,var(--surf) 25%,var(--brd) 50%,var(--surf) 75%);background-size:200% 100%;animation:loading-shimmer 1.5s infinite}
-.skeleton-footer {margin-top:auto;border-top:1px solid var(--brd);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-.skeleton-price {width:80px;height:20px;border-radius:4px;background:linear-gradient(90deg,var(--surf) 25%,var(--brd) 50%,var(--surf) 75%);background-size:200% 100%;animation:loading-shimmer 1.5s infinite}
-.skeleton-rating {width:40px;height:16px;border-radius:4px;background:linear-gradient(90deg,var(--surf) 25%,var(--brd) 50%,var(--surf) 75%);background-size:200% 100%;animation:loading-shimmer 1.5s infinite}
-@keyframes loading-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
 </style>
 <style>
 /* Clerk Modal Styling */
@@ -894,7 +671,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       </div>
       <button class="btn btn-outline" onclick="showPage('panel')">List your property</button>
     </div>
-    <div class="audience-grid" id="categoryCards"></div>
+    <div class="category-grid" id="categoryCards"></div>
   </section>
 
   <section class="section-band">
@@ -907,13 +684,15 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
 
   <!-- Category Tabs -->
   <div class="cat-tabs" id="listings-top">
-    <div class="cat-tab active" id="tab-all" onclick="selectMetaCategory('all')"><span class="ct-icon">🏢</span> All <span class="ct-count" id="cnt-all">0</span></div>
-    <div class="cat-tab" id="tab-student-living" onclick="selectMetaCategory('student-living')"><span class="ct-icon">🎓</span> Student Living <span class="ct-count" id="cnt-student-living">0</span></div>
-    <div class="cat-tab" id="tab-homes-flats" onclick="selectMetaCategory('homes-flats')"><span class="ct-icon">🏡</span> Homes & Flats <span class="ct-count" id="cnt-homes-flats">0</span></div>
-    <div class="cat-tab" id="tab-shared-living" onclick="selectMetaCategory('shared-living')"><span class="ct-icon">🤝</span> Shared Living <span class="ct-count" id="cnt-shared-living">0</span></div>
-    <div class="cat-tab" id="tab-services" onclick="selectMetaCategory('services')"><span class="ct-icon">🍱</span> Services <span class="ct-count" id="cnt-services">0</span></div>
+    <div class="cat-tab active" id="tab-all" onclick="filterType('all')"><span class="ct-icon">All</span> All <span class="ct-count" id="cnt-all">0</span></div>
+    <div class="cat-tab" id="tab-rooms" onclick="filterCategory('rooms')"><span class="ct-icon">Room</span> Rooms <span class="ct-count" id="cnt-room">0</span></div>
+    <div class="cat-tab" id="tab-flats" onclick="filterCategory('flats')"><span class="ct-icon">Flat</span> Flats <span class="ct-count" id="cnt-flat">0</span></div>
+    <div class="cat-tab" id="tab-pg" onclick="filterCategory('pg')"><span class="ct-icon">PG</span> PG <span class="ct-count" id="cnt-pg">0</span></div>
+    <div class="cat-tab" id="tab-hostel" onclick="filterType('hostel')"><span class="ct-icon">Hostel</span> Hostels <span class="ct-count" id="cnt-hostel">0</span></div>
+    <div class="cat-tab" id="tab-family" onclick="filterCategory('family')"><span class="ct-icon">Home</span> Family Homes <span class="ct-count" id="cnt-family">0</span></div>
+    <div class="cat-tab" id="tab-tiffin" onclick="filterCategory('food')"><span class="ct-icon">Food</span> Food/Mess <span class="ct-count" id="cnt-tiffin">0</span></div>
+    <div class="cat-tab" id="tab-roommates" onclick="filterCategory('roommates')"><span class="ct-icon">Share</span> Roommates <span class="ct-count" id="cnt-roommates">0</span></div>
   </div>
-  <div class="sub-tabs-bar" id="subTabsContainer" style="display:none"></div>
 
   <!-- Listings -->
   <div class="listings-section">
@@ -930,7 +709,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
           <option value="male">Boys only</option>
           <option value="female">Girls only</option>
         </select>
-        <select id="filter-sort" onchange="state.userSelectedSort = true; applyFilters()">
+        <select id="filter-sort" onchange="applyFilters()">
           <option value="latest">Latest first</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
@@ -958,7 +737,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     <div class="section-head">
       <div>
         <h2>Built for every move</h2>
-        <p>Use NikunjM to compare homes, rooms, food services and owner-posted spaces with the same trusted flow.</p>
+        <p>Use Nikunj to compare homes, rooms, food services and owner-posted spaces with the same trusted flow.</p>
       </div>
     </div>
     <div class="testimonial-grid">
@@ -972,15 +751,15 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="logo" onclick="showPage('home')">Nikunj<span>M</span></div>
-        <p>A modern housing and living marketplace for students, families, roommates and working professionals.</p>
+        <div class="logo">Niku<span>nj</span></div>
+        <p>A modern rental marketplace for rooms, flats, PGs, hostels, family homes, roommates and food services.</p>
       </div>
       <div class="footer-col">
         <h4>Find</h4>
-        <a onclick="selectMetaCategory('student-living')">Student Living</a>
-        <a onclick="selectMetaCategory('homes-flats')">Homes & Flats</a>
-        <a onclick="selectMetaCategory('shared-living')">Shared Living</a>
-        <a onclick="selectMetaCategory('services')">Services & Mess</a>
+        <a onclick="filterType('hostel')">Hostels</a>
+        <a onclick="filterType('room')">Rooms / PG</a>
+        <a onclick="filterType('flat')">Flats</a>
+        <a onclick="filterType('tiffin')">Food / Mess</a>
       </div>
       <div class="footer-col">
         <h4>Owners</h4>
@@ -989,14 +768,14 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       </div>
       <div class="footer-col">
         <h4>Platform</h4>
-        <a>About NikunjM</a>
+        <a>About Nikunj</a>
         <a>Trust & Safety</a>
         <a>Contact Us</a>
         <a>Privacy Policy</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 NikunjM. Made with ❤️ in Jaipur.</span>
+      <span>© 2026 Nikunj. Made with ❤️ for students in Jaipur.</span>
       <span>Contact: hello@nikunj.in</span>
     </div>
   </footer>
@@ -1008,7 +787,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
 <div class="page" id="page-panel">
   <div class="panel-layout">
     <div class="panel-sidebar">
-      <div class="panel-sidebar-logo">Nikunj<span style="color:var(--or)">M</span> Portal</div>
+      <div class="panel-sidebar-logo">Niku<span style="color:var(--or)">nj</span> Panel</div>
       <div class="sidebar-item active" id="sb-dashboard" onclick="showPanelTab('dashboard')"><span class="si-icon">📊</span> Dashboard</div>
       <div class="sidebar-item" id="sb-listings" onclick="showPanelTab('listings')"><span class="si-icon">📋</span> My Listings</div>
       <div class="sidebar-item" id="sb-add" onclick="showPanelTab('add')"><span class="si-icon">➕</span> Add Listing</div>
@@ -1067,7 +846,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
               </div>
             </div>
           </div>
-          <div class="form-group"><label>Nearby Colleges (Optional)</label><input type="text" id="f-colleges" placeholder="RTU, MNIT, Manipal (comma separated)"/></div>
+          <div class="form-group"><label>Nearby Colleges</label><input type="text" id="f-colleges" placeholder="RTU, MNIT, Manipal (comma separated)"/></div>
           <div class="form-group"><label>Owner Name *</label><input type="text" id="f-oname" placeholder="Your full name"/></div>
           <div class="form-2col">
             <div class="form-group"><label>Contact Phone *</label><input type="tel" id="f-phone" placeholder="+91 98765 43210"/></div>
@@ -1142,7 +921,6 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
       </div>
       <div class="modal-meta">
         <div class="meta-item">📍 <span id="dm-loc"></span></div>
-        <div class="meta-item" id="dm-colleges-item" style="display:none">🎓 Near: <span id="dm-colleges"></span></div>
         <div class="meta-item">👤 <span id="dm-gender"></span></div>
         <div class="meta-item">⭐ <span id="dm-rating"></span></div>
         <div class="meta-item">👁 <span id="dm-views"></span> views</div>
@@ -1158,7 +936,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
         <button class="contact-btn btn-interested" onclick="showLeadModal('interested')">🏠 I'm Interested</button>
         <button class="contact-btn btn-nikunj" onclick="showLeadModal('callback')">📞 Request Callback</button>
         <button class="contact-btn btn-nikunj" onclick="showLeadModal('visit')" style="background:linear-gradient(135deg,#1b5e20,#2e7d32)">📅 Schedule Visit</button>
-        <button class="contact-btn btn-nikunj" onclick="showLeadModal('interested')" style="background:linear-gradient(135deg,#444,#666)">💬 Talk to NikunjM</button>
+        <button class="contact-btn btn-nikunj" onclick="showLeadModal('interested')" style="background:linear-gradient(135deg,#444,#666)">💬 Talk to Nikunj</button>
       </div>
       <div class="modal-lead-form" id="leadForm">
         <h4 id="leadFormTitle">Express Interest</h4>
@@ -1167,7 +945,7 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
         <textarea id="lead-msg" rows="2" placeholder="Any specific requirements? (optional)"></textarea>
         <div class="lead-actions">
           <button class="btn btn-outline btn-sm" onclick="closeLeadForm()">Cancel</button>
-          <button class="btn btn-primary btn-sm" onclick="submitLead()">Send to NikunjM →</button>
+          <button class="btn btn-primary btn-sm" onclick="submitLead()">Send to Nikunj →</button>
         </div>
         <p id="lead-feedback" style="font-size:.8rem;color:var(--muted);margin-top:.5rem"></p>
       </div>
@@ -1204,11 +982,11 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
 <div class="ai-chat-panel" id="aiPanel">
   <div class="ai-chat-header">
     <div class="ai-avatar">✦</div>
-    <div class="ai-chat-header-text"><strong>NikunjM AI</strong><span>Smart accommodation assistant</span></div>
+    <div class="ai-chat-header-text"><strong>Nikunj AI</strong><span>Smart accommodation assistant</span></div>
     <button class="ai-close-btn" onclick="closeAI()">✕</button>
   </div>
   <div class="ai-messages" id="aiMessages">
-    <div class="chat-msg bot">Hello 👋 Welcome to NikunjM.<br/>How can I help you today?</div>
+    <div class="chat-msg bot">Namaste! 👋 I'm your Nikunj AI. Tell me your budget, area, and what you need — I'll find the best verified options for you!</div>
   </div>
   <div class="quick-q">
     <span class="qq" onclick="sendAI('Hostel under ₹5000 near RTU')">Hostel &lt;₹5k near RTU</span>
@@ -1216,21 +994,12 @@ footer{background:rgba(8,6,22,.74);color:rgba(255,255,255,.5);padding:3rem 5%;ma
     <span class="qq" onclick="sendAI('Affordable tiffin service under ₹2000')">Cheap tiffin</span>
     <span class="qq" onclick="sendAI('2BHK flat for 3 students')">Flat for group</span>
   </div>
-  <div class="voice-wave-container" id="voiceWave" style="display:none">
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <div class="wave-bar"></div>
-    <span style="margin-left:8px;font-size:0.75rem;font-weight:600">Listening... Speak now</span>
-  </div>
   <div class="ai-input-wrap">
-    <button class="ai-mic-btn" id="aiMicBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
     <input type="text" id="aiInput" placeholder="Ask about rooms, hostels, food…" onkeydown="if(event.key==='Enter')sendAI()"/>
     <button class="ai-send" onclick="sendAI()">➤</button>
   </div>
 </div>
-<button class="ai-fab" onclick="toggleAI()" title="Ask NikunjM AI">✦</button>
+<button class="ai-fab" onclick="toggleAI()" title="Ask Nikunj AI">✦</button>
 
 <!-- ── Toast ───────────────────────────────────────────── -->
 <div class="toast" id="toast"></div>
@@ -1280,11 +1049,7 @@ var state={
   currentListingId:null,
   aiHistory:[],
   mapInstance:null,
-  nearMeLat:null,nearMeLng:null,nearMeActive:false,
-  currentCategory: 'all',
-  currentSubcategory: null,
-  lastSearchQuery: '',
-  userSelectedSort: false
+  nearMeLat:null,nearMeLng:null,nearMeActive:false
 };
 
 // Demo listings (replace with API calls when backend is running)
@@ -1304,49 +1069,15 @@ var FACILITIES_OPTIONS=['WiFi','Meals Included','AC','Security','Laundry','Hot W
 var TYPE_ICONS={hostel:'Stay',room:'Room',flat:'Home',tiffin:'Food'};
 var TYPE_LABELS={hostel:'Hostel',room:'Room / PG',flat:'Flat / Home',tiffin:'Food / Mess'};
 var GENDER_LABELS={male:'Boys only',female:'Girls only',any:'All genders'};
-
 var CATEGORY_OPTIONS=[
-  {key:'student-living',label:'Student Living',text:'Verified PGs, Hostels & Student Mess',icon:'🎓'},
-  {key:'homes-flats',label:'Homes & Flats',text:'Flats, Apartments & Independent Houses',icon:'🏡'},
-  {key:'shared-living',label:'Shared Living',text:'Shared rooms, Coliving & Roommates',icon:'🤝'},
-  {key:'services',label:'Services & Food',text:'Tiffin service, Mess, Laundry & WiFi',icon:'🍱'}
+  {key:'rooms',label:'Rooms',type:'room',text:'Private and shared rooms'},
+  {key:'flats',label:'Flats',type:'flat',text:'Apartments for rent'},
+  {key:'pg',label:'PG',type:'room',text:'Managed stays and meals'},
+  {key:'hostel',label:'Hostels',type:'hostel',text:'Budget community living'},
+  {key:'family',label:'Family Homes',type:'flat',text:'Homes for families'},
+  {key:'food',label:'Food/Mess',type:'tiffin',text:'Daily meals and tiffin'},
+  {key:'roommates',label:'Roommates',type:'room',text:'Shared stays and groups'}
 ];
-
-var META_CATEGORIES = {
-  'student-living': {
-    label: 'Student Living',
-    subcategories: [
-      { key: 'hostel', label: 'Hostels' },
-      { key: 'pg', label: 'PGs' },
-      { key: 'shared', label: 'Shared Rooms' },
-      { key: 'mess', label: 'Mess / Tiffin' }
-    ]
-  },
-  'homes-flats': {
-    label: 'Homes & Flats',
-    subcategories: [
-      { key: 'flat', label: 'Flats & Apartments' },
-      { key: 'family', label: 'Family Stays' },
-      { key: 'villa', label: 'Villas' }
-    ]
-  },
-  'shared-living': {
-    label: 'Shared Living',
-    subcategories: [
-      { key: 'roommate', label: 'Roommates Needed' },
-      { key: 'coliving', label: 'Co-Living Spaces' },
-      { key: 'shared-room', label: 'Shared Flat/Room' }
-    ]
-  },
-  'services': {
-    label: 'Services',
-    subcategories: [
-      { key: 'food', label: 'Tiffin & Mess' },
-      { key: 'laundry', label: 'Laundry Service' },
-      { key: 'wifi', label: 'Stays with WiFi' }
-    ]
-  }
-};
 
 function normalizeImageList(images){
   if(typeof images==='string')images=[images];
@@ -1355,7 +1086,7 @@ function normalizeImageList(images){
     if(typeof img==='string')return img;
     if(img&&typeof img==='object')return img.secure_url||img.url||img.src||'';
     return '';
-  }).filter(Boolean);
+  }).filter(function(url){return /^https?:\/\//i.test(url)||/^data:image\//i.test(url)});
 }
 
 function cssImageUrl(url){
@@ -1368,7 +1099,8 @@ function cssImageUrl(url){
 (async function init(){
   state.listings=[];
   state.filtered=[];
-  selectMetaCategory('all');
+  updateCounts();
+  renderCategoryCards();
   buildFacilitiesGrid();
   loadSavedAuth();
   await loadListings();
@@ -1394,30 +1126,7 @@ function normalizeListing(l){
   return l;
 }
 
-function renderSkeletons() {
-  var grid = document.getElementById('listingsGrid');
-  if (!grid) return;
-  var skeletonHtml = '';
-  for (var i = 0; i < 6; i++) {
-    skeletonHtml += '<div class="skeleton-card">'+
-      '<div class="skeleton-img"></div>'+
-      '<div class="skeleton-body">'+
-        '<div class="skeleton-line sk-type"></div>'+
-        '<div class="skeleton-line sk-title"></div>'+
-        '<div class="skeleton-line sk-loc"></div>'+
-        '<div class="skeleton-line sk-fac"></div>'+
-        '<div class="skeleton-footer">'+
-          '<div class="skeleton-line sk-price"></div>'+
-          '<div class="skeleton-line sk-rating"></div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  }
-  grid.innerHTML = '<div class="skeleton-grid">' + skeletonHtml + '</div>';
-}
-
 async function loadListings(includeAll){
-  renderSkeletons();
   try{
     var adminRequest=includeAll&&isAdminUser();
     var url=adminRequest?'/api/admin/listings?status=all&limit=500':'/api/listings?limit=500';
@@ -1429,15 +1138,8 @@ async function loadListings(includeAll){
     }
     state.listings=data.listings.map(normalizeListing);
   }catch(err){
-    console.warn('API fetch failed:', err);
-    var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (isLocal) {
-      console.log('Falling back to DEMO_LISTINGS in development mode.');
-      state.listings=DEMO_LISTINGS.map(normalizeListing);
-    } else {
-      console.error('API call failed in production. Not falling back.');
-      state.listings=[];
-    }
+    console.warn('API fetch failed, falling back to DEMO_LISTINGS:', err);
+    state.listings=DEMO_LISTINGS.map(normalizeListing);
   }
   applyFilters();
   updateCounts();
@@ -1464,18 +1166,17 @@ function toggleNav(){document.getElementById('navLinks').classList.toggle('open'
 // ═══════════════════════════════════════════════════════════
 function updateCounts(){
   var all=state.listings.filter(function(l){return l.status==='approved'});
-  var elAll = document.getElementById('cnt-all');
-  if (elAll) elAll.textContent = all.length;
-  
-  var categories = ['student-living', 'homes-flats', 'shared-living', 'services'];
-  categories.forEach(function(catKey) {
-    var el = document.getElementById('cnt-' + catKey);
-    if (el) {
-      var count = all.filter(function(l) { return matchesMetaCategory(l, catKey); }).length;
-      el.textContent = count;
-    }
+  document.getElementById('cnt-all').textContent=all.length;
+  ['hostel','room','flat','tiffin'].forEach(function(t){
+    var el=document.getElementById('cnt-'+t);
+    if(el)el.textContent=all.filter(function(l){return l.type===t}).length;
   });
-
+  var pg=document.getElementById('cnt-pg');
+  var family=document.getElementById('cnt-family');
+  var roommates=document.getElementById('cnt-roommates');
+  if(pg)pg.textContent=all.filter(function(l){return l.type==='room'}).length;
+  if(family)family.textContent=all.filter(function(l){return l.type==='flat'}).length;
+  if(roommates)roommates.textContent=all.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
   document.getElementById('stat-total').textContent=all.length;
   var statRating=document.getElementById('stat-rating');
   if(statRating){
@@ -1485,320 +1186,40 @@ function updateCounts(){
   }
 }
 
-function selectMetaCategory(catKey) {
-  state.currentCategory = catKey;
-  state.currentSubcategory = null;
-  
+function filterType(t){
+  state.currentType=t;state.currentPage=1;
   document.querySelectorAll('.cat-tab').forEach(function(el){el.classList.remove('active')});
-  var tab = document.getElementById('tab-' + catKey);
-  if (tab) tab.classList.add('active');
-
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    a.classList.remove('active');
-  });
-  var navLink = document.getElementById('nav-' + catKey);
-  if (navLink) navLink.classList.add('active');
-
-  renderSubcategoriesBar();
+  var tab=document.getElementById('tab-'+t);
+  if(tab)tab.classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active')});
   applyFilters();
+  var el=document.getElementById('listings-top');
+  if(el)el.scrollIntoView({behavior:'smooth'});
 }
 
-function selectSubcategory(subKey) {
-  state.currentSubcategory = state.currentSubcategory === subKey ? null : subKey;
-  
-  document.querySelectorAll('.sub-tab').forEach(function(el){
-    el.classList.toggle('active', el.dataset.sub === state.currentSubcategory);
-  });
-  
-  applyFilters();
-}
-
-function renderSubcategoriesBar() {
-  var bar = document.getElementById('subTabsContainer');
-  if (!bar) return;
-  
-  var cat = META_CATEGORIES[state.currentCategory];
-  if (!cat || !cat.subcategories || cat.subcategories.length === 0) {
-    bar.style.display = 'none';
-    bar.innerHTML = '';
-    return;
-  }
-  
-  bar.style.display = 'flex';
-  bar.innerHTML = cat.subcategories.map(function(sub) {
-    var active = sub.key === state.currentSubcategory ? ' active' : '';
-    return '<button class="sub-tab' + active + '" data-sub="' + sub.key + '" onclick="selectSubcategory(\'' + sub.key + '\')">' + sub.label + '</button>';
-  }).join('');
-}
-
-function filterType(t) {
-  var mapping = {
-    'all': 'all',
-    'hostel': 'student-living',
-    'room': 'student-living',
-    'flat': 'homes-flats',
-    'tiffin': 'services'
-  };
-  var target = mapping[t] || 'all';
-  selectMetaCategory(target);
-  if (t !== 'all' && t !== target) {
-    selectSubcategory(t);
-  }
-}
-
-function filterCategory(key) {
-  selectMetaCategory(key);
-}
-
-function selectCategoryAndSub(catKey, subKey) {
-  selectMetaCategory(catKey);
-  if (subKey) {
-    selectSubcategory(subKey);
-  }
-  var el = document.getElementById('listings-top');
-  if (el) el.scrollIntoView({behavior:'smooth'});
+function filterCategory(key){
+  var cat=CATEGORY_OPTIONS.find(function(c){return c.key===key});
+  if(!cat)return filterType('all');
+  filterType(cat.type);
+  document.querySelectorAll('.cat-tab').forEach(function(el){el.classList.remove('active')});
+  var tab=document.getElementById('tab-'+key)||document.getElementById('tab-'+cat.type);
+  if(tab)tab.classList.add('active');
 }
 
 function renderCategoryCards(){
   var el=document.getElementById('categoryCards');
   if(!el)return;
   var approved=state.listings.filter(function(l){return l.status==='approved'});
-  
-  var studentCount = approved.filter(function(l){ return matchesMetaCategory(l, 'student-living') || (l.type==='room' && (l.description||'').toLowerCase().includes('roommate')); }).length;
-  var familyCount = approved.filter(function(l){ return matchesMetaCategory(l, 'homes-flats'); }).length;
-  var profCount = approved.filter(function(l){ return matchesMetaCategory(l, 'shared-living') || l.type==='flat'; }).length;
-  var servCount = approved.filter(function(l){ return matchesMetaCategory(l, 'services'); }).length;
-
-  var cardsHtml = 
-    // Students Card
-    '<div class="audience-card">' +
-      '<div class="audience-badge">Students</div>' +
-      '<h3>Student Living</h3>' +
-      '<p>Hostels, PGs, mess plans, and compatible roommate matches near campus.</p>' +
-      '<div class="audience-pills">' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'student-living\', \'hostel\')">🎓 Hostels</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'student-living\', \'pg\')">🏠 PGs</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'student-living\', \'mess\')">🍱 Mess</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'shared-living\', \'roommate\')">👥 Roommates</span>' +
-      '</div>' +
-    '</div>' +
-
-    // Families Card
-    '<div class="audience-card">' +
-      '<div class="audience-badge">Families</div>' +
-      '<h3>Family Homes</h3>' +
-      '<p>Independent houses, premium flats, and spacious residential apartments.</p>' +
-      '<div class="audience-pills">' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'homes-flats\', \'flat\')">🏢 Flats</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'homes-flats\', \'family\')">🏡 Homes</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'homes-flats\', \'villa\')">🏰 Villas</span>' +
-      '</div>' +
-    '</div>' +
-
-    // Professionals Card
-    '<div class="audience-card">' +
-      '<div class="audience-badge">Professionals</div>' +
-      '<h3>Professionals & Shared</h3>' +
-      '<p>Modern co-living spaces, premium rentals, and shared flat listings.</p>' +
-      '<div class="audience-pills">' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'shared-living\', \'shared-room\')">🤝 Shared Flats</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'homes-flats\', \'flat\')">🏢 Rentals</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'shared-living\', \'coliving\')">🔑 Co-Living</span>' +
-      '</div>' +
-    '</div>' +
-
-    // Services Card
-    '<div class="audience-card">' +
-      '<div class="audience-badge">Services</div>' +
-      '<h3>On-Demand Services</h3>' +
-      '<p>Tiffin/food delivery, laundry options, and stays with full utilities.</p>' +
-      '<div class="audience-pills">' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'services\', \'food\')">🍱 Food/Mess</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'services\', \'laundry\')">🧺 Laundry</span>' +
-        '<span class="aud-pill" onclick="selectCategoryAndSub(\'services\', \'wifi\')">⚡ WiFi Stays</span>' +
-      '</div>' +
+  el.innerHTML=CATEGORY_OPTIONS.map(function(cat){
+    var count=approved.filter(function(l){return l.type===cat.type}).length;
+    if(cat.key==='roommates')count=approved.filter(function(l){return l.type==='room'||l.type==='flat'}).length;
+    return '<div class="category-card" onclick="filterCategory(\''+cat.key+'\')">'+
+      '<div class="cc-icon">'+cat.label.split('/')[0]+'</div>'+
+      '<strong>'+cat.label+'</strong>'+
+      '<span>'+cat.text+'</span>'+
+      '<span style="margin-top:12px;color:var(--or);font-weight:700">'+count+' active</span>'+
     '</div>';
-
-  el.innerHTML = cardsHtml;
-}
-
-function parseSmartQuery(query) {
-  var q = query.toLowerCase();
-  var parsed = {
-    maxPrice: null,
-    minPrice: null,
-    types: [],
-    facilities: [],
-    gender: null,
-    locations: []
-  };
-
-  var underMatch = q.match(/(?:under|below|less than|max|budget|within|\<)\s*(\d+)(k)?/i);
-  if (underMatch) {
-    var val = parseInt(underMatch[1]);
-    if (underMatch[2]) val *= 1000;
-    parsed.maxPrice = val;
-  }
-  var aboveMatch = q.match(/(?:above|greater than|min|over|\>)\s*(\d+)(k)?/i);
-  if (aboveMatch) {
-    var val = parseInt(aboveMatch[1]);
-    if (aboveMatch[2]) val *= 1000;
-    parsed.minPrice = val;
-  }
-
-  if (q.includes('hostel')) parsed.types.push('hostel');
-  if (q.includes('flat') || q.includes('apartment') || q.includes('bhk') || q.includes('villa')) parsed.types.push('flat');
-  if (q.includes('pg') || q.includes('room') || q.includes('coliving') || q.includes('co-living')) parsed.types.push('room');
-  if (q.includes('tiffin') || q.includes('food') || q.includes('mess') || q.includes('meal')) parsed.types.push('tiffin');
-
-  var facilitiesList = ['wifi', 'ac', 'cooler', 'geyser', 'gym', 'parking', 'cctv', 'laundry', 'security', 'kitchen', 'furnished', 'meals'];
-  facilitiesList.forEach(function(f) {
-    if (q.includes(f)) {
-      if (f === 'meals') parsed.facilities.push('Meals Included');
-      else parsed.facilities.push(f.toUpperCase());
-    }
-  });
-
-  if (q.includes('girls') || q.includes('girl') || q.includes('female') || q.includes('boys only') === false && q.includes('boys') === false && q.includes('boy') === false && q.includes('women')) {
-    parsed.gender = 'female';
-  }
-  if (q.includes('boys') || q.includes('boy') || q.includes('male') || q.includes('men')) {
-    parsed.gender = 'male';
-  }
-
-  var areaKeywords = ['malviya', 'mansarovar', 'jagatpura', 'tonk', 'vaishali', 'bapu', 'c-scheme', 'kota', 'raja park', 'gopalpura'];
-  areaKeywords.forEach(function(area) {
-    if (q.includes(area)) parsed.locations.push(area);
-  });
-  var collegeKeywords = ['rtu', 'mnit', 'manipal', 'jecrc', 'poornima', 'lnmiit', 'amity', 'iis'];
-  collegeKeywords.forEach(function(coll) {
-    if (q.includes(coll)) parsed.locations.push(coll);
-  });
-
-  return parsed;
-}
-
-function calculateRelevanceScore(listing, parsedQuery) {
-  var score = 0;
-  var title = (listing.title || '').toLowerCase();
-  var desc = (listing.description || '').toLowerCase();
-  var area = (listing.location.area || '').toLowerCase();
-  var city = (listing.location.city || '').toLowerCase();
-  var colleges = (listing.location.nearbyColleges || listing.location.nearbyPlaces || []).map(function(c){return c.toLowerCase()});
-  var facilities = (listing.facilities || []).map(function(f){return f.toLowerCase()});
-
-  if (parsedQuery.types.length > 0) {
-    if (parsedQuery.types.indexOf(listing.type) !== -1) {
-      score += 15;
-    }
-  }
-
-  if (parsedQuery.maxPrice !== null) {
-    if (listing.pricing.amount <= parsedQuery.maxPrice) {
-      score += 20;
-    } else {
-      score -= 10;
-    }
-  }
-  if (parsedQuery.minPrice !== null) {
-    if (listing.pricing.amount >= parsedQuery.minPrice) {
-      score += 10;
-    }
-  }
-
-  parsedQuery.locations.forEach(function(loc) {
-    if (area.includes(loc)) score += 15;
-    if (city.includes(loc)) score += 5;
-    colleges.forEach(function(c) {
-      if (c.includes(loc)) score += 15;
-    });
-    if (title.includes(loc)) score += 10;
-  });
-
-  parsedQuery.facilities.forEach(function(fac) {
-    var fLower = fac.toLowerCase();
-    var match = false;
-    facilities.forEach(function(f) {
-      if (f.includes(fLower)) match = true;
-    });
-    if (match) score += 10;
-    if (desc.includes(fLower)) score += 5;
-  });
-
-  if (parsedQuery.gender !== null) {
-    if (listing.gender === parsedQuery.gender || listing.gender === 'any') {
-      score += 15;
-    } else {
-      score -= 30;
-    }
-  }
-
-  return score;
-}
-
-function matchesMetaCategory(listing, catKey) {
-  if (catKey === 'all') return true;
-  var type = (listing.type || '').toLowerCase();
-  var title = (listing.title || '').toLowerCase();
-  var desc = (listing.description || '').toLowerCase();
-  var facilities = (listing.facilities || []).map(function(f){return f.toLowerCase()});
-
-  if (catKey === 'student-living') {
-    return type === 'hostel' || type === 'room' || desc.includes('pg') || title.includes('pg') || facilities.includes('meals included');
-  }
-  if (catKey === 'homes-flats') {
-    return type === 'flat';
-  }
-  if (catKey === 'shared-living') {
-    return (type === 'room' || type === 'flat') && (desc.includes('roommate') || title.includes('roommate') || desc.includes('shared') || title.includes('shared') || desc.includes('co-living') || title.includes('co-living'));
-  }
-  if (catKey === 'services') {
-    return type === 'tiffin' || facilities.includes('laundry') || facilities.includes('wifi') || facilities.includes('meals included');
-  }
-  return false;
-}
-
-function matchesSubcategory(listing, subKey) {
-  var type = (listing.type || '').toLowerCase();
-  var title = (listing.title || '').toLowerCase();
-  var desc = (listing.description || '').toLowerCase();
-  var facilities = (listing.facilities || []).map(function(f){return f.toLowerCase()});
-  var gender = (listing.gender || '').toLowerCase();
-
-  switch(subKey) {
-    case 'hostel':
-      return type === 'hostel';
-    case 'pg':
-      return type === 'room' && (desc.includes('pg') || title.includes('pg') || facilities.includes('meals included'));
-    case 'shared':
-      return type === 'room' && (gender === 'any' || desc.includes('shared') || title.includes('shared') || desc.includes('co-living'));
-    case 'mess':
-      return type === 'tiffin' || facilities.includes('meals included');
-
-    case 'flat':
-      return type === 'flat';
-    case 'family':
-      return type === 'flat' && (facilities.includes('family friendly') || desc.includes('family') || desc.includes('residential'));
-    case 'villa':
-      return type === 'flat' && (desc.includes('villa') || title.includes('villa') || desc.includes('independent house'));
-
-    case 'roommate':
-      return (type === 'room' || type === 'flat') && (desc.includes('roommate') || title.includes('roommate') || desc.includes('shared room'));
-    case 'coliving':
-      return (type === 'room' || type === 'flat') && (desc.includes('co-living') || title.includes('co-living') || facilities.includes('wifi'));
-    case 'shared-room':
-      return type === 'room' && (desc.includes('shared') || title.includes('shared'));
-
-    case 'food':
-      return type === 'tiffin';
-    case 'laundry':
-      return facilities.includes('laundry');
-    case 'wifi':
-      return facilities.includes('wifi');
-
-    default:
-      return true;
-  }
+  }).join('');
 }
 
 function applyFilters(){
@@ -1806,64 +1227,20 @@ function applyFilters(){
   var sort=document.getElementById('filter-sort').value;
   var minP=parseInt(document.getElementById('qs-min').value)||0;
   var maxP=parseInt(document.getElementById('qs-max').value)||Infinity;
-  
-  var queryText = (state.lastSearchQuery || '').trim();
-  var parsedQuery = queryText ? parseSmartQuery(queryText) : null;
-  
-  var sortSelect = document.getElementById('filter-sort');
-  
-  if (queryText && !state.userSelectedSort) {
-    if (!Array.from(sortSelect.options).some(function(o){return o.value === 'relevance'})) {
-      var opt = document.createElement('option');
-      opt.value = 'relevance';
-      opt.textContent = 'Relevance';
-      sortSelect.add(opt, 0);
-    }
-    sortSelect.value = 'relevance';
-    sort = 'relevance';
-  } else if (!queryText) {
-    var relOptIdx = Array.from(sortSelect.options).findIndex(function(o){return o.value === 'relevance'});
-    if (relOptIdx !== -1) {
-      sortSelect.remove(relOptIdx);
-      if (sort === 'relevance') {
-        sortSelect.value = 'latest';
-        sort = 'latest';
-      }
-    }
-  }
-
+  var area=document.getElementById('qs-area').value.toLowerCase();
   state.filtered=state.listings.filter(function(l){
     if(l.status!=='approved')return false;
-    
-    if (!matchesMetaCategory(l, state.currentCategory)) return false;
-    if (state.currentSubcategory && !matchesSubcategory(l, state.currentSubcategory)) return false;
+    if(state.currentType!=='all'&&l.type!==state.currentType)return false;
     if(gender&&l.gender!==gender&&l.gender!=='any')return false;
     if(l.pricing.amount<minP||l.pricing.amount>maxP)return false;
-    
-    if (parsedQuery) {
-      var score = calculateRelevanceScore(l, parsedQuery);
-      l._relevanceScore = score;
-      if (parsedQuery.types.length > 0 && parsedQuery.types.indexOf(l.type) === -1) {
-        return false;
-      }
-      if (score < -10) return false;
-    } else {
-      l._relevanceScore = 0;
-    }
-    
+    if(area&&!l.location.area.toLowerCase().includes(area)&&!l.title.toLowerCase().includes(area))return false;
     return true;
   });
-
-  if(sort==='relevance' && parsedQuery) {
-    state.filtered.sort(function(a,b){
-      return (b._relevanceScore - a._relevanceScore) || ((b.featured?1:0)-(a.featured?1:0));
-    });
-  }
-  else if(sort==='price-asc')state.filtered.sort(function(a,b){return a.pricing.amount-b.pricing.amount});
+  if(sort==='price-asc')state.filtered.sort(function(a,b){return a.pricing.amount-b.pricing.amount});
   else if(sort==='price-desc')state.filtered.sort(function(a,b){return b.pricing.amount-a.pricing.amount});
   else if(sort==='rating')state.filtered.sort(function(a,b){return b.avgRating-a.avgRating});
   else state.filtered.sort(function(a,b){return (b.featured?1:0)-(a.featured?1:0)});
-  
+  // Near Me override: sort by distance, only listings with coords
   if(state.nearMeActive&&state.nearMeLat!==null&&state.nearMeLng!==null){
     state.filtered=state.filtered.filter(function(l){return l.location&&l.location.lat&&l.location.lng;});
     state.filtered.sort(function(a,b){
@@ -1871,34 +1248,24 @@ function applyFilters(){
              nearMeDistance(state.nearMeLat,state.nearMeLng,b.location.lat,b.location.lng);
     });
   }
-  
   state.currentPage=1;
   var h=document.getElementById('listings-heading');
   if(h){
-    var catLabel = state.currentCategory === 'all' ? 'All Stays & Services' : META_CATEGORIES[state.currentCategory].label;
-    if (state.currentSubcategory) {
-      var subLabel = META_CATEGORIES[state.currentCategory].subcategories.find(function(s){return s.key === state.currentSubcategory})?.label || '';
-      catLabel += ' > ' + subLabel;
-    }
+    var t=state.currentType==='all'?'All Listings':TYPE_LABELS[state.currentType]+'s';
     var suffix=state.nearMeActive?' nearby':'';
-    h.textContent=catLabel+suffix+' ('+state.filtered.length+')';
+    h.textContent=t+suffix+' ('+state.filtered.length+')';
   }
   renderListings();
   if(state.currentView==='map')renderMapView();
 }
 
-function doSearch() {
-  var typeVal = document.getElementById('qs-type').value;
-  var searchVal = document.getElementById('qs-area').value.trim();
-  state.lastSearchQuery = searchVal;
-  selectMetaCategory(typeVal);
-  var el = document.getElementById('listings-top');
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
+function doSearch(){
+  filterType(document.getElementById('qs-type').value);
+  document.getElementById('listings-top').scrollIntoView({behavior:'smooth'});
 }
-
-function syncFilter() {
-  var v = document.getElementById('qs-type').value;
-  selectMetaCategory(v);
+function syncFilter(){
+  var v=document.getElementById('qs-type').value;
+  filterType(v);
 }
 
 function renderListings(){
@@ -2221,14 +1588,6 @@ function openDetail(id){
   document.getElementById('dm-loc').textContent=l.location.area+', '+l.location.city;
   document.getElementById('dm-gender').textContent=GENDER_LABELS[l.gender];
   document.getElementById('dm-rating').textContent=l.avgRating+' ('+l.totalReviews+' reviews)';
-  var colleges = l.location.nearbyPlaces || l.location.nearbyColleges || [];
-  if (typeof colleges === 'string') colleges = colleges.split(',').map(function(s){return s.trim()}).filter(Boolean);
-  if (Array.isArray(colleges) && colleges.length > 0) {
-    document.getElementById('dm-colleges').textContent = colleges.join(', ');
-    document.getElementById('dm-colleges-item').style.display = 'inline-flex';
-  } else {
-    document.getElementById('dm-colleges-item').style.display = 'none';
-  }
   document.getElementById('dm-views').textContent=l.views;
   document.getElementById('dm-desc').textContent=l.description;
   document.getElementById('dm-address').textContent=l.location.address;
@@ -3060,7 +2419,7 @@ async function submitLead() {
       document.getElementById('lead-name').value  = '';
       document.getElementById('lead-email').value = '';
       document.getElementById('lead-msg').value   = '';
-      showToast('Request sent! NikunjM will contact you shortly.');
+      showToast('Request sent! Nikunj will contact you shortly.');
       setTimeout(closeLeadForm, 3000);
     } else {
       fb.style.color = '#e53e3e';
@@ -3137,277 +2496,55 @@ function escapeHtml(str) {
 // ═══════════════════════════════════════════════════════════
 function toggleAI(){document.getElementById('aiPanel').classList.toggle('open')}
 function openAI(){document.getElementById('aiPanel').classList.add('open')}
-function closeAI(){
-  document.getElementById('aiPanel').classList.remove('open');
-  if (isListening && recognition) {
-    recognition.stop();
-  }
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
-}
-
-// Speech Recognition & Synthesis State
-var recognition = null;
-var isListening = false;
-var voiceModeActive = false;
-
-function initVoice() {
-  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    console.warn("Speech recognition is not supported in this browser.");
-    return false;
-  }
-  recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.lang = 'en-IN'; // Hinglish & Indian English friendly
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = function() {
-    isListening = true;
-    voiceModeActive = true;
-    updateMicUI();
-  };
-
-  recognition.onresult = function(event) {
-    var transcript = event.results[0][0].transcript;
-    var input = document.getElementById('aiInput');
-    if (input) {
-      input.value = transcript;
-      sendAI();
-    }
-  };
-
-  recognition.onerror = function(event) {
-    console.error("Speech recognition error:", event.error);
-    isListening = false;
-    updateMicUI();
-  };
-
-  recognition.onend = function() {
-    isListening = false;
-    updateMicUI();
-  };
-  return true;
-}
-
-function toggleVoice() {
-  if (!recognition) {
-    var supported = initVoice();
-    if (!supported) {
-      showToast("Voice input is not supported in this browser.");
-      return;
-    }
-  }
-  if (isListening) {
-    recognition.stop();
-  } else {
-    try {
-      recognition.start();
-    } catch (e) {
-      console.error(e);
-    }
-  }
-}
-
-function updateMicUI() {
-  var btn = document.getElementById('aiMicBtn');
-  var wave = document.getElementById('voiceWave');
-  if (btn) {
-    if (isListening) {
-      btn.classList.add('listening');
-      btn.textContent = '🛑';
-    } else {
-      btn.classList.remove('listening');
-      btn.textContent = '🎤';
-    }
-  }
-  if (wave) {
-    wave.style.display = isListening ? 'flex' : 'none';
-  }
-}
-
-function speakText(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    
-    // Remove emojis and special characters for cleaner speech synthesis output
-    var cleanText = text.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '')
-                        .replace(/[📍🏢🏡🤝🍱🎓⭐🏠👥👨‍👩‍👧‍👦🏰🧺⚡🛑➤✓✕✕]/g, '')
-                        .replace(/[*#_`~]/g, '');
-                        
-    var utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'en-IN';
-    
-    var avatar = document.querySelector('.ai-avatar');
-    utterance.onstart = function() {
-      if (avatar) avatar.classList.add('speaking');
-    };
-    utterance.onend = function() {
-      if (avatar) avatar.classList.remove('speaking');
-    };
-    utterance.onerror = function() {
-      if (avatar) avatar.classList.remove('speaking');
-    };
-    
-    window.speechSynthesis.speak(utterance);
-  }
-}
-
-function findMatchingListingsForText(text, approvedListings) {
-  var parsed = parseSmartQuery(text);
-  var scored = approvedListings.map(function(l) {
-    var score = calculateRelevanceScore(l, parsed);
-    var copy = Object.assign({}, l);
-    copy._relevanceScore = score;
-    return copy;
-  });
-  
-  var matches = scored.filter(function(l) {
-    if (parsed.types.length > 0 && parsed.types.indexOf(l.type) === -1) {
-      return false;
-    }
-    if (parsed.gender !== null && l.gender !== parsed.gender && l.gender !== 'any') {
-      return false;
-    }
-    if (parsed.maxPrice !== null && l.pricing.amount > parsed.maxPrice) {
-      return false;
-    }
-    return l._relevanceScore >= 10;
-  });
-  
-  matches.sort(function(a, b) {
-    return b._relevanceScore - a._relevanceScore;
-  });
-  
-  return matches.slice(0, 3);
-}
+function closeAI(){document.getElementById('aiPanel').classList.remove('open')}
 
 function sendAI(pretext){
   var input=document.getElementById('aiInput');
   var msg=pretext||input.value.trim();
   if(!msg)return;
   input.value='';
-  
-  // Set voice mode active if pretext (clicked pill) is used or voice button was active
-  if (!pretext && isListening) {
-    voiceModeActive = true;
-  }
-  
   appendMsg(msg,'user');
   var typing=appendMsg('','typing');
   var approved=state.listings.filter(function(l){return l.status==='approved'});
-  
+  var ctx=approved.map(function(l){return l.title+' ('+l.type+') | '+l.location.area+' | ₹'+l.pricing.amount+'/mo | ★'+l.avgRating}).join('\n');
   fetch('/api/ai/chat',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({message:msg,history:state.aiHistory})
   }).then(function(r){return r.json()}).then(function(d){
     typing.remove();
-    var reply = d.reply;
-    var matches = [];
-    if (d.success && reply) {
-      matches = findMatchingListingsForText(msg, approved);
-    } else {
-      reply = getLocalAIReply(msg, approved);
-      matches = findMatchingListingsForText(msg, approved);
-    }
-    appendMsg(reply,'bot', matches);
-    
-    // Play voice feedback if voice session is active
-    if (voiceModeActive) {
-      speakText(reply);
-    }
-    
+    var reply=d.reply||getLocalAIReply(msg,approved);
+    appendMsg(reply,'bot');
     state.aiHistory.push({role:'user',content:msg},{role:'assistant',content:reply});
     if(state.aiHistory.length>10)state.aiHistory=state.aiHistory.slice(-10);
   }).catch(function(){
     typing.remove();
-    var reply = getLocalAIReply(msg, approved);
-    var matches = findMatchingListingsForText(msg, approved);
-    appendMsg(reply,'bot', matches);
-    if (voiceModeActive) {
-      speakText(reply);
-    }
+    appendMsg(getLocalAIReply(msg,approved),'bot');
   });
 }
 
-function appendMsg(text,type,matchedListings){
+function appendMsg(text,type){
   var msgs=document.getElementById('aiMessages');
   var div=document.createElement('div');
   div.className='chat-msg '+type;
-  if(type==='typing'){
-    div.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-  } else {
-    div.innerHTML=escapeHtml(text).replace(/\n/g,'<br/>');
-  }
+  if(type==='typing'){div.innerHTML='<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';}
+  else{div.textContent=text;}
   msgs.appendChild(div);
-  
-  if(matchedListings && matchedListings.length > 0) {
-    matchedListings.forEach(function(l) {
-      var card = document.createElement('div');
-      card.className = 'chat-property-card';
-      
-      var images = normalizeImageList(l.images);
-      var imgUrl = images.length > 0 ? images[0] : '/placeholder.jpg';
-      
-      var tag = 'Recommended';
-      var tagClass = 'tag-recommended';
-      if (l._relevanceScore >= 50) {
-        tag = '100% Match';
-        tagClass = 'tag-perfect';
-      } else if (l._relevanceScore >= 35) {
-        tag = 'Best Match';
-        tagClass = 'tag-best';
-      } else if (l.pricing.amount <= 6000) {
-        tag = 'Budget Friendly';
-        tagClass = 'tag-budget';
-      }
-      
-      card.innerHTML = 
-        '<div class="chat-prop-img" style="background-image: ' + cssImageUrl(imgUrl) + '"></div>' +
-        '<div class="chat-prop-info">' +
-          '<span class="chat-prop-badge ' + tagClass + '">' + tag + '</span>' +
-          '<div class="chat-prop-title">' + escapeHtml(l.title) + '</div>' +
-          '<div class="chat-prop-meta">₹' + l.pricing.amount + '/mo • ' + escapeHtml(l.location.area) + '</div>' +
-        '</div>';
-      
-      card.onclick = function() {
-        openDetail(l._id);
-      };
-      
-      msgs.appendChild(card);
-    });
-  }
-  
   msgs.scrollTop=msgs.scrollHeight;
   return div;
 }
 
 function getLocalAIReply(msg,listings){
   var m=msg.toLowerCase();
-  var parsed = parseSmartQuery(msg);
-  var matches = findMatchingListingsForText(msg, listings);
-  
-  if (matches.length > 0) {
-    var responseText = "Here are the best matches I found for you in NikunjM:\n\n";
-    matches.forEach(function(l, i) {
-      responseText += (i + 1) + ". " + l.title + " in " + l.location.area + " for ₹" + l.pricing.amount + "/month.\n";
-    });
-    responseText += "\nYou can click on any card to view full details and contact the owner!";
-    return responseText;
-  }
-  
-  if (m.includes('hello') || m.includes('hi') || m.includes('hey')) {
-    return "Hello 👋 Welcome to NikunjM! I am your AI assistant. Tell me what type of accommodation you are looking for (e.g. boys hostel near RTU, flat under 15k, or mess/laundry service). How can I help you today?";
-  }
-  
-  if (m.includes('thank') || m.includes('thanks')) {
-    return "You're welcome! Let me know if you need help finding anything else. 😊";
-  }
-  
-  return "I understand you are looking for accommodation. I couldn't find exact matches based on your filters. Could you please specify your preferred area, budget (e.g. 'under 10k'), or category?";
+  var filtered;
+  if(m.includes('hostel'))filtered=listings.filter(function(l){return l.type==='hostel'});
+  else if(m.includes('pg')||m.includes('room')||m.includes('girls')||m.includes('girl'))filtered=listings.filter(function(l){return l.type==='room'||(m.includes('girl')&&l.gender==='female')});
+  else if(m.includes('flat'))filtered=listings.filter(function(l){return l.type==='flat'});
+  else if(m.includes('tiffin')||m.includes('food')||m.includes('meal'))filtered=listings.filter(function(l){return l.type==='tiffin'});
+  else filtered=listings.slice(0,3);
+  if(!filtered||filtered.length===0)return 'Koi listing nahi mili aapki search ke liye. Kya aap area ya budget batayenge?';
+  var top=filtered.slice(0,2);
+  return top.map(function(l){return '🏠 '+l.title+'\n📍 '+l.location.area+' | ₹'+l.pricing.amount+'/mo | ★'+l.avgRating+'\nFacilities: '+(l.facilities||[]).slice(0,3).join(', ')}).join('\n\n')+'\n\nKya aap in listings ke baare mein aur jaanna chahte hain?';
 }
 
 // ═══════════════════════════════════════════════════════════
