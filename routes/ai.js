@@ -2,10 +2,25 @@ const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing');
 
+const AI_TIMEOUT_MS = Number(process.env.AI_TIMEOUT_MS) || 15000;
+
+function hasConfiguredAnthropicKey() {
+  const key = String(process.env.ANTHROPIC_API_KEY || '').trim();
+  return key && !/^YOUR_/i.test(key) && key !== 'undefined' && key !== 'null';
+}
+
 // POST /api/ai/chat
 router.post('/chat', async (req, res) => {
   try {
     const { message, history = [] } = req.body;
+    if (!message || !String(message).trim()) {
+      return res.status(400).json({ success: false, message: 'Message is required' });
+    }
+
+    if (!hasConfiguredAnthropicKey()) {
+      console.warn('[AI] ANTHROPIC_API_KEY is not configured; frontend will use local fallback.');
+      return res.status(503).json({ success: false, message: 'AI provider is not configured' });
+    }
 
     // Fetch relevant listings to give AI context
     const listings = await Listing.find({ status: 'approved' })
@@ -41,25 +56,42 @@ Rules:
       { role: 'user', content: message }
     ];
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 500,
-        system: systemPrompt,
-        messages
-      })
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+    let response;
+    try {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          system: systemPrompt,
+          messages
+        })
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      console.error('[AI] Provider error:', response.status, data.error?.message || data.message || data);
+      return res.status(502).json({ success: false, message: 'AI provider error' });
+    }
     const reply = data.content?.[0]?.text || 'Sorry, I could not process that. Please try again.';
     res.json({ success: true, reply });
   } catch (err) {
+    if (err.name === 'AbortError') {
+      console.error('[AI] Provider timeout after %sms', AI_TIMEOUT_MS);
+      return res.status(504).json({ success: false, message: 'AI request timed out' });
+    }
+    console.error('[AI] Route error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
